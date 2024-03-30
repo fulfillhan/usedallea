@@ -1,0 +1,12 @@
+.base-layout {
+    width: 100%;
+}
+
+.base-layout .header {
+}
+
+.base-layout .body {
+    width: 1045px;
+    margin: auto;
+    align-items: center;
+}

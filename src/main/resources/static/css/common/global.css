@@ -1,0 +1,18 @@
+a {
+    color: rgb(33, 33, 33);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button {
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+body * {
+    font-size: 13px;
+    font-family: "Noto Sans KR", sans-serif;
+    letter-spacing: -0.5px;
+}
