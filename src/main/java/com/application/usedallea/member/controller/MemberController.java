@@ -27,12 +27,12 @@ public class MemberController {
 		
 		@GetMapping("/main")
 		public String main() {
-			return "usedallea/common/main";
+			return "common/main";
 		}
 		
 		@GetMapping("/registerMember")
 		public String registerMember () {
-			return "usedallea/member/register";
+			return "member/register";
 		}
 		
 		@PostMapping("/registerMember")
@@ -62,7 +62,7 @@ public class MemberController {
 		
 		@GetMapping("/login")
 	     public String login() {
-			return "usedallea/member/login";
+			return "member/login";
 		}
 		
 		@PostMapping("/login")
@@ -82,7 +82,7 @@ public class MemberController {
 			HttpSession session = request.getSession();
 			session.invalidate();
 			
-			return "redirect:/usedallea/common/main";
+			return "redirect:/common/main";
 		}
 		
 		
