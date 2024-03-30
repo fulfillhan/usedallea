@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{usedallea/member/layout.html}">
+
+<div layout:fragment="content">
+	
+	<form th:action="@{/member/registerMember}" th:onsubmit="return checkFirmValidation()" method="post">
+		<div align="center">
+	<h4>회원 가입</h4>
+    <div>아이디<span>*</span></div>
+	<input type="text" id="userId" name="userId" placeholder="아이디 입력(6~20자이내)" required>&emsp;<br>
+	<label id="isvalidMsg"></label>
+	
+	<div>패스워드<span>*</span></div>
+	<input type="password" id="password" name="password" placeholder="패스워드 입력(문자,숫자,특수문자 포함6~20자)" required>
+	<br><br>
+	<div>패스워드 재확인<span>*</span></div>
+	<input type="text" id="confirmPassword" placeholder="패스워드 재입력"><br>
+	<label id="isvalidPasswordMsg"></label>
+	
+	<div>이름<span>*</span></div>
+	<input type="text" id="name" name="name" placeholder="이름을 입력해주세요" required>
+	<br><br>
+	<div>전화번호<span>*</span></div>
+	<input type="text" name="phoneNumber" placeholder="'-'없이 숫자만 입력" required>
+	<div>SMS 마케팅 수신 동의여부<span>*</span></div>
+	<input type="checkbox" id="smsstsYn" name="smsstsYn" value="y">
+	
+	<div>이메일<span>*</span></div>
+	<input type="text" name="email" placeholder="you@example.com">
+	<div>이메일 마케팅 수신 동의여부<span>*</span></div>
+	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y">
+	
+	<div>주소<span>*</span></p>
+	<input type="text" id="zipCode" name="zipCode"  placeholder="우편번호 입력">
+	<input type="button" value="검색">
+	<br><br>
+	<input type="text" placeholder="도로명 주소" id="roadAddress" name="roadAddress"><br><br>
+	<input type="text" placeholder="지번 주소" id="jibunAddress" name="jibunAddress"><br><br>
+	<input type="text" placeholder="상세 주소" id="namujiAddress" name="namujiAddress" >
+    <br>
+    <div>
+		<input type="checkbox" name="personalInfoYn" value="y">개인 정보 수집 및 이용 동의(필수)<br>
+		<textarea rows="5" cols="50">
+     개인정보보호법에 따라  '중고올래'  회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.
+	    </textarea>
+	</div>
+	<input type="submit" value="회원가입하기">
+	
+	</form>
+</div>
+<script>
+	
+	var formCheckId = false;
+	var formCheckPasswd = false;
+	
+	
+       $(function(){
+		$("#userId").blur(function(){
+			var userId = $(this).val();
+			if(userId ==''){
+				$("#isvalidMsg").html("<span style='color:red;'>아이디를 입력하세요!</span>");
+				formCheckId = false;
+				return;
+			}
+			// AJAX전송(단일데이터)
+			$.ajax({
+				type : "post",
+				url : "/member/dupleCheckId",
+				data : {"userId" : userId},
+				success : function(validateId){
+					if(validateId == "y"){
+						$("#isvalidMsg").html("<span style='color:green;'>사용 가능한 아이디입니다.</span>");
+						formCheckId = true;
+					}
+					else{
+						$("#isvalidMsg").html("<span style='color:red;'>이미 사용중인 아이디입니다.</span>");
+						formCheckId = false;
+					}
+				}
+			});
+		});
+		
+		$("#confirmPassword").blur(function(){
+			var password = $("#password").val();
+			var confirmPassword = $("#confirmPassword").val();
+			
+			if(password == confirmPassword){
+				$("#isvalidPasswordMsg").html("<span style='color:green;'>패스워드가 일치합니다.</span>");
+				formCheckPasswd = true;
+			}
+			else{
+				$("#isvalidPasswordMsg").html("<span style='color:red;'>패스워드가 일치하지 않습니다.</span>");
+				formCheckPasswd  = false;
+			}
+			
+		});
+	});
+	
+	function checkFirmValidation(){
+		if(!formCheckId){
+			alert("아이디 중복 확인을 해주세요!");
+			$("#userId").focus();
+			return false;
+		}
+		if(!formCheckPasswd){
+			alert("패스워드 재확인 해주세요!");
+			$("#password").focus();
+			return false;
+		}
+	}
+	
+</script>
+</html>
