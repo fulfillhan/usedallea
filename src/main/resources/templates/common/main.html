@@ -13,25 +13,25 @@
     </section>
 
     <section class="today-recommended">
-        <h3>오늘의 상품 추천</h3>
+        <h3>오늘의 상품 추천</h3>		
 
         <div class="item-list">
 
             <!-- 상품 단건 이미지 -->
             <div class="item">
                 <a>
-                    <div class="item__body">
+                    <div class="item__body" th:text="${product.img}">
                         <img src="https://picsum.photos/seed/picsum/200/300" />
                     </div>
                     <div class="item__footer">
                         <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
+                             th:text="${product.title}">
                             풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
                         </div>
-                        <div class="item__footer--price">
+                        <div class="item__footer--price" th:text="${product.price}">
                             100,000,000원
                         </div>
-                        <div class="item__footer--date">
+                        <div class="item__footer--date" th:text="${product.createdAt}">
                             7일 전
                         </div>
                     </div>

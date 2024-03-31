@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import com.application.usedallea.member.dao.MemberDAO;
 import com.application.usedallea.member.dto.MemberDTO;
 
+
+
+
 @Service
 public class MemberServiceImpl implements MemberService {
 	

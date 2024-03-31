@@ -4,11 +4,14 @@
 <section class="header-tool-bar" th:fragment="toolBar">
     <div class="header-tool-bar__wrap">
         <!-- TODO 로그아웃 상태일 때 -->
-        <div>
-            <button>로그인</button>
+        <div th:if="${session.userId == null}">
+            <button><a th:href="@{/member/login}">로그인</button></a>
         </div>
-
-        <!-- TODO 로그인 상태일 때 -->
+        <div th:unless="${session.userId != null}">
+           <button><a th:href="@{/member/register}">회원가입</button></a>
+           
+         </div>
+            <!--TODO 로그인 상태일 때 -->
         <div>
             <button>로그아웃</button>
         </div>
