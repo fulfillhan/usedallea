@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="/css/common/global.css" type="text/css">
     <link rel="stylesheet" href="/css/common/layout.css" type="text/css">
     <link rel="stylesheet" href="/css/common/header.css" type="text/css">
+    <link rel="stylesheet" href="/css/common/footer.css" type="text/css">
 </head>
 
 <body>
@@ -39,9 +40,7 @@
             <div layout:fragment="contents"></div>
         </section>
 
-        <section class="footer">
-            Footer
-        </section>
+        <section th:replace="~{common/footer::contents}"></section>
     </div>
 </body>
 
