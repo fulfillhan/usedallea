@@ -13,8 +13,13 @@ public class PageController {
     }
 
     @RequestMapping("/product/regigster")
-    public String registProduct() {
+    public String registerProduct() {
         return "product/productRegister";
+    }
+
+    @RequestMapping("/product/detail")
+    public String registerDetail() {
+        return "product/productDetail";
     }
 
 }
