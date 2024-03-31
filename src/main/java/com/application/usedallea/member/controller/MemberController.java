@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import com.application.usedallea.member.dto.MemberDTO;
 import com.application.usedallea.member.service.MemberService;
-
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,17 +23,13 @@ public class MemberController {
 		@Autowired
 		private MemberService memberService;
 		
-		@GetMapping("/main")
-		public String main() {
-			return "common/main";
-		}
 		
-		@GetMapping("/registerMember")
+		@GetMapping("/register")
 		public String registerMember () {
 			return "member/register";
 		}
 		
-		@PostMapping("/registerMember")
+		@PostMapping("/register")
 		@ResponseBody
 		public String registerMember (@ModelAttribute MemberDTO memberDTO) {
 			memberService.registerMember(memberDTO);
