@@ -11,8 +11,13 @@ button {
     cursor: pointer;
 }
 
+body {
+    margin: 0;
+}
+
 body * {
     font-size: 13px;
     font-family: "Noto Sans KR", sans-serif;
     letter-spacing: -0.5px;
+    box-sizing: border-box;
 }
