@@ -1,10 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
 
-</body>
+<head>
+    <link rel="stylesheet" href="/css/product/detail.css" type="text/css">
+</head>
+
+<div class="product-detail-container" layout:fragment="contents">
+    <div class="product-detail__category">
+    </div>
+
+    <div class="product-detail__info-wrap">
+        <div class="product-detail__img-wrap">
+            <img src="/img/store.png" />
+        </div>
+
+        <div class="product-detail__info">
+            <div class="product-detail__info--title">
+                <div class="name">
+                    리바이스 N3BP 진청 34
+                </div>
+                <div class="price">
+                    280,000
+                    <span>원</span>
+                </div>
+            </div>
+
+            <div class="product-detail__status">
+                <div class="product-detail__view">
+                    <div class="product-detail__statistics">
+                        <span>
+                            <img src="/img/zzim.png" />
+                            0
+                        </span>
+                        <span>
+                            <img src="/img/views.png" />
+                            0
+                        </span>
+                        <span>
+                            <img src="/img/time.png" />
+                            1주 전
+                        </span>
+                    </div>
+                    <div class="product-detail__report">
+                        <a>
+                            <img src="/img/report.png" />
+                            <span>신고하기</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="product-detail__status-row">
+                    <div class="product-detail__status--name">
+                        상품상태
+                    </div>
+                    <div class="product-detail__status--value">
+                        새 상품
+                    </div>
+                </div>
+
+                <div class="product-detail__action-wrap">
+                    <button class="product-detail__button--zzim">
+                        찜
+                    </button>
+                    <button class="product-detail__button--chat">
+                        올래톡
+                    </button>
+                    <button class="product-detail__button--buy">
+                        바로구매
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="product-detail__line"></div>
+
+    <div class="product-detail__introduce">
+        <div class="product-detail__introduce--title">
+            상품 정보
+        </div>
+
+        <div class="product-detail__contents">
+            <pre>
+리바이스 N3BP 진청 34
+
+새제품
+
+2005년 도쿄 리바이스 매장에서 구매했습니다
+
+소장하기에도 좋습니다
+            </pre>
+        </div>
+    </div>
+
+    <div class="product-detail__etc">
+        <div>
+            <div class="product-detail__etc--name">카테고리</div>
+            <div>데님/청바지</div>
+        </div>
+        <div>
+            <div class="product-detail__etc--name">상품태그</div>
+            <div>#N3BP #리바이스 #데님진 #현행</div>
+        </div>
+    </div>
+</div>
+
+<script>
+</script>
 </html>
