@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
 
 <div>
 	<form th:action="@{/prodcut/create}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="sellerId" th:value="${session.userId}"/>
 		<div align="center">
 	<h4>기본 정보<span style="color:red;">*필수 항목</span></h4><!-- * 이 표시는 빨간색으로 -->
 	<!-- 다중 파일 업로드-->
@@ -25,10 +27,10 @@
 	<br>
 	<div>
 	<p>상품 상태<span>*</span><br>
-		<input type="radio" name="status" value="1"> 새상품(미사용)<br>
-		<input type="radio" name="status" value="2"> 사용감 약간 있음(사용은 했지만 흔적은 없음)<br>
-		<input type="radio" name="status" value="3"> 사용감 많음(눈에 띄는 흔적 있음)<br>
-		<input type="radio" name="status" value="4"> 고장/파손 상품(수리/수선 필요)<br>
+		<input type="radio" name="qualityCondition" value="1"> 새상품(미사용)<br>
+		<input type="radio" name="qualityCondition" value="2"> 사용감 약간 있음(사용은 했지만 흔적은 없음)<br>
+		<input type="radio" name="qualityCondition" value="3"> 사용감 많음(눈에 띄는 흔적 있음)<br>
+		<input type="radio" name="qualityCondition" value="4"> 고장/파손 상품(수리/수선 필요)<br>
 		</p>
 	</div>
 	<br>

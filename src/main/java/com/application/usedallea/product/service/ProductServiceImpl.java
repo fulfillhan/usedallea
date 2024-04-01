@@ -1,5 +1,6 @@
 package com.application.usedallea.product.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private ImgService imgService;
 
 	@Override
 	public List<ProductDTO> getAllProudctList(ProductDTO productDTO) {
@@ -28,10 +32,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void createProduct(MultipartFile uploadFile, ProductDTO productDTO) {
-	   String uploadImg  = ImgService.saveImg(uploadFile);
+	public void createProduct(MultipartFile uploadImg, ProductDTO productDTO, ImgDTO imgDTO) throws Exception, IOException {
+		
+		// img테이블에 이미지 저장하기 -> 이미지 id 생성
+		 long imgId = imgService.createImg(uploadImg, imgDTO);
+		
+		 productDTO.setStatus(ProductStatus.SELLING.name());
+		//상품 테이블에 이미지 id 저장하여 등록된 상품테이블 모두 저장하기
+		productDAO.createProduct(productDTO);
 		
 	}
+
 	
 
 }

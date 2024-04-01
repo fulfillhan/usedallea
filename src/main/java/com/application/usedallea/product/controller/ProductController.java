@@ -1,7 +1,12 @@
 package com.application.usedallea.product.controller;
 
+import java.io.File;
 import java.util.List;
 
+import com.application.usedallea.member.dto.MemberDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -27,6 +32,7 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
+	
 //	@GetMapping("/allProductList")
 //	public String getAllProductList(Model model) {
 //	List<ProductDTO> productList = productService.getAllProudctList();
@@ -41,13 +47,15 @@ public class ProductController {
 	
 	// 중고 상품 등록
 	@GetMapping("/create")
-	public String create() {
+	public String create(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		model.addAttribute("sellerId",session.getAttribute("userId"));
 		return "product/createProduct";
 	}
 	
 	@PostMapping("/create")
-	public String create(@RequestParam("uploadImg") MultipartFile uploadFile,@ModelAttribute ProductDTO productDTO) {
-		productService.createProduct(uploadFile,productDTO);
+	public String create(@RequestParam("uploadImg") MultipartFile uploadFile, ProductDTO productDTO, ImgDTO imgDTO) throws Exception {
+		productService.createProduct(uploadFile,productDTO,imgDTO);
 		
 		return "";
 		

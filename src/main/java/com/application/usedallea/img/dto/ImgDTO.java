@@ -10,7 +10,6 @@ import lombok.Data;
 public class ImgDTO {
 	
 	private long imgId;
-	private long productId;
 	private String imgUUID;
 	private String originalName;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
