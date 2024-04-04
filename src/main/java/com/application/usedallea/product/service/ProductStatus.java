@@ -1,6 +1,6 @@
 package com.application.usedallea.product.service;
 
 public enum ProductStatus {
-	SELLING,
-	CLOSE,
+	판매중,
+	판매완료,
 }

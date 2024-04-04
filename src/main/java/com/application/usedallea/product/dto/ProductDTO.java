@@ -1,12 +1,9 @@
 package com.application.usedallea.product.dto;
 
 import java.util.Date;
-import java.util.List;
 
-import com.application.usedallea.product.service.ProductStatus;
+//import com.application.usedallea.product.service.ProductStatus;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.application.usedallea.img.dto.ImgDTO;
 
 import lombok.Data;
 
@@ -26,6 +23,7 @@ public class ProductDTO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;
 	private Date updatedAt;
+	
 	
 	
 	

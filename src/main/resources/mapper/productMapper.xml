@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.application.usedallea.product.dao.ProductDAO">
-<insert id="createProduct" parameterType="ProductDTO">
-    INSERT INTO PRODUCT(
-        SELLER_ID,
-        IMG_ID,
-        TITLE,
-        CATEGORY,
-        STATUS,
-        PRICE,
-        DESCRIPTION,
-    )
-    VALUES(
-        #{sellerId},
-        #{imgId},
-        #{title},
-        #{category},
-        #{status},
-        #{price},
-        #{description}
-    )
-</insert>
+    <insert id="createProduct" parameterType="ProductDTO">
+        INSERT INTO PRODUCT(
+            SELLER_ID,
+            IMG_ID,
+            TITLE,
+            CATEGORY,
+            QUALITY_CONDITION,
+            PRICE,
+            DESCRIPTION,
+            STATUS
+        )
+        VALUES(
+            #{sellerId},
+            #{imgId},
+            #{title},
+            #{category},
+            #{qualityCondition},
+            #{price},
+            #{description},
+            #{status}
+        )
+    </insert>
+
+    <select id="getProductDetail"  parameterType="long" resultType="ProductDTO">
+        SELECT
+                *
+        FROM
+                PRODUCT
+        WHERE
+                PRODUCT_ID = #{productId}
+    </select>
+    <update id="updateReadCnt" parameterType="long">
+        UPDATE
+                READ_COUNT
+        SET
+                READ_COUNT = READ_COUNT + 1
+        WHERE
+                PRODUCT_ID = #{productId}
+    </update>
+
+    <select id="getImgUUID" parameterType="long" resultType="String">
+        SELECT
+                IMG_UUID
+        FROM
+                IMG
+        WHERE
+                IMG_ID = #{imgId}
+    </select>
 
 </mapper>

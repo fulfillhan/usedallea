@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout.html}">
-
+<!--xmlns:th="http://www.w3.org/1999/xhtml"-->
 <head>
     <link rel="stylesheet" href="/css/product/detail.css" type="text/css">
 </head>
 
 <div class="product-detail-container" layout:fragment="contents">
+    <input type="hidden" name="sellerId" th:value="${session.userId}"/>
+    <input type="hidden" name="productId" th:value="${productDTO.productId}"/>
     <div class="product-detail__category">
     </div>
-
+	
     <div class="product-detail__info-wrap">
         <div class="product-detail__img-wrap">
-            <img src="/img/store.png" />
+            <img src="/img/store.png" /><!--여기-->
+            <img th:src="@{/img/thumbnailList(imgName=${imgUUID})}">
         </div>
 
         <div class="product-detail__info">
             <div class="product-detail__info--title">
-                <div class="name">
-                    리바이스 N3BP 진청 34
+                <div class="title" th:text="${productDTO.title}">
+                   <span th:text="${productDTO.title}"></span>
                 </div>
                 <div class="price">
-                    280,000
+                    <span th:text="${productDTO.price}"></span>
                     <span>원</span>
                 </div>
             </div>
@@ -34,8 +38,7 @@
                             0
                         </span>
                         <span>
-                            <img src="/img/views.png" />
-                            0
+                            <img src="/img/views.png" th:text="${productDTO.readCount}"/>
                         </span>
                         <span>
                             <img src="/img/time.png" />
@@ -51,14 +54,22 @@
                 </div>
 
                 <div class="product-detail__status-row">
-                    <div class="product-detail__status--name">
+                    <div class="product-detail__condition--name" >
                         상품상태
-                    </div>
-                    <div class="product-detail__status--value">
-                        새 상품
+                    </div>&emsp;
+                    <div class="product-detail__condition--value">
+	                    <span th:text="${productDTO.qualityCondition}"></span>
                     </div>
                 </div>
-
+	            <div>
+		            <div class="product-detail__sell_status--name">
+			            판매상태
+		            </div>
+		            <div class="product-detail__sell_status--value">
+			            <span th:text="${productDTO.status}"></span>
+		            </div>
+	            </div>
+				
                 <div class="product-detail__action-wrap">
                     <button class="product-detail__button--zzim">
                         찜
@@ -82,25 +93,20 @@
             상품 정보
         </div>
 
-        <div class="product-detail__contents">
+        <div class="product-detail__description">
             <pre>
-리바이스 N3BP 진청 34
-
-새제품
-
-2005년 도쿄 리바이스 매장에서 구매했습니다
-
-소장하기에도 좋습니다
+			 <span th:text="${productDTO.description}"></span>
             </pre>
         </div>
     </div>
 
     <div class="product-detail__etc">
         <div>
-            <div class="product-detail__etc--name">카테고리</div>
-            <div>데님/청바지</div>
+            <div class="product-detail__etc--category">카테고리</div>
+            <div><a th:Text="${productDTO.category}"></a></div>
         </div>
         <div>
+	        <!--이거는 빼는걸루..-->
             <div class="product-detail__etc--name">상품태그</div>
             <div>#N3BP #리바이스 #데님진 #현행</div>
         </div>

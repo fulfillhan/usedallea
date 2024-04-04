@@ -37,7 +37,7 @@ public class MemberController {
 			String script = """
 					<script>
 					alert('중고올래의 회원이 되신것을 축하드립니다!');
-					location.href='/member/main';
+					location.href='/usedallea/main';
 					</script>
 					""";
 			return script;
@@ -76,7 +76,7 @@ public class MemberController {
 			HttpSession session = request.getSession();
 			session.invalidate();
 			
-			return "redirect:/common/main";
+			return "redirect:/usedallea/main";
 		}
 		
 		

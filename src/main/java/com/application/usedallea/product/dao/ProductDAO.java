@@ -6,5 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductDAO {
 	
-	public void createProduct(ProductDTO productDTO);
+	public long createProduct(ProductDTO productDTO);
+
+	public ProductDTO getProductDetail(long productId);
+	
+	public void updateReadCnt(long productId);
+
+	public String getImgUUID(long productImgId);
 }

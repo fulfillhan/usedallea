@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script src="/js/jquery-3.6.1.min.js"></script>
+</head>
+  <!--th:Object 활용-->
+			<h4 th:text="|${/memberDTO.userId} 님!|"></h4>
+<form th:action="@{/member/udpate}" th:onsubmit="return checkFirmValidation()" method="post">
+		<div align="center">
+    <div>아이디<span>*</span></div>
+	<input type="text" id="userId" name="userId" placeholder="아이디 입력(6~20자이내)" required>&emsp;<br>
+	<label id="isvalidMsg"></label>
+	
+	<div>패스워드<span>*</span></div>
+	<input type="password" id="password" name="password" placeholder="패스워드 입력(문자,숫자,특수문자 포함6~20자)" required>
+	<br><br>
+	<div>패스워드 재확인<span>*</span></div>
+	<input type="text" id="confirmPassword" placeholder="패스워드 재입력"><br>
+	<label id="isvalidPasswordMsg"></label>
+	
+	<div>이름<span>*</span></div>
+	<input type="text" id="name" name="name" placeholder="이름을 입력해주세요" required>
+	<br><br>
+	<div>전화번호<span>*</span></div>
+	<input type="text" name="phoneNumber" placeholder="'-'없이 숫자만 입력" required>
+	<div>SMS 마케팅 수신 동의여부<span>*</span></div>
+	<input type="checkbox" id="smsstsYn" name="smsstsYn" value="y">
+	
+	<div>이메일<span>*</span></div>
+	<input type="text" name="email" placeholder="you@example.com">
+	<div>이메일 마케팅 수신 동의여부<span>*</span></div>
+	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y">
+	
+	<div>주소<span>*</span></p>
+	<input type="text" id="zipCode" name="zipCode"  placeholder="우편번호 입력">
+	<input type="button" value="검색">
+	</div>
+	<br><br>
+	<input type="text" placeholder="도로명 주소" id="roadAddress" name="roadAddress"><br><br>
+	<input type="text" placeholder="지번 주소" id="jibunAddress" name="jibunAddress"><br><br>
+	<input type="text" placeholder="상세 주소" id="namujiAddress" name="namujiAddress" >
+    <br>
+	<input type="submit" value="회원가입하기">
+		</div>
+	</form>
+</div>
+</html>
