@@ -10,4 +10,7 @@ public interface MemberService {
 
 	public String login(MemberDTO memberDTO);
 
+     public MemberDTO getMemberDetail(String userId);
+
+	 public void updateMember(MemberDTO memberDTO);
 }

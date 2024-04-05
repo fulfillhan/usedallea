@@ -8,7 +8,6 @@
 </head>
 
 <div class="product-detail-container" layout:fragment="contents">
-    <input type="hidden" name="sellerId" th:value="${session.userId}"/>
     <input type="hidden" name="productId" th:value="${productDTO.productId}"/>
     <div class="product-detail__category">
     </div>
@@ -38,7 +37,7 @@
                             0
                         </span>
                         <span>
-                            <img src="/img/views.png" th:text="${productDTO.readCount}"/>
+                            <img src="/img/views.png"/><span th:text="${productDTO.readCount}"></span>
                         </span>
                         <span>
                             <img src="/img/time.png" />

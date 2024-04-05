@@ -12,8 +12,8 @@
             <!--TODO 로그인 상태일 때 -->
              <div th:unless="${session.userId == null}">
         <div>
-	        <button><a th:text="|${session.userId} 님|" th:href="@{/member/register}"></button></a>
-	        <!--회원 상세로 이동화면-->
+	        <span th:text="|${session.userId} 님|"></span>
+            <button><a th:href="@{/member/update}">회원수정</button></a>
             <button><a th:href="@{/member/logout}">로그아웃</button></a>
         </div>
     </div>

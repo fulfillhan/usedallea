@@ -10,8 +10,6 @@ import com.application.usedallea.member.dao.MemberDAO;
 import com.application.usedallea.member.dto.MemberDTO;
 
 
-
-
 @Service
 public class MemberServiceImpl implements MemberService {
 	
@@ -57,6 +55,20 @@ public class MemberServiceImpl implements MemberService {
 		return loginPossible;
 	}
 
-	
+	@Override
+	public MemberDTO getMemberDetail(String userId) {
+
+		return memberDAO.getMemberDetail(userId);
+	}
+
+    @Override
+    public void updateMember(MemberDTO memberDTO) {
+
+		if(memberDTO.getSmsstsYn() == null) memberDTO.setSmsstsYn("n");
+		if(memberDTO.getEmailstsYn() == null) memberDTO.setEmailstsYn("n");
+
+        memberDAO.updateMember(memberDTO);
+    }
+
 
 }

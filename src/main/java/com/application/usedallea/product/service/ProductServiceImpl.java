@@ -49,8 +49,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
 		//title, 가격, readCount, 상품 상태, 상품 설명, 카테고리
-
-
 		productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
 		return productDAO.getProductDetail(productId);
 	
