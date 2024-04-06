@@ -2,6 +2,7 @@ package com.application.usedallea.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,68 +20,79 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
-	
-		@Autowired
-		private MemberService memberService;
-		
-		
-		@GetMapping("/register")
-		public String registerMember () {
-			return "member/register";
-		}
-		
-		@PostMapping("/register")
-		@ResponseBody
-		public String registerMember (@ModelAttribute MemberDTO memberDTO) {
-			memberService.registerMember(memberDTO);
-			
-			String script = """
-					<script>
-					alert('중고올래의 회원이 되신것을 축하드립니다!');
-					location.href='/member/main';
-					</script>
-					""";
-			return script;
-		}
-		
-		@PostMapping("/dupleCheckId")
-		@ResponseBody
-		public String dupleCheckId(@RequestParam("userId") String userId) {
-			
-			String validateId = "y";
-			if(memberService.dupleCheckId(userId)) {
-				validateId = "n";
-			}
-			return validateId;
-		}
-		
-		@GetMapping("/login")
-	     public String login() {
-			return "member/login";
-		}
-		
-		@PostMapping("/login")
-		@ResponseBody
-		public String login(@RequestBody MemberDTO memberDTO,HttpServletRequest request) {
-			// 로그인이 되면 세션화 적용하기
-			String validateLogin = memberService.login(memberDTO);
-			if(validateLogin.equals("y")) { //로그인이 가능
-				HttpSession session = request.getSession();
-				session.setAttribute("userId", memberDTO.getUserId());
-			}
-			return validateLogin;
-		}
-		
-		@GetMapping("/logout")
-		public String logout (HttpServletRequest request) {
-			HttpSession session = request.getSession();
-			session.invalidate();
-			
-			return "redirect:/common/main";
-		}
-		
-		
-		
 
-		
+	@Autowired
+	private MemberService memberService;
+
+	@GetMapping("/register")
+	public String registerMember() {
+		return "member/register";
+	}
+
+	@PostMapping("/register")
+	@ResponseBody
+	public String registerMember(@ModelAttribute MemberDTO memberDTO) {
+		memberService.registerMember(memberDTO);
+
+		String script = """
+				<script>
+				alert('중고올래의 회원이 되신것을 축하드립니다!');
+				location.href='/usedallea/main';
+				</script>
+				""";
+		return script;
+	}
+
+	@PostMapping("/dupleCheckId")
+	@ResponseBody
+	public String dupleCheckId(@RequestParam("userId") String userId) {
+
+		String validateId = "y";
+		if (memberService.dupleCheckId(userId)) {
+			validateId = "n";
+		}
+		return validateId;
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "member/login";
+	}
+
+	@PostMapping("/login")
+	@ResponseBody
+	public String login(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
+		// 로그인이 되면 세션화 적용하기
+		String validateLogin = memberService.login(memberDTO);
+		if (validateLogin.equals("y")) { //로그인이 가능
+			HttpSession session = request.getSession();
+			session.setAttribute("userId", memberDTO.getUserId());
+		}
+		return validateLogin;
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.invalidate();
+
+		return "redirect:/usedallea/main";
+	}
+
+	@GetMapping("/update")
+	public String update(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		model.addAttribute("memberDTO", memberService.getMemberDetail(userId));
+		return "member/update";
+	}
+
+	@PostMapping("/update")
+	public String update(@ModelAttribute MemberDTO memberDTO) {
+		memberService.updateMember(memberDTO);
+
+		return "redirect:/usedallea/main";
+	}
+
+
 }

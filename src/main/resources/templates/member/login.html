@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<script src="/js/jquery-3.6.1.min.js"></script>
+</head>
+<body>
 <div>
 	<div align="center">
 	<h4>로그인</h4>
@@ -11,8 +15,8 @@
 	<label id="loginFaileMsg"></label>
 	<br>
 	<input type="button" id="loginBtn" value="로그인">
+   </div>
 </div>
-
   <script>
 	$(function(){
 		   $("#password").blur(function(){
@@ -29,7 +33,7 @@
 				   success: function (validateLogin) {
 					   if (validateLogin == "y") {
 						   $("#loginBtn").click(function(){
-						   location.href='/member/main';						 
+						   location.href='/usedallea/main';
 						 });
 					   }
 					   else if(validateLogin == "n"){
@@ -42,4 +46,5 @@
 	   });
 
   </script>
+</body>
 </html>

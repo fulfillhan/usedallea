@@ -6,14 +6,15 @@
         <!-- TODO 로그아웃 상태일 때 -->
         <div th:if="${session.userId == null}">
             <button><a th:href="@{/member/login}">로그인</button></a>
-        </div>
-        <div th:unless="${session.userId != null}">
-           <button><a th:href="@{/member/register}">회원가입</button></a>
-           
+	        <button><a th:href="@{/member/register}">회원가입</button></a>
+           </div>
          </div>
             <!--TODO 로그인 상태일 때 -->
+             <div th:unless="${session.userId == null}">
         <div>
-            <button>로그아웃</button>
+	        <span th:text="|${session.userId} 님|"></span>
+            <button><a th:href="@{/member/update}">회원수정</button></a>
+            <button><a th:href="@{/member/logout}">로그아웃</button></a>
         </div>
     </div>
 </section>
@@ -21,7 +22,7 @@
 <section class="header-search-bar" th:fragment="searchBar">
     <div class="header-search-bar__wrap">
         <div class="header-search-bar__top">
-            <a><img src="/img/logo.png" class="site-logo" /></a>
+            <a th:href="@{/usedallea/main}"><img src="/img/logo.png" class="site-logo" /></a>
 
             <div class="header-search-bar__search">
                 <input type="text" />
@@ -29,15 +30,16 @@
             </div>
 
             <div class="header-search-bar__menu">
-                <a>
+                <a th:href="@{/product/create}">
                     <img src="/img/sell.png" />
                     <button>판매하기</button>
                 </a>
                 <a>
                     <img src="/img/store.png" />
+	                
                     <button>내상점</button>
                 </a>
-                <a>
+                <a >
                     <img src="/img/chat.png" />
                     <button>올래톡</button>
                 </a>
