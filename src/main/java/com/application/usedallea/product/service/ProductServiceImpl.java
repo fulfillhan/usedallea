@@ -25,28 +25,25 @@ public class ProductServiceImpl implements ProductService {
 
 	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-	@Override
-	public List<ProductDTO> getAllProudctList(ProductDTO productDTO) {
-		
-		return null;
-	}
+//	@Override
+//	public List<ProductDTO> getAllProudctList(ProductDTO productDTO) {
+//
+//		return null;
+//	}
 
 	@Override
 	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
 
 		long imgId = productImgService.saveImg(uploadImg, productImgDTO); 	// img테이블에 이미지 저장하기 -> 이미지 id 생성
-
+		productDTO.setImgId(imgId);
 		//단위 테스트
 	    //System.out.println(imgId);
 
-
-		productDTO.setImgId(imgId);
 		productDTO.setStatus(ProductStatus.판매중.name());                   // 상품의 품질상태 저장하기
 
 		productDAO.createProduct(productDTO);                               //상품 테이블에 이미지 id 저장하여 등록된 상품테이블 모두 저장하기
 
 		return productDAO.getProductId(imgId);
-
 
 	}
 	
@@ -62,6 +59,16 @@ public class ProductServiceImpl implements ProductService {
 	public List<String> getImgUUID(long productId) {
 
 		return productDAO.getImgUUID(productId);
+	}
+
+	@Override
+	public void updateProduct(ProductDTO productDTO) {
+		productDAO.updateProduct(productDTO);
+	}
+
+	@Override
+	public void deleteProduct(long productId) {
+		productDAO.deleteProduct(productId);
 	}
 
 }

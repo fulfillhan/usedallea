@@ -17,4 +17,8 @@ public interface ProductDAO {
 	void updateReadCnt(long productId);
 
 	List<String> getImgUUID(long productId);
+
+	void updateProduct(ProductDTO productDTO);
+
+	void deleteProduct(long productId);
 }

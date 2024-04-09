@@ -61,4 +61,24 @@
                 PRODUCT_ID = #{productId}
     </select>
 
+    <update id="updateProduct" parameterType="ProductDTO">
+        UPDATE
+                PRODUCT
+        SET
+                TITLE = #{title},
+                CATEGORY = #{category},
+                QUALITY_CONDITION = #{qualityCondition},
+                PRICE = #{price},
+                DESCRIPTION = #{description},
+        WHERE
+                PRODUCT_ID = #{productId}
+    </update>
+    
+    <delete id="deleteProduct" parameterType="long">
+        DELETE FROM
+                    PRODUCT
+        WHERE
+                PRODUCT_ID = #{productId}
+    </delete>
+
 </mapper>

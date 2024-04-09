@@ -15,7 +15,8 @@ public class ProductDTO {
 	private long imgId;
 	private String title;
 	private int price;
-	//private int delivaryPrice;
+	private String includedDeliveryYn;
+	private String deliveryPrice;
 	private String description;
 	private String qualityCondition;
 	private String category;

@@ -1,24 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout.html}">
-<!--xmlns:th="http://www.w3.org/1999/xhtml"-->
 <head>
     <link rel="stylesheet" href="/css/product/detail.css" type="text/css">
-    <script src="/js/jquery-3.6.1.min.js"></script>
 </head>
-
 <div class="product-detail-container" layout:fragment="contents">
     <input type="hidden" name="productId" th:value="${productDTO.productId}"/>
-    <div class="product-detail__category">
-    </div>
-	
+    <div class="product-detail__category"></div>
+
+
     <div class="product-detail__info-wrap">
         <div class="product-detail__img-wrap" >
             <div th:each="imgUUID :${imgUUIDList}">
                 <img th:src="@{/img/setThumbnail(imgName=${imgUUID})}" alt="이미지">
             </div>
-
         </div>
 
         <div class="product-detail__info">
@@ -66,21 +61,11 @@
 			            <span th:text="${productDTO.status}"></span>
 		            </div>
 	            </div>
-                <div>
-                    <div class="product-detail__delivery_price--name">
-                        배송비
-                    </div>
-                    <div class="product-detail__sell_status--value">
-                        <span th:text=""></span>
-                    </div>
-                </div>
-
                 <div class="product-detail__action-wrap">
                     <button class="product-detail__button--manager">
                         내 상점 관리
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
