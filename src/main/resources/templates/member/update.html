@@ -42,38 +42,39 @@
 </head>
   <!--th:Object 활용-->
 <div align="center">
-			<h1 th:text="|${session.userId} 님,|"></h1>
-			<h4>기본 정보 수정이 필요하시나요?</h4>
-<form th:action="@{/member/update}" th:object="${memberDTO}" method="post">
-	<div>이름<span style="color:darkblue;">*</span></div>
-			<input type="text" th:field="*{name}"/>
-	<br>
-	<div>전화번호<span>*</span></div>
-			<input type="text" th:field="*{phoneNumber}"/>
-	<br>
-	<div>SMS 마케팅 수신 동의여부<span>*</span></div>
-			<input type="checkbox" th:field="*{smsstsYn}" value="y"/>
-	<br>
-	<div>이메일<span>*</span></div>
-			<input type="text" th:field="*{email}"/><br>
-	<div>이메일 마케팅 수신 동의여부<span>*</span></div>
-			<input type="checkbox" th:field="*{emailstsYn}" value="y"/>
-	<br>
-	<div>주소<span>*</span></p>
-		<span>우편번호 검색</span>
-		<input type="text"  placeholder="우편번호 입력" th:field="*{zipCode}">
-		<input type="button" onclick="javascript:execDaumPostcode()" value="검색">
-	</div>
-	<br>
-			도로명 주소 : <input type="text" th:field="*{roadAddress}" size="60">
-			<br><br>
-			지번 주소 : <input type="text"  th:field="*{jibunAddress}" size="60">
-			<br><br>
-			나머지 주소: <input type="text" th:field="*{namujiAddress}" size="60">
-			<br><br>
-			<input type="submit" value="수정하기" ><br>
-			<input type="button" value="탈퇴하기"  ><br>
-			<a th:href="@{/usedallea/main}">메인으로 이동</a>
+	<h1 th:text="|${session.userId} 님,|"></h1>
+	<h4>기본 정보 수정이 필요하시나요?</h4>
+	<form th:action="@{/member/update}" th:object="${memberDTO}" method="post">
+
+		<div>닉네임<span style="color:darkblue;">*</span></div>
+		<input type="text" th:field="*{nickname}"/>
+		<br>
+		<div>전화번호<span>*</span></div>
+		<input type="text" th:field="*{phoneNumber}"/>
+		<br>
+		<div>SMS 마케팅 수신 동의여부<span>*</span></div>
+		<input type="checkbox" th:field="*{smsstsYn}" value="y"/>
+		<br>
+		<div>이메일<span>*</span></div>
+		<input type="text" th:field="*{email}"/><br>
+		<div>이메일 마케팅 수신 동의여부<span>*</span></div>
+		<input type="checkbox" th:field="*{emailstsYn}" value="y"/>
+		<br>
+		<div>주소<span>*</span></p>
+			<span>우편번호 검색</span>
+			<input type="text"  placeholder="우편번호 입력" th:field="*{zipCode}">
+			<input type="button" onclick="execDaumPostcode()" value="검색">
+		</div>
+		<br>
+		도로명 주소 : <input type="text" th:field="*{roadAddress}" size="60">
+		<br><br>
+		지번 주소 : <input type="text"  th:field="*{jibunAddress}" size="60">
+		<br><br>
+		나머지 주소: <input type="text" th:field="*{namujiAddress}" size="60">
+		<br><br>
+		<input type="submit" value="수정하기" ><br>
+		<input type="button" value="탈퇴하기" th:onclick="|location.href='@{/member/delete}'|"><br>
+		<a th:href="@{/usedallea/main}">메인으로 이동</a>
 	</form>
 </div>
 </html>

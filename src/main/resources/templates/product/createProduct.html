@@ -4,12 +4,12 @@
 
 <div layout:fragment="contents">
 	<form th:action="@{/product/create}" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="sellerId" th:value="${session.userId}"/>
+		<input type="hidden" id="sellerId" name="sellerId" th:value="${sellerId}">
 		<div align="center">
 	<h4>기본 정보<span style="color:red;">*필수 항목</span></h4><!-- * 이 표시는 빨간색으로 -->
 	<!-- 다중 파일 업로드-->
-    <div>상품이미지 (0/10)<span>*</span></div>
-	<input type="file"  multiple="multiple" name ="uploadImg" placeholder="" required>&emsp;<br>
+    <div>상품이미지 (0/5)<span>*</span></div>
+	<input type="file" name ="uploadImg" id="uploadImg" multiple="multiple" required><br>
 	<br><br>
 	<div>상품명<span>*</span>
 	<input type="text" name="title" maxlength="40" placeholder="상품명을 입력해주세요(40자까지)" required>
@@ -17,7 +17,7 @@
 	
 	<br><br>
 	<div>카테고리<span>*</span>
-	<select name="category">
+	<select name="category" required>
 		<option value="cloth" selected>의류</option>
 		<option value="cosmetic">화장품</option>
 		<option value="furniture">가구/인테리어</option>
@@ -38,6 +38,9 @@
 	<input type="text" id="price" name="price" placeholder="가격을 입력해주세요" required>
 			<span>원</span>
 	<br><br>
+<!--	<div>배송비<span>*</span></div>-->
+<!--	<input type="radio" id="delivaryPrice" name="incl" value=""required>배송비포함-->
+<!--	<span>원</span>-->
 	
 	<div>설명<span>*</span></div>
 			<label>
@@ -49,5 +52,4 @@
 		</div>
 	</form>
 </div>
-
 </html>

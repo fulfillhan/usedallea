@@ -47,11 +47,7 @@ public class MemberController {
 	@ResponseBody
 	public String dupleCheckId(@RequestParam("userId") String userId) {
 
-		String validateId = "y";
-		if (memberService.dupleCheckId(userId)) {
-			validateId = "n";
-		}
-		return validateId;
+		return memberService.dupleCheckId(userId);
 	}
 
 	@GetMapping("/login")
@@ -63,10 +59,11 @@ public class MemberController {
 	@ResponseBody
 	public String login(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
 		// 로그인이 되면 세션화 적용하기
-		String validateLogin = memberService.login(memberDTO);
-		if (validateLogin.equals("y")) { //로그인이 가능
+		String validateLogin = "n";
+		if(memberService.login(memberDTO)){
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", memberDTO.getUserId());
+            validateLogin = "y";
 		}
 		return validateLogin;
 	}
@@ -82,8 +79,14 @@ public class MemberController {
 	@GetMapping("/update")
 	public String update(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
-		String userId = (String) session.getAttribute("userId");
-		model.addAttribute("memberDTO", memberService.getMemberDetail(userId));
+		String userId = (String)session.getAttribute("userId");
+		MemberDTO memberDetail = memberService.getMemberDetail(userId);
+
+		//null이면 객체로 반환하여 빈값으로 생성하기.
+		if (memberDetail == null) {
+			memberDetail = new MemberDTO();
+		}
+		model.addAttribute("memberDTO", memberDetail);
 		return "member/update";
 	}
 
@@ -93,6 +96,23 @@ public class MemberController {
 
 		return "redirect:/usedallea/main";
 	}
+
+	@GetMapping("/delete")
+	public String delete(){
+		return "member/delete";
+	}
+
+	@PostMapping("/delete")
+	public String delete(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String userId = (String)session.getAttribute("userId");
+		memberService.updateDelete(userId);  // 비활성화로 업데이트 하기
+
+		session.invalidate();  // 세션 지우기
+		return "redirect:/usedallea/main";
+	}
+
+	//탈퇴한 회원 스케줄링 하기
 
 
 }

@@ -24,6 +24,15 @@
         )
     </insert>
 
+    <select id="getProductId" parameterType="long" resultType="long">
+        SELECT
+                PRODUCT_ID
+        FROM
+                PRODUCT
+        WHERE
+                IMG_ID = #{imgId}
+    </select>
+
     <select id="getProductDetail"  parameterType="long" resultType="ProductDTO">
         SELECT
                 *
@@ -34,7 +43,7 @@
     </select>
     <update id="updateReadCnt" parameterType="long">
         UPDATE
-                READ_COUNT
+                PRODUCT
         SET
                 READ_COUNT = READ_COUNT + 1
         WHERE
@@ -43,11 +52,13 @@
 
     <select id="getImgUUID" parameterType="long" resultType="String">
         SELECT
-                IMG_UUID
+               I.IMG_UUID AS IMG_UUID
         FROM
-                IMG
+                PRODUCT P
+           JOIN IMG I
+            ON  P.IMG_ID = I.IMG_ID
         WHERE
-                IMG_ID = #{imgId}
+                PRODUCT_ID = #{productId}
     </select>
 
 </mapper>

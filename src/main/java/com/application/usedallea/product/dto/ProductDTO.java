@@ -2,7 +2,7 @@ package com.application.usedallea.product.dto;
 
 import java.util.Date;
 
-//import com.application.usedallea.product.service.ProductStatus;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -15,6 +15,7 @@ public class ProductDTO {
 	private long imgId;
 	private String title;
 	private int price;
+	//private int delivaryPrice;
 	private String description;
 	private String qualityCondition;
 	private String category;

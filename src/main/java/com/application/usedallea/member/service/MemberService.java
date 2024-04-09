@@ -6,11 +6,13 @@ public interface MemberService {
 
 	public void registerMember(MemberDTO memberDTO);
 
-	public boolean dupleCheckId(String userId);
+	public String dupleCheckId(String userId);
 
-	public String login(MemberDTO memberDTO);
+	public boolean login(MemberDTO memberDTO);
 
      public MemberDTO getMemberDetail(String userId);
 
 	 public void updateMember(MemberDTO memberDTO);
+
+	 public void updateDelete(String userId);
 }
