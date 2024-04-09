@@ -5,7 +5,7 @@
 <body>
 <div layout:fragment="contents">
 	<form th:action="@{/product/update}"  method="post" th:object="${productDTO}" enctype="multipart/form-data">
-		<input type="hidden" th:field="productId" th:value="${productId}">
+		<input type="hidden" th:field="*{productId}">
 		<div align="center">
 	<h4>기본 정보<span style="color:red;">*필수 항목</span></h4><!-- * 이 표시는 빨간색으로 -->
 	<!-- 다중 파일 수정하기-->
@@ -14,12 +14,9 @@
 <!--	<br><br>-->
 	<div>상품명<span>*</span>
 	<input type="text" maxlength="40" th:field="*{title}" required>
-		<input type="text" th:field="*{productId}"></p>
 	</div>
-	<!--빨간줄이생기는 이유는-->
 	<br><br>
 	<div>카테고리<span>*</span>
-		<!--17스프링_form HTML 참고-->
 	<select th:field="*{category}">
 		<option th:value="cloth"  selected>의류</option>
 		<option th:value="cosmetic" >화장품</option>
@@ -52,5 +49,5 @@
 		</div>
 	</form>
 </div>
-	</body>
+</body>
 </html>

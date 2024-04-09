@@ -8,14 +8,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.application.usedallea.product.dto.ProductDTO;
 
 public interface ProductService {
+	//List<ProductDTO> getAllProudctList(ProductDTO productDTO);
 
-	public List<ProductDTO> getAllProudctList(ProductDTO productDTO);
 
-	//public File createProduct(MultipartFile uploadFile, ProductDTO productDTO, ProductImgDTO ProductImgDTO) throws Exception;
+	long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
 
-	  long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
-	  public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt);
-	  //public List<String> getImgUUID(long productImgId);
-	  List<String> getImgUUID(long productId);
+	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt);
+
+	//public List<String> getImgUUID(long productImgId);
+	List<String> getImgUUID(long productId);
+
+	void updateProduct(ProductDTO productDTO);
+
+	void deleteProduct(long productId);
 }
 
