@@ -10,6 +10,7 @@ import lombok.Data;
 public class MemberDTO {
 	
 	private String userId;
+	private String nickname;
 	private String password;
 	private String name;
 	private String activeYn;
@@ -22,8 +23,5 @@ public class MemberDTO {
 	private String namujiAddress;
 	private String zipCode;
 	private String personalInfoYn;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date updatedAt;
-	private Date createDate;
 
 }

@@ -32,18 +32,22 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
+	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
 
 		long imgId = productImgService.saveImg(uploadImg, productImgDTO); 	// img테이블에 이미지 저장하기 -> 이미지 id 생성
 
 		//단위 테스트
 	    //System.out.println(imgId);
 
-		productDTO.setImgId(imgId);
 
+		productDTO.setImgId(imgId);
 		productDTO.setStatus(ProductStatus.판매중.name());                   // 상품의 품질상태 저장하기
 
 		productDAO.createProduct(productDTO);                               //상품 테이블에 이미지 id 저장하여 등록된 상품테이블 모두 저장하기
+
+		return productDAO.getProductId(imgId);
+
+
 	}
 	
 	@Override
@@ -55,9 +59,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public String getImgUUID(long productImgId) {
+	public List<String> getImgUUID(long productId) {
 
-		return productDAO.getImgUUID(productImgId);
+		return productDAO.getImgUUID(productId);
 	}
 
 }

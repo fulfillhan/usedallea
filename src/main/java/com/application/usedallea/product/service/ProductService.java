@@ -13,8 +13,9 @@ public interface ProductService {
 
 	//public File createProduct(MultipartFile uploadFile, ProductDTO productDTO, ProductImgDTO ProductImgDTO) throws Exception;
 
-	  public void createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
+	  long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
 	  public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt);
-	  public String getImgUUID(long productImgId);
+	  //public List<String> getImgUUID(long productImgId);
+	  List<String> getImgUUID(long productId);
 }
 

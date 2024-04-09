@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ProductImgDAO {
-	
-	 public long saveImg(ProductImgDTO productImgDTO);
 
 	public long getMaxImgId();
+
+	 public void saveImg(ProductImgDTO productImgDTO);
 
 }
