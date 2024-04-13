@@ -24,6 +24,26 @@
         )
     </insert>
 
+    <select id="getAllProductList" resultType="ProductDTO">
+        SELECT
+            PRODUCT_ID,
+            SELLER_ID,
+            PRICE,
+            DESCRIPTION,
+            QUALITY_CONDITION,
+            CATEGORY,
+            CREATED_AT,
+            UPDATED_AT,
+            READ_COUNT,
+            STATUS,
+            TITLE,
+            IMG_ID
+        FROM
+                PRODUCT
+        ORDER BY
+                CREATED_AT DESC
+    </select>
+
     <select id="getProductId" parameterType="long" resultType="long">
         SELECT
                 PRODUCT_ID
@@ -50,7 +70,7 @@
                 PRODUCT_ID = #{productId}
     </update>
 
-    <select id="getImgUUID" parameterType="long" resultType="String">
+    <select id="getImgUUIDList" parameterType="long" resultType="String">
         SELECT
                I.IMG_UUID AS IMG_UUID
         FROM
@@ -80,5 +100,68 @@
         WHERE
                 PRODUCT_ID = #{productId}
     </delete>
+
+    <select id="getAllProductCnt" parameterType="hashmap" resultType="int">
+        <choose>
+            <when test="searchWord.equals('')">
+                SELECT
+                        COUNT(*)
+                FROM
+                        PRODUCT
+            </when>
+            <otherwise>
+                SELECT
+                         COUNT(*)
+                FROM
+                        PRODUCT
+                WHERE
+                        CATEGORY LIKE CONCAT('%', #{category}, '%')
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getProductList" parameterType="hashmap" resultType="ProductDTO">
+        <choose>
+            <when test="searchWord.equals('')">
+                select
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    DESCRIPTION,
+                    QUALITY_CONDITION,
+                    CREATED_AT,
+                    UPDATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM PRODUCT
+                ORDER BY
+                    CREATED_AT DESC
+            </when>
+            <otherwise>
+                SELECT
+                        PRODUCT_ID,
+                        SELLER_ID,
+                        PRICE,
+                        DESCRIPTION,
+                        QUALITY_CONDITION,
+                        CREATED_AT,
+                        UPDATED_AT,
+                        READ_COUNT,
+                        STATUS,
+                        TITLE,
+                        IMG_ID
+                FROM
+                        PRODUCT
+                WHERE
+                        CATEGORY LIKE CONCAT('%', #{category), '%')
+                ORDER BY
+                        CREATED_AT DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
 
 </mapper>

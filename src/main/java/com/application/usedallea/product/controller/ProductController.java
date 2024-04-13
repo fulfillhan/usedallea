@@ -60,7 +60,7 @@ public class ProductController {
 		HttpSession session = request.getSession();
 		model.addAttribute("sellerId", session.getAttribute("userId"));   //찜 기능이 있어서 세션정보 필요
 		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
-		model.addAttribute("imgUUIDList", productService.getImgUUID(productId));
+		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
 
 		return "product/productDetailBySeller";
 	}
@@ -86,9 +86,15 @@ public class ProductController {
 		String script= """
 				<script>
 				alert("게시글이 삭제되었습니다!");
+				location.href='product/productManager'; 
 				</script>
 				""";
+			// 나중에 상품 관리 페이지로 넘어가게한다.
+		return script;
 	}
+
+
+
 
 }
 

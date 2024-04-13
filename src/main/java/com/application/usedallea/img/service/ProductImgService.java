@@ -10,7 +10,4 @@ import java.util.List;
 
 public interface ProductImgService {
 	public long saveImg(List<MultipartFile> uploadImg, ProductImgDTO productImgDTO) throws IOException;
-	
-	
-	
 }

@@ -1,5 +1,6 @@
 package com.application.usedallea.product.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -15,16 +16,18 @@ public class ProductDTO {
 	private long imgId;
 	private String title;
 	private int price;
-	private String includedDeliveryYn;
-	private String deliveryPrice;
 	private String description;
 	private String qualityCondition;
 	private String category;
 	private String status;
 	private int readCount;	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date createdAt;
-	private Date updatedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	private long daysAgo;
+	private long hoursAgo;
+	private String firstImgUUID;
+
 	
 	
 	
