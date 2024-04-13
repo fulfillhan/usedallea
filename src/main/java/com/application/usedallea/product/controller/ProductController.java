@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.usedallea.product.dto.ProductDTO;
@@ -21,14 +18,14 @@ import com.application.usedallea.product.service.ProductService;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
-	
+
 	@Value("${file.repo.path")
 	private String imgRepositoryPath;
-	
+
 	@Autowired
 	private ProductService productService;
-	
-	
+
+
 //	@GetMapping("/allProductList")
 //	public String getAllProductList(Model model) {
 //	List<ProductDTO> productList = productService.getAllProudctList();
@@ -37,36 +34,67 @@ public class ProductController {
 //	
 //		return "";	
 //	}
-	
+
 	// 중고 상품 등록
 	@GetMapping("/create")
 	public String create(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		model.addAttribute("sellerId",session.getAttribute("userId"));
+		model.addAttribute("sellerId", session.getAttribute("userId"));
 		return "product/createProduct";
 	}
-	
+
 	@PostMapping("/create")
 	public String create(@RequestParam("uploadImg") List<MultipartFile> uploadFile, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
 
-		productService.createProduct(uploadFile,productDTO,productImgDTO);
+		long productId = productService.createProduct(uploadFile, productDTO, productImgDTO);
 
-		return "product/productDetail";
-		
+		return "redirect:/product/detailBySeller?productId=" + productId;
+
 	}
-	// 상품 상세
-	@GetMapping("/detail")
-	public String detail(Model model,HttpServletRequest request,
-						 @RequestParam("productId") long productId, @RequestParam("productImgId") long productImgId){
+
+
+	// 판매자에게 보이는 상품 상세
+	@GetMapping("/detailBySeller")
+	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
 		//상세 상품 데이터 처음 가져올때만 조회수 반영
-	  HttpSession session = request.getSession();
-	    model.addAttribute("sellerId", session.getAttribute("userId"));   //찜 기능이 있어서 세션정보 필요
-		model.addAttribute("productDTO",productService.getProductDetail(productId,true));
-		model.addAttribute("imgUUID", productService.getImgUUID(productImgId));
-		//<!--사진이 여러장이 아니면... imgDTO로 받아야 하는지?-->
+		HttpSession session = request.getSession();
+		model.addAttribute("sellerId", session.getAttribute("userId"));   //찜 기능이 있어서 세션정보 필요
+		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
+		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
 
-		return "product/productDetail";
+		return "product/productDetailBySeller";
 	}
+
+	//상품 수정 productId를 보내준다.
+	@GetMapping("/update")
+	public String update(Model model, @RequestParam("productId") long productId) {
+		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
+		return "product/updateProduct";
+	}
+
+	@PostMapping("/update")
+	public String update(@ModelAttribute ProductDTO productDTO) {
+		productService.updateProduct(productDTO);
+		return "redirect:/product/detailBySeller";  //상품 관리 페이지로 변경해주기
+	}
+
+	@PostMapping("/delete")   // 상품 관리 페이지에서 삭제 버튼을 누르면 해당 컨트롤러 실행하여 삭제해주기!
+	@ResponseBody
+	public String delete(@RequestParam("productId") long productId){
+		productService.deleteProduct(productId);
+
+		String script= """
+				<script>
+				alert("게시글이 삭제되었습니다!");
+				location.href='product/productManager'; 
+				</script>
+				""";
+			// 나중에 상품 관리 페이지로 넘어가게한다.
+		return script;
+	}
+
+
+
 
 }
 

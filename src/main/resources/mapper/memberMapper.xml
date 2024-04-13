@@ -6,6 +6,7 @@
 		INSERT INTO USER(
 			USER_ID,
 			PASSWORD,
+			NICKNAME,
 			NAME,
 			PHONE_NUMBER,
 			SMSSTS_YN,
@@ -20,6 +21,7 @@
 		VALUES(
 			#{userId},
 			#{password},
+			#{nickname},
 			#{name},
 			#{phoneNumber},
 			#{smsstsYn},
@@ -65,7 +67,7 @@
 		UPDATE
 		    	USER
 		SET
-		    	NAME = #{name},
+		    	NICKNAME = #{nickname},
 				PHONE_NUMBER = #{phoneNumber},
 				SMSSTS_YN = #{smsstsYn},
 				EMAIL = #{email},
@@ -75,5 +77,16 @@
 				JIBUN_ADDRESS = #{jibunAddress},
 				NAMUJI_ADDRESS = #{namujiAddress}
 	</update>
+
+	<update id="updateDeleteMember" parameterType="String">
+		UPDATE
+		    	USER
+		SET
+		    	ACTIVE_YN = "n",
+				UPDATED_AT = NOW()
+		WHERE
+		    	USER_ID = #{userId}
+	</update>
+
 
 </mapper>

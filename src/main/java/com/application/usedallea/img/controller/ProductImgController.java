@@ -2,8 +2,6 @@ package com.application.usedallea.img.controller;
 
 import java.io.IOException;
 
-import com.application.usedallea.img.service.ProductImgService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
@@ -17,17 +15,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/img")
 public class ProductImgController {
 	
-	@Value("${file.repo.path")
+	@Value("${file.repo.path}")
 	private String imgRepositoryPath;
-	
-	@Autowired
-	private ProductImgService productimgService;
-	
-	@GetMapping("/thumbnails")
+
+
+	@GetMapping("/setThumbnail")
 	@ResponseBody
-	public UrlResource thumbnails(@RequestParam("imgName") String imgName) throws IOException {
-		return new UrlResource(imgRepositoryPath+imgName);
+	public UrlResource setThumbnail(@RequestParam("imgName") String imgName) throws IOException {
+		UrlResource resource = new UrlResource("file:"+imgRepositoryPath + imgName);
+		return resource;
 	}
+
+
 
 
 

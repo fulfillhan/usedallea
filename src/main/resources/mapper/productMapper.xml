@@ -24,6 +24,35 @@
         )
     </insert>
 
+    <select id="getAllProductList" resultType="ProductDTO">
+        SELECT
+            PRODUCT_ID,
+            SELLER_ID,
+            PRICE,
+            DESCRIPTION,
+            QUALITY_CONDITION,
+            CATEGORY,
+            CREATED_AT,
+            UPDATED_AT,
+            READ_COUNT,
+            STATUS,
+            TITLE,
+            IMG_ID
+        FROM
+                PRODUCT
+        ORDER BY
+                CREATED_AT DESC
+    </select>
+
+    <select id="getProductId" parameterType="long" resultType="long">
+        SELECT
+                PRODUCT_ID
+        FROM
+                PRODUCT
+        WHERE
+                IMG_ID = #{imgId}
+    </select>
+
     <select id="getProductDetail"  parameterType="long" resultType="ProductDTO">
         SELECT
                 *
@@ -34,20 +63,105 @@
     </select>
     <update id="updateReadCnt" parameterType="long">
         UPDATE
-                READ_COUNT
+                PRODUCT
         SET
                 READ_COUNT = READ_COUNT + 1
         WHERE
                 PRODUCT_ID = #{productId}
     </update>
 
-    <select id="getImgUUID" parameterType="long" resultType="String">
+    <select id="getImgUUIDList" parameterType="long" resultType="String">
         SELECT
-                IMG_UUID
+               I.IMG_UUID AS IMG_UUID
         FROM
-                IMG
+                PRODUCT P
+           JOIN IMG I
+            ON  P.IMG_ID = I.IMG_ID
         WHERE
-                IMG_ID = #{imgId}
+                PRODUCT_ID = #{productId}
     </select>
+
+    <update id="updateProduct" parameterType="ProductDTO">
+        UPDATE
+                PRODUCT
+        SET
+                TITLE = #{title},
+                CATEGORY = #{category},
+                QUALITY_CONDITION = #{qualityCondition},
+                PRICE = #{price},
+                DESCRIPTION = #{description},
+        WHERE
+                PRODUCT_ID = #{productId}
+    </update>
+    
+    <delete id="deleteProduct" parameterType="long">
+        DELETE FROM
+                    PRODUCT
+        WHERE
+                PRODUCT_ID = #{productId}
+    </delete>
+
+    <select id="getAllProductCnt" parameterType="hashmap" resultType="int">
+        <choose>
+            <when test="searchWord.equals('')">
+                SELECT
+                        COUNT(*)
+                FROM
+                        PRODUCT
+            </when>
+            <otherwise>
+                SELECT
+                         COUNT(*)
+                FROM
+                        PRODUCT
+                WHERE
+                        CATEGORY LIKE CONCAT('%', #{category}, '%')
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getProductList" parameterType="hashmap" resultType="ProductDTO">
+        <choose>
+            <when test="searchWord.equals('')">
+                select
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    DESCRIPTION,
+                    QUALITY_CONDITION,
+                    CREATED_AT,
+                    UPDATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM PRODUCT
+                ORDER BY
+                    CREATED_AT DESC
+            </when>
+            <otherwise>
+                SELECT
+                        PRODUCT_ID,
+                        SELLER_ID,
+                        PRICE,
+                        DESCRIPTION,
+                        QUALITY_CONDITION,
+                        CREATED_AT,
+                        UPDATED_AT,
+                        READ_COUNT,
+                        STATUS,
+                        TITLE,
+                        IMG_ID
+                FROM
+                        PRODUCT
+                WHERE
+                        CATEGORY LIKE CONCAT('%', #{category), '%')
+                ORDER BY
+                        CREATED_AT DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
 
 </mapper>

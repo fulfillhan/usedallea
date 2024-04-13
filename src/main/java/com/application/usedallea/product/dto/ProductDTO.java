@@ -1,8 +1,9 @@
 package com.application.usedallea.product.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-//import com.application.usedallea.product.service.ProductStatus;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -21,8 +22,12 @@ public class ProductDTO {
 	private String status;
 	private int readCount;	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date createdAt;
-	private Date updatedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	private long daysAgo;
+	private long hoursAgo;
+	private String firstImgUUID;
+
 	
 	
 	

@@ -18,15 +18,14 @@
         </div>
     </div>
 </section>
-
 <section class="header-search-bar" th:fragment="searchBar">
     <div class="header-search-bar__wrap">
         <div class="header-search-bar__top">
             <a th:href="@{/usedallea/main}"><img src="/img/logo.png" class="site-logo" /></a>
 
             <div class="header-search-bar__search">
-                <input type="text" />
-                <img src="/img/search.png" />
+                <input type="text" id="searchWord" name="searchWord" th:value="${searchWord}" placeholder="상품명 입력" maxlength="40"/>
+                <img src="/img/search.png" onclick="getProductList()" />
             </div>
 
             <div class="header-search-bar__menu">
@@ -49,7 +48,4 @@
         </div>
     </div>
 </section>
-
-<script>
-</script>
 </html>

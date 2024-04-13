@@ -13,218 +13,66 @@
     </section>
 
     <section class="today-recommended">
-        <h3>오늘의 상품 추천</h3>		
-
+        <h3>오늘의 상품 추천</h3>
+        <select id="onePageProductCnt" th:onchange="getProductList()" ><!--이함수가 안되고 있음-->
+            <option>5</option>
+            <option>10</option>
+        </select>
+      전체 : <span th:text="|${allProductCnt} 개|"></span><!--오늘의 상품 추천 옆에-->
+        <br><br>
         <div class="item-list">
-
-            <!-- 상품 단건 이미지 -->
-            <div class="item">
-                <a>
+            <!-- 상품 단건 이미지 보여주기-->
+            <div class="item" id="productList" th:each="productDTO : ${productList}" >
+                <a th:href="@{/prodcut/productDetailByUser(productId=${productDTO.productId})}">
                     <div class="item__body" >
-<!--	                    th:text="${product.img}"-->
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                        <!--th:src="@{/img/thumbnails(imgName=${imgDTO.imgUUID)}"-->
+                        <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지"/>
                     </div>
                     <div class="item__footer">
                         <div class="item__footer--title">
-<!--	                        th:text="${product.title}"-->
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
+	                        <span th:text="${productDTO.title}"/>
                         </div>
                         <div class="item__footer--price">
-<!--	                        th:text="${product.price}"-->
-                            100,000,000원
+	                        <span th:text="${productDTO.price+'원'}"/>
                         </div>
                         <div class="item__footer--date">
-<!--	                        th:text="${product.createdAt}"-->
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="item">
-                <a>
-                    <div class="item__body">
-                        <img src="https://picsum.photos/seed/picsum/200/300" />
-                    </div>
-                    <div class="item__footer">
-                        <div class="item__footer--title"
-                             th:title="${'풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.'}">
-                            풍경 사진입니다. 제목이 너무 길면 축약해서 보여줍니다.
-                        </div>
-                        <div class="item__footer--price">
-                            100,000,000원
-                        </div>
-                        <div class="item__footer--date">
-                            7일 전
+                          <span th:if="${productDTO.hoursAgo < 24}" th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
+                          <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}" th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
+                          <span th:if="${productDTO.daysAgo >= 7}" th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
                         </div>
                     </div>
                 </a>
             </div>
         </div>
     </section>
+   <div style="display: table; margin-left: auto; margin-right: auto">
+        <ul>
+            <li th:if="${startPage > 10}">
+                <a th:href="|javascript:getProductList(${startPage - 10})|">이전&nbsp;</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                <a th:href="|javascript:getProductList(${i})|" th:text="${i }"></a>&nbsp;
+            </li>
+            <li th:if="${endPage >= 10 && endPage != allPageCnt}">
+                <a th:href="|javascript:getProductList(${startPage + 10})|">다음</a>
+            </li>
+        </ul>
+    </div>
+</table>
 </div>
-
 <script>
+    $(function (){
+        $("#searchWord").val();
+        $("#onePageProductCnt").val();
+    });
+
+    function getProductList(currentPageNumber){
+        let url = "/usedallea/main";
+            url += "?searchWord="+$("#searchWord").val();
+            url += "?onePageProductCnt="+$("onePageProductCnt").val();
+        if(currentPageNumber != null){
+            url += "?currentPageNumber="+currentPageNumber;
+        }
+        location.href=url;
+    }
 </script>
 </html>

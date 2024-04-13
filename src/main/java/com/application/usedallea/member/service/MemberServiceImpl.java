@@ -34,25 +34,24 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean dupleCheckId(String userId) {
-		boolean isDupleId = false;
+	public String dupleCheckId(String userId) {
+		String validateId = "y";
 		if(memberDAO.dupleCheckId(userId) != null) {
-			isDupleId = true;
+			validateId = "n";
 		}
-		return isDupleId;
+		return validateId;
 	}
 
 	@Override
-	public String login(MemberDTO memberDTO) {
-		String loginPossible = "n";
+	public boolean login(MemberDTO memberDTO) {
 		//입력한 아이디의 패스워드, 활성여부 확인하여 있으면 로그인가능
 		MemberDTO loginData = memberDAO.getLoginData(memberDTO.getUserId());
 		if(loginData != null) {
 			if(passwordEncoder.matches(memberDTO.getPassword(), loginData.getPassword()) && loginData.getActiveYn().equals("y")) {
-				loginPossible = "y";
+				return true;   //로그인 되어 있는 상태
 			}
 		}
-		return loginPossible;
+		return false;
 	}
 
 	@Override
@@ -70,5 +69,9 @@ public class MemberServiceImpl implements MemberService {
         memberDAO.updateMember(memberDTO);
     }
 
+	@Override
+	public void updateDelete(String userId) {
+		memberDAO.updateDeleteMember(userId);
+	}
 
 }

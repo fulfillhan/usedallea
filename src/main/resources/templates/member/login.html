@@ -19,12 +19,12 @@
 </div>
   <script>
 	$(function(){
-		   $("#password").blur(function(){
+		$("#loginBtn").click(function(){
 			   var loginData = {
-				   "userId" : $("#userId").val(),
+				   "userId" : $("#userId").val(),    // 식별자 보내주기
 				   "password" : $("#password").val()
 			   }
-			   
+
 			   $.ajax({
 				   url: "/member/login",
 				   type: "post",
@@ -32,9 +32,7 @@
 				   data: JSON.stringify(loginData),
 				   success: function (validateLogin) {
 					   if (validateLogin == "y") {
-						   $("#loginBtn").click(function(){
-						   location.href='/usedallea/main';
-						 });
+						   location.href="/usedallea/main";
 					   }
 					   else if(validateLogin == "n"){
 						   $("#loginFaileMsg").html("<span style='color:red;'>아이디와 패스워드가 일치하지 않습니다.<br>입력한 내용을 다시 한번 확인해주세요.</span>");
@@ -43,7 +41,18 @@
 				   }
 			   });
 		   });
-	   });
+
+		$("#userId").focus(function (){   // 아이디 입력란에 포커스를 받으면 메시지 지움
+			$("#loginFaileMsg").html("");
+		});
+
+		$("#password").focus(function (){ // 패스워드 입력란에 포커스를 받으면 메시지 지움
+			$("#loginFaileMsg").html("");
+		});
+
+
+   });
+
 
   </script>
 </body>
