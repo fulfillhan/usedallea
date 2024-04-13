@@ -28,10 +28,10 @@
 		<div>주소<span>*</span></p>
 			<span>우편번호 검색</span>
 			<input type="text"  placeholder="우편번호 입력" th:field="*{zipCode}">
-			<input type="button" th:onclick="javascript:execDaumPostcode()" value="검색">
+			<input type="button" th:onclick="|javascript:execDaumPostcode()|" value="검색">
 		</div>
 		<br>
-		도로명 주소 : <input type="text" th:field="*{roadAddress}" size="60">
+		도로명 주소 : <input type="text" th:field="*{roadAddress}"size="60">
 		<br><br>
 		지번 주소 : <input type="text"  th:field="*{jibunAddress}" size="60">
 		<br><br>
@@ -71,7 +71,7 @@
 					fullRoadAddr += extraRoadAddr;
 				}
 
-				document.getElementById('zipcode').value = data.zonecode;
+				document.getElementById('zipCode').value = data.zonecode;
 				document.getElementById('roadAddress').value = fullRoadAddr;
 				document.getElementById('jibunAddress').value = data.jibunAddress;
 

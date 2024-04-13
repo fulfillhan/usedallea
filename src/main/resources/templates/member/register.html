@@ -39,7 +39,7 @@
 	
 	<div>주소<span>*</span></p>
 		<input type="text" placeholder="우편번호 입력" id="zipcode" name="zipcode">
-		<input type="button" th:onclick="javascript:execDaumPostcode()" value="검색"/>
+		<input type="button" th:onclick="|javascript:execDaumPostcode()|" value="검색"/>
 	</div>
 	<br><br>
 		도로명 주소 : <input type="text" name="roadAddress" id="roadAddress">

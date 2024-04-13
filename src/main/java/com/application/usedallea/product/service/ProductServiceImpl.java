@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -46,19 +47,25 @@ public class ProductServiceImpl implements ProductService {
 		return productDAO.getProductId(imgId);
 
 	}
-	
+
+	@Override
+	public List<ProductDTO> getAllProductList() {
+		return productDAO.getAllProductList();
+	}
+
+
 	@Override
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
 		//title, 가격, readCount, 상품 상태, 상품 설명, 카테고리
 		productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
 		return productDAO.getProductDetail(productId);
-	
+
 	}
 
 	@Override
-	public List<String> getImgUUID(long productId) {
+	public List<String> getImgUUIDList(long productId) {
 
-		return productDAO.getImgUUID(productId);
+		return productDAO.getImgUUIDList(productId);
 	}
 
 	@Override
@@ -69,6 +76,17 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void deleteProduct(long productId) {
 		productDAO.deleteProduct(productId);
+	}
+
+	@Override
+	public int getAllProductCnt(Map<String, String> searchCntMap) {
+
+		return productDAO.getAllProductCnt(searchCntMap);
+	}
+
+	@Override
+	public List<ProductDTO> getProductList(Map<String, Object> searchMap) {
+		return productDAO.getProductList(searchMap);
 	}
 
 }

@@ -4,11 +4,14 @@ import com.application.usedallea.product.dto.ProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ProductDAO {
 
 	void createProduct(ProductDTO productDTO);
+
+	List<ProductDTO> getAllProductList();
 
 	long getProductId(long imgId);
 
@@ -16,9 +19,13 @@ public interface ProductDAO {
 
 	void updateReadCnt(long productId);
 
-	List<String> getImgUUID(long productId);
+	List<String> getImgUUIDList(long productId);
 
 	void updateProduct(ProductDTO productDTO);
 
 	void deleteProduct(long productId);
+
+    int getAllProductCnt(Map<String, String> searchCntMap);
+
+	List<ProductDTO> getProductList(Map<String, Object> searchMap);
 }
