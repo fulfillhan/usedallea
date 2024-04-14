@@ -93,7 +93,7 @@
         WHERE
                 PRODUCT_ID = #{productId}
     </update>
-    
+
     <delete id="deleteProduct" parameterType="long">
         DELETE FROM
                     PRODUCT
@@ -102,22 +102,17 @@
     </delete>
 
     <select id="getAllProductCnt" parameterType="hashmap" resultType="int">
-        <choose>
-            <when test="searchWord.equals('')">
-                SELECT
-                        COUNT(*)
-                FROM
-                        PRODUCT
-            </when>
-            <otherwise>
-                SELECT
-                         COUNT(*)
-                FROM
-                        PRODUCT
-                WHERE
-                        CATEGORY LIKE CONCAT('%', #{category}, '%')
-            </otherwise>
-        </choose>
+        SELECT
+            COUNT(*)
+        FROM
+            PRODUCT
+        <where>
+            <if test="searchWord != ''">
+                CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
+                TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
+                DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="getProductList" parameterType="hashmap" resultType="ProductDTO">
@@ -138,6 +133,9 @@
                 FROM PRODUCT
                 ORDER BY
                     CREATED_AT DESC
+                LIMIT
+                    #{startProductIdx}, #{onePageProductCnt}
+
             </when>
             <otherwise>
                 SELECT
@@ -154,10 +152,17 @@
                         IMG_ID
                 FROM
                         PRODUCT
-                WHERE
-                        CATEGORY LIKE CONCAT('%', #{category), '%')
+               <where>
+                   <if test="searchWord != ''">
+                       CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
+                       TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
+                       DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
+                   </if>
+               </where>
                 ORDER BY
                         CREATED_AT DESC
+                LIMIT
+                        #{startProductIdx}, #{onePageProductCnt}
             </otherwise>
         </choose>
     </select>

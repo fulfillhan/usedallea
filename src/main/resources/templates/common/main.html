@@ -14,16 +14,12 @@
 
     <section class="today-recommended">
         <h3>오늘의 상품 추천</h3>
-        <select id="onePageProductCnt" th:onchange="getProductList()" ><!--이함수가 안되고 있음-->
-            <option>5</option>
-            <option>10</option>
-        </select>
-      전체 : <span th:text="|${allProductCnt} 개|"></span><!--오늘의 상품 추천 옆에-->
+      전체 : <span th:text="|${allProductCnt} 개|"></span>
         <br><br>
         <div class="item-list">
             <!-- 상품 단건 이미지 보여주기-->
             <div class="item" id="productList" th:each="productDTO : ${productList}" >
-                <a th:href="@{/prodcut/productDetailByUser(productId=${productDTO.productId})}">
+                <a th:href="@{/product/detailBySeller(productId=${productDTO.productId})}">
                     <div class="item__body" >
                         <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지"/>
                     </div>
@@ -44,35 +40,38 @@
             </div>
         </div>
     </section>
-   <div style="display: table; margin-left: auto; margin-right: auto">
-        <ul>
+    <!--화면 페이징 처리-->
+<!--   <div style="display: table; margin-left: auto; margin-right: auto">-->
+        <ul th:align="center">
             <li th:if="${startPage > 10}">
-                <a th:href="|javascript:getProductList(${startPage - 10})|">이전&nbsp;</a>
+                <a th:href="|javascript:getProductList(${startPage - 10})|">◀&nbsp;</a>
             </li>
-            <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                <a th:href="|javascript:getProductList(${i})|" th:text="${i }"></a>&nbsp;
-            </li>
+            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|" th:text="${page}"></a>&nbsp;
+                <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
+            </th:block>
             <li th:if="${endPage >= 10 && endPage != allPageCnt}">
-                <a th:href="|javascript:getProductList(${startPage + 10})|">다음</a>
+                <a th:href="|javascript:getProductList(${startPage + 10})|">▶</a>
             </li>
         </ul>
-    </div>
-</table>
-</div>
-<script>
-    $(function (){
-        $("#searchWord").val();
-        $("#onePageProductCnt").val();
-    });
+    <script>
 
-    function getProductList(currentPageNumber){
-        let url = "/usedallea/main";
+
+        $("#searchWord").keypress(function (event){
+            if(event.keyCode == 13){
+                getProductList();
+            }
+        })
+        function getProductList(currentPageNumber){
+            let url = "/usedallea/main"
             url += "?searchWord="+$("#searchWord").val();
-            url += "?onePageProductCnt="+$("onePageProductCnt").val();
-        if(currentPageNumber != null){
-            url += "?currentPageNumber="+currentPageNumber;
+            if(currentPageNumber != null){
+                url += "&currentPageNumber="+currentPageNumber;
+            }
+            location.href=url;
         }
-        location.href=url;
-    }
-</script>
+
+
+    </script>
+</div>
 </html>

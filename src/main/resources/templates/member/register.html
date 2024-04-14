@@ -17,7 +17,7 @@
 		<input type="password" id="password" name="password" placeholder="패스워드 입력(문자,숫자,특수문자 포함6~20자)" required>
 	<br><br>
 	<div>패스워드 재확인<span>*</span></div>
-		<input type="text" id="confirmPassword" placeholder="패스워드 재입력"><br>
+		<input type="password" id="confirmPassword" placeholder="패스워드 재입력"><br>
 	<label id="isvalidPasswordMsg"></label>
 			<br><br>
 	<div>이름<span>*</span></div>
@@ -32,13 +32,13 @@
 		<input type="checkbox" id="smsstsYn" name="smsstsYn" value="y">
 	
 	<div>이메일<span>*</span></div>
-		<input type="text" name="email" placeholder="you@example.com">
+		<input type="text" name="email" placeholder="you@example.com" required>
 			<!--이메일 형식 검증 작성하기 11web_dom29참고-->
 	<div>이메일 마케팅 수신 동의여부<span>*</span></div>
-	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y">
+	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y" required>
 	
 	<div>주소<span>*</span></p>
-		<input type="text" placeholder="우편번호 입력" id="zipcode" name="zipcode">
+		<input type="text" placeholder="우편번호 입력" id="zipCode" name="zipCode" required>
 		<input type="button" th:onclick="|javascript:execDaumPostcode()|" value="검색"/>
 	</div>
 	<br><br>
@@ -86,7 +86,7 @@
 					fullRoadAddr += extraRoadAddr;
 				}
 
-				document.getElementById('zipcode').value = data.zonecode;
+				document.getElementById('zipCode').value = data.zipCode;
 				document.getElementById('roadAddress').value = fullRoadAddr;
 				document.getElementById('jibunAddress').value = data.jibunAddress;
 

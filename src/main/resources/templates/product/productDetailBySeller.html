@@ -52,7 +52,7 @@
 	                    <span th:text="${productDTO.qualityCondition}"></span>
                     </div>
                 </div>
-                <BR>
+                <br>
 	            <div>
 		            <div class="product-detail__sell_status--name">
 			            판매상태
@@ -61,12 +61,20 @@
 			            <span th:text="${productDTO.status}"></span>
 		            </div>
 	            </div>
-                <div class="product-detail__action-wrap">
-                    <button class="product-detail__button--manager">
-                        내 상점 관리
-                    </button>
-                </div>
             </div>
+
+            <div class="product-detail__action-wrap">
+                <button class="product-detail__button--zzim">
+                    찜
+                </button>
+                <button class="product-detail__button--chat">
+                    올래톡
+                </button>
+                <button class="product-detail__button--buy">
+                    내 상점 관리
+                </button>
+            </div>
+
         </div>
     </div>
 

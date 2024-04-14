@@ -40,6 +40,13 @@ public class ProductController {
 	public String create(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		model.addAttribute("sellerId", session.getAttribute("userId"));
+//		if (로그인이 안되어있으면){
+//			/**
+//			 * 만약 로그인으로 가졌다.
+//			 * 그럼 로그인이 된 후 다시 판매하기 메뉴로 이동시켜줘야 하는데, 어떻게 구현할 수 있을까?
+//			 */
+//			return "member/login";
+//		}
 		return "product/createProduct";
 	}
 
