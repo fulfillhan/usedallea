@@ -19,7 +19,12 @@ public class PageController {
 
     @RequestMapping("/product/detail")
     public String registerDetail() {
-        return "productDetailByUser";
+        return "design/productDetail";
+    }
+
+    @RequestMapping("/my-store")
+    public String myStore() {
+        return "design/myStoreManage";
     }
 
 }
