@@ -1,6 +1,8 @@
 package com.application.usedallea.product.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.application.usedallea.img.dto.ProductImgDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,21 +21,12 @@ import com.application.usedallea.product.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 
-	@Value("${file.repo.path")
-	private String imgRepositoryPath;
+//	@Value("${file.repo.path")
+//	private String imgRepositoryPath;
 
 	@Autowired
 	private ProductService productService;
 
-
-//	@GetMapping("/allProductList")
-//	public String getAllProductList(Model model) {
-//	List<ProductDTO> productList = productService.getAllProudctList();
-//	
-//	// 각 상품에 대한 이미지 정보 가져오기
-//	
-//		return "";	
-//	}
 
 	// 중고 상품 등록
 	@GetMapping("/create")
@@ -61,43 +54,105 @@ public class ProductController {
 
 
 	// 판매자에게 보이는 상품 상세
-	@GetMapping("/detailBySeller")
+	@GetMapping("/detail")
 	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
-		//상세 상품 데이터 처음 가져올때만 조회수 반영
+
+		// 세션에서 현재 로그인 한 아이디 가져오기
 		HttpSession session = request.getSession();
-		model.addAttribute("sellerId", session.getAttribute("userId"));   //찜 기능이 있어서 세션정보 필요
-		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
+		String userId = (String) session.getAttribute("userId");
+		//session.setAttribute("userId", userId);
+		//굳이 model로? session으로 저장해서 보내는건
+		model.addAttribute("userId", userId);
+		model.addAttribute("productDTO", productService.getProductDetail(productId,true));
 		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
+
 
 		return "product/productDetailBySeller";
 	}
 
 	//상품 수정 productId를 보내준다.
 	@GetMapping("/update")
-	public String update(Model model, @RequestParam("productId") long productId) {
-		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
+	public String update(Model model,@RequestParam("productId") long productId) {
+		model.addAttribute("productDTO", productService.getProductDetail(productId,false));
 		return "product/updateProduct";
 	}
 
 	@PostMapping("/update")
 	public String update(@ModelAttribute ProductDTO productDTO) {
 		productService.updateProduct(productDTO);
-		return "redirect:/product/detailBySeller";  //상품 관리 페이지로 변경해주기
+		return "redirect:/product/productManager?sellerId="+productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
 	}
 
 	@PostMapping("/delete")   // 상품 관리 페이지에서 삭제 버튼을 누르면 해당 컨트롤러 실행하여 삭제해주기!
 	@ResponseBody
-	public String delete(@RequestParam("productId") long productId){
+	public String delete(@RequestParam("productId") long productId) {
 		productService.deleteProduct(productId);
 
-		String script= """
+		String script = """
 				<script>
 				alert("게시글이 삭제되었습니다!");
 				location.href='product/productManager'; 
 				</script>
 				""";
-			// 나중에 상품 관리 페이지로 넘어가게한다.
+		// 나중에 상품 관리 페이지로 넘어가게한다.
 		return script;
+	}
+
+	@GetMapping("/productManager")
+	public String productManager(Model model,
+								 @RequestParam("sellerId") String sellerId,
+								 @RequestParam(name = "searchTitle", defaultValue = "") String searchTitle,
+								 @RequestParam(name = "onePageProductCnt", defaultValue = "10") int onePageProductCnt,
+								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber){
+
+
+		Map<String, String> searchCntMap = new HashMap<>();
+		searchCntMap.put("searchTitle",searchTitle);
+		searchCntMap.put("sellerId",sellerId);
+
+		int allProductCntBySeller = productService.getAllProductCntBySeller(searchCntMap);  // 특정 판매자의 판매목록의 총 개수
+
+		int allPageCnt = allProductCntBySeller / onePageProductCnt;
+		if(allProductCntBySeller % onePageProductCnt != 0){
+			allPageCnt++;
+		}
+
+		int startPage = (currentPageNumber-1)/ 10 * 10 +1;
+		if(startPage == 0){
+			startPage = 1;
+		}
+
+		int endPage = startPage + 9;
+		if (endPage > allPageCnt) {
+			endPage = allPageCnt;
+		}
+		if(endPage == 0){
+			endPage = 1;
+		}
+
+		int startProductIdx = (currentPageNumber-1) * onePageProductCnt;
+
+		Map<String, Object> searchMap =  new HashMap<>();
+		searchMap.put("searchTitle",searchTitle);
+		searchMap.put("startProductIdx", startProductIdx);
+		searchMap.put("onePageProductCnt", onePageProductCnt);
+		searchMap.put("sellerId", sellerId);
+		List<ProductDTO> productListBySeller = productService.getProductListBySeller(searchMap);
+		for(ProductDTO products : productListBySeller){
+			List<String> productImgUUIDs = productService.getImgUUIDList(products.getProductId());
+		if(!productImgUUIDs.isEmpty()){
+			String firstImgUUID = productImgUUIDs.get(0);
+			products.setFirstImgUUID(firstImgUUID);
+		}
+	}
+		model.addAttribute("productListBySeller",productListBySeller);
+		model.addAttribute("allProductCntBySeller",allProductCntBySeller);
+		model.addAttribute("allPageCnt",allPageCnt);
+		model.addAttribute("startPage",startPage);
+		model.addAttribute("endPage",endPage);
+		model.addAttribute("onePageProductCnt",onePageProductCnt);
+		model.addAttribute("currentPageNumber",currentPageNumber);
+		return "product/productManagerSample";
 	}
 
 

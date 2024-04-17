@@ -20,8 +20,7 @@ public class ProductDTO {
 	private String qualityCondition;
 	private String category;
 	private String status;
-	private int readCount;	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private int readCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private long daysAgo;

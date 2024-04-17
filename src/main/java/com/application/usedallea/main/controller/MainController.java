@@ -2,6 +2,7 @@ package com.application.usedallea.main.controller;
 
 
 import com.application.usedallea.img.service.ProductImgService;
+import com.application.usedallea.member.dto.MemberDTO;
 import com.application.usedallea.member.service.MemberService;
 import com.application.usedallea.product.dto.ProductDTO;
 import com.application.usedallea.product.service.ProductService;
@@ -31,10 +32,12 @@ public class MainController {
     @Autowired
     private ProductService productService;
 
+
     @GetMapping("/main")
-    public String main(HttpServletRequest request, Model model,
+    public String main(Model model,
                        @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
                        @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber) {
+
 
         int onePageProductCnt = 10;
 
@@ -55,10 +58,17 @@ public class MainController {
         }
         //시작 페이지의 수
         int startPage = (currentPageNumber - 1) / 10 * 10 + 1;
+        if(startPage == 0){
+            startPage = 1;
+        }
+
         // 끝 페이지의 수
         int endPage = startPage + 9;
         if (endPage > allPageCnt) {
             endPage = allPageCnt;
+        }
+        if(endPage == 0){
+            endPage = 1;
         }
 
         // 페이징 처리된 상품 목록 조회

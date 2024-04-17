@@ -55,7 +55,16 @@
 
     <select id="getProductDetail"  parameterType="long" resultType="ProductDTO">
         SELECT
-                *
+                PRODUCT_ID,
+                SELLER_ID,
+                IMG_ID,
+                PRICE,
+                DESCRIPTION,
+                QUALITY_CONDITION,
+                CATEGORY,
+                READ_COUNT,
+                STATUS,
+                TITLE
         FROM
                 PRODUCT
         WHERE
@@ -90,6 +99,7 @@
                 QUALITY_CONDITION = #{qualityCondition},
                 PRICE = #{price},
                 DESCRIPTION = #{description},
+                UPDATED_AT = NOW()
         WHERE
                 PRODUCT_ID = #{productId}
     </update>
@@ -118,7 +128,7 @@
     <select id="getProductList" parameterType="hashmap" resultType="ProductDTO">
         <choose>
             <when test="searchWord.equals('')">
-                select
+                SELECT
                     PRODUCT_ID,
                     SELLER_ID,
                     PRICE,
@@ -130,7 +140,8 @@
                     STATUS,
                     TITLE,
                     IMG_ID
-                FROM PRODUCT
+                FROM
+                    PRODUCT
                 ORDER BY
                     CREATED_AT DESC
                 LIMIT
@@ -163,6 +174,81 @@
                         CREATED_AT DESC
                 LIMIT
                         #{startProductIdx}, #{onePageProductCnt}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getAllProductCntBySeller" parameterType="hashmap" resultType="int">
+       <choose>
+           <when test="searchTitle == ''">
+               SELECT
+                    COUNT(*)
+               FROM
+                   PRODUCT
+               WHERE
+                   SELLER_ID = #{sellerId}
+           </when>
+           <otherwise>
+               SELECT
+                   COUNT(*)
+               FROM
+                   PRODUCT
+               WHERE
+                    SELLER_ID = #{sellerId}
+               AND(
+               CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
+               TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR
+               DESCRIPTION LIKE CONCAT('%', #{searchTitle}, '%')
+               )
+           </otherwise>
+       </choose>
+    </select>
+
+    <select id="getProductListBySeller" parameterType="hashmap" resultType="ProductDTO">
+        <choose>
+            <when test="searchTitle == ''">
+                SELECT
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    UPDATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM
+                    PRODUCT
+                WHERE
+                    SELLER_ID = #{sellerId}
+                ORDER BY
+                    CREATED_AT DESC
+                LIMIT
+                    #{startProductIdx}, #{onePageProductCnt}
+            </when>
+            <otherwise>
+                SELECT
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    UPDATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM
+                    PRODUCT
+                <where>
+                    SELLER_ID = #{sellerId}
+                    AND (
+                    CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
+                    TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR
+                    DESCRIPTION LIKE CONCAT('%', #{searchTitle}, '%')
+                    )
+                </where>
+                ORDER BY
+                    CREATED_AT DESC
+                LIMIT
+                    #{startProductIdx}, #{onePageProductCnt}
             </otherwise>
         </choose>
     </select>

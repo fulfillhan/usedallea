@@ -35,7 +35,7 @@
 		<input type="text" name="email" placeholder="you@example.com" required>
 			<!--이메일 형식 검증 작성하기 11web_dom29참고-->
 	<div>이메일 마케팅 수신 동의여부<span>*</span></div>
-	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y" required>
+	<input type="checkbox" id="emailstsYn" name="emailstsYn" value="y">
 	
 	<div>주소<span>*</span></p>
 		<input type="text" placeholder="우편번호 입력" id="zipCode" name="zipCode" required>
@@ -86,7 +86,7 @@
 					fullRoadAddr += extraRoadAddr;
 				}
 
-				document.getElementById('zipCode').value = data.zipCode;
+				document.getElementById('zipCode').value = data.zonecode;
 				document.getElementById('roadAddress').value = fullRoadAddr;
 				document.getElementById('jibunAddress').value = data.jibunAddress;
 

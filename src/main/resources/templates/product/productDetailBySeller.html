@@ -62,17 +62,23 @@
 		            </div>
 	            </div>
             </div>
-
             <div class="product-detail__action-wrap">
-                <button class="product-detail__button--zzim">
+                <!--userId 로그인 한 아이디가 없거나, 로그인을 해도 userId 와 sellerId가 같지 않아야 한다.-->
+                <button class="product-detail__button--zzim"
+                    th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}" >
                     찜
                 </button>
-                <button class="product-detail__button--chat">
+                <button class="product-detail__button--chat"
+                    th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}" >
                     올래톡
                 </button>
-                <button class="product-detail__button--buy">
+                <!--userId가 있어야 하고, sellerid가 있는 경우 그리고 해당 sellerId가 올린 물건만-->
+                <button class="product-detail__button--buy"
+                    th:if="${userId != null and productDTO.sellerId != null and userId.equals(productDTO.sellerId)}"
+                th:onclick="|location.href='@{/product/productManager(sellerId=${productDTO.sellerId})}'|">
                     내 상점 관리
                 </button>
+                <!-- th:onclick="|location.href='@{/product/productManager(sellerId=${productDTO.sellerId})}'|">-->
             </div>
 
         </div>

@@ -5,16 +5,16 @@
     <div class="header-tool-bar__wrap">
         <!-- TODO 로그아웃 상태일 때 -->
         <div th:if="${session.userId == null}">
-            <button><a th:href="@{/member/login}">로그인</button></a>
-	        <button><a th:href="@{/member/register}">회원가입</button></a>
+            <button><a th:href="@{/member/login}">로그인</a></button>
+	        <button><a th:href="@{/member/register}">회원가입</a></button>
            </div>
          </div>
             <!--TODO 로그인 상태일 때 -->
              <div th:unless="${session.userId == null}">
         <div>
 	        <span th:text="|${session.userId} 님|"></span>
-            <button><a th:href="@{/member/update}">회원수정</button></a>
-            <button><a th:href="@{/member/logout}">로그아웃</button></a>
+            <button><a th:href="@{/member/update}">회원수정</a></button>
+            <button><a th:href="@{/member/logout}">로그아웃</a></button>
         </div>
     </div>
 </section>
@@ -24,7 +24,7 @@
             <a th:href="@{/usedallea/main}"><img src="/img/logo.png" class="site-logo" /></a>
 
             <div class="header-search-bar__search">
-                <input type="text" id="searchWord" name="searchWord" th:value="${searchWord}" placeholder="상품명,지역 입력" maxlength="40"/>
+                <input type="text" id="searchWord" name="searchWord" placeholder="상품명,지역 입력" maxlength="40"/>
                 <img src="/img/search.png" onclick="getProductList()" />
             </div>
 
@@ -33,7 +33,7 @@
                     <img src="/img/sell.png" />
                     <button>판매하기</button>
                 </a>
-                <a>
+                <a th:href="@{/product/productManager(sellerId=${session.userId})}">
                     <img src="/img/store.png" />
 	                
                     <button>내상점</button>

@@ -7,7 +7,6 @@
 </head>
 
 <div class="product-list-container" layout:fragment="contents">
-
     <section style="background-color: grey; width: 100%; height: 300px;">
         Slide
     </section>
@@ -19,7 +18,7 @@
         <div class="item-list">
             <!-- 상품 단건 이미지 보여주기-->
             <div class="item" id="productList" th:each="productDTO : ${productList}" >
-                <a th:href="@{/product/detailBySeller(productId=${productDTO.productId})}">
+                <a th:href="@{/product/detail(productId=${productDTO.productId})}">
                     <div class="item__body" >
                         <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지"/>
                     </div>
@@ -51,7 +50,7 @@
                 <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
             </th:block>
             <li th:if="${endPage >= 10 && endPage != allPageCnt}">
-                <a th:href="|javascript:getProductList(${startPage + 10})|">▶</a>
+                <a th:href="|javascript:getProductList(${startPage + 10})|">&nbsp;▶</a>
             </li>
         </ul>
     <script>
@@ -61,7 +60,7 @@
             if(event.keyCode == 13){
                 getProductList();
             }
-        })
+        });
         function getProductList(currentPageNumber){
             let url = "/usedallea/main"
             url += "?searchWord="+$("#searchWord").val();
