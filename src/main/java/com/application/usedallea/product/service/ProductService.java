@@ -15,10 +15,7 @@ public interface ProductService {
 
 	long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
 
-	List<ProductDTO> getAllProductList();
-
 	 ProductDTO getProductDetail(long productId, boolean isCheckReadCnt);
-	//public List<String> getImgUUID(long productImgId);
 
 	List<String> getImgUUIDList(long productId);
 
@@ -29,5 +26,9 @@ public interface ProductService {
 	int getAllProductCnt(Map<String, String> searchCntMap);
 
 	List<ProductDTO> getProductList(Map<String, Object> searchMap);
+
+	int getAllProductCntBySeller(Map<String, String> searchCntMap);
+
+	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
 }
 

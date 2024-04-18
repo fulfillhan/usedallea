@@ -28,4 +28,8 @@ public interface ProductDAO {
     int getAllProductCnt(Map<String, String> searchCntMap);
 
 	List<ProductDTO> getProductList(Map<String, Object> searchMap);
+
+	int getAllProductCntBySeller(Map<String, String> searchCntMap);
+
+	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
 }

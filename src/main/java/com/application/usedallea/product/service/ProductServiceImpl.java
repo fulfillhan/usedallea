@@ -49,17 +49,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductDTO> getAllProductList() {
-		return productDAO.getAllProductList();
-	}
-
-
-	@Override
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
 		//title, 가격, readCount, 상품 상태, 상품 설명, 카테고리
-		productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
+		// 로그인을 하고, 해당 유저가 판매자가 아닌경우에만 조회수 증가
+		if(isCheckReadCnt){
+			productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
+		}
 		return productDAO.getProductDetail(productId);
-
 	}
 
 	@Override
@@ -88,5 +84,16 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductDTO> getProductList(Map<String, Object> searchMap) {
 		return productDAO.getProductList(searchMap);
 	}
+
+	@Override
+	public int getAllProductCntBySeller(Map<String, String> searchCntMap) {
+		return productDAO.getAllProductCntBySeller(searchCntMap);
+	}
+
+	@Override
+	public List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap) {
+		return productDAO.getProductListBySeller(searchMap);
+	}
+
 
 }
