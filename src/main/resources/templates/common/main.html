@@ -30,9 +30,9 @@
 	                        <span th:text="${productDTO.price+'원'}"/>
                         </div>
                         <div class="item__footer--date">
-                          <span th:if="${productDTO.hoursAgo < 24}" th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
+                          <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}" th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
                           <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}" th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
-                          <span th:if="${productDTO.daysAgo >= 7}" th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
+                          <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}" th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
                         </div>
                     </div>
                 </a>

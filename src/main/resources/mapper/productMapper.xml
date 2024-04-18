@@ -64,7 +64,8 @@
                 CATEGORY,
                 READ_COUNT,
                 STATUS,
-                TITLE
+                TITLE,
+                CREATED_AT
         FROM
                 PRODUCT
         WHERE

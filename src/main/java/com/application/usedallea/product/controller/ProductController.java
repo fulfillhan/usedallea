@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.application.usedallea.img.dto.ProductImgDTO;
+import com.application.usedallea.zzim.service.ZzimService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +28,21 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private ZzimService zzimService;
+
+	private String getUserId(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return  (String) session.getAttribute("userId");
+	}
 
 	// 중고 상품 등록
 	@GetMapping("/create")
 	public String create(Model model, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		model.addAttribute("sellerId", session.getAttribute("userId"));
-//		if (로그인이 안되어있으면){
-//			/**
-//			 * 만약 로그인으로 가졌다.
-//			 * 그럼 로그인이 된 후 다시 판매하기 메뉴로 이동시켜줘야 하는데, 어떻게 구현할 수 있을까?
-//			 */
-//			return "member/login";
-//		}
+
+		String sellerId = getUserId(request);
+		model.addAttribute("sellerId", sellerId);
+
 		return "product/createProduct";
 	}
 
@@ -48,7 +51,7 @@ public class ProductController {
 
 		long productId = productService.createProduct(uploadFile, productDTO, productImgDTO);
 
-		return "redirect:/product/detailBySeller?productId=" + productId;
+		return "redirect:/product/detail?productId=" + productId;
 
 	}
 
@@ -58,12 +61,11 @@ public class ProductController {
 	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
 
 		// 세션에서 현재 로그인 한 아이디 가져오기
-		HttpSession session = request.getSession();
-		String userId = (String) session.getAttribute("userId");
-		//session.setAttribute("userId", userId);
-		//굳이 model로? session으로 저장해서 보내는건
+		String userId = getUserId(request);
+
 		model.addAttribute("userId", userId);
 		model.addAttribute("productDTO", productService.getProductDetail(productId,true));
+		model.addAttribute("zzimCount", zzimService.getZzimCount(productId));
 		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
 
 

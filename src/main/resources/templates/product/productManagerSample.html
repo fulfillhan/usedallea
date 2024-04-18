@@ -19,13 +19,13 @@
         <tr>
             <div align="center" >
             <input type="text" id="searchTitle" name="searchTitle" placeholder="상품명을 입력하세요" maxlength="40">
-            <input type="button" value="검색" onclick="getMyProductList()">
+            <input type="button" value="검색" th:onclick="|javascript:getMyProductList()|">
             </div>
             <div align="left">
                 <span th:text="|총 ${allProductCntBySeller} 개|"></span>
             </div>
             <div align="right" >
-                <select id="onePageProductCnt" onchange="getMyProductList()" >
+                <select id="onePageProductCnt" th:onchange="|javascript:getMyProductList()|" >
                     <option value="5">5개씩</option>
                     <option value="7">7개씩</option>
                     <option value="10">10개씩</option>

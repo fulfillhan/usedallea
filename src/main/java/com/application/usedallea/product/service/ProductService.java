@@ -30,5 +30,6 @@ public interface ProductService {
 	int getAllProductCntBySeller(Map<String, String> searchCntMap);
 
 	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
+
 }
 

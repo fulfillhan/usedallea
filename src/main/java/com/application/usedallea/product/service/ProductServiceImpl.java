@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +28,6 @@ public class ProductServiceImpl implements ProductService {
 
 	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-//	@Override
-//	public List<ProductDTO> getAllProudctList(ProductDTO productDTO) {
-//
-//		return null;
-//	}
 
 	@Override
 	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
@@ -50,12 +47,21 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
-		//title, 가격, readCount, 상품 상태, 상품 설명, 카테고리
+
 		// 로그인을 하고, 해당 유저가 판매자가 아닌경우에만 조회수 증가
 		if(isCheckReadCnt){
 			productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
 		}
-		return productDAO.getProductDetail(productId);
+
+		ProductDTO productDTO = productDAO.getProductDetail(productId);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime createdAt = productDTO.getCreatedAt();
+		long daysAgo = Duration.between(createdAt, now).toDays();
+		long hoursAgo = Duration.between(createdAt, now).toHours();
+		productDTO.setDaysAgo(daysAgo);
+		productDTO.setHoursAgo(hoursAgo);
+
+		return productDTO;
 	}
 
 	@Override
