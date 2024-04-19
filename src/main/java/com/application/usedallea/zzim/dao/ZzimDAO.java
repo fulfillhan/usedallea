@@ -8,11 +8,9 @@ public interface ZzimDAO {
 
     long insertZzim(ZzimDTO zzimDTO);
 
-    void updateZzimCnt(long zzimId);
-
     int getZzimCount(long productId);
 
-    int getZzimIdCnt(ZzimDTO zzimDTO);
+    int getZzimId(ZzimDTO zzimDTO);
 
     void deleteZzim(ZzimDTO zzimDTO);
 }

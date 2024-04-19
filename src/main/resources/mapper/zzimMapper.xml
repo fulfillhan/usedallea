@@ -16,35 +16,8 @@
            NOW()
                )
     </insert>
-<!--    <insert id="insertZzim" parameterType="ZzimDTO">-->
-<!--        <selectKey keyProperty="zzimId" resultType="long" order="AFTER">-->
-<!--            SELECT  COALESCE(MAX(ZZIM_ID),0)+1 AS ZZIM_ID-->
-<!--            FROM ZZIM-->
-<!--            WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}-->
-<!--        </selectKey>-->
-<!--            INSERT INTO ZZIM(-->
-<!--            ZZIM_ID,-->
-<!--            PRODUCT_ID,-->
-<!--            USER_ID,-->
-<!--            CREATED_AT-->
-<!--            )-->
-<!--             VALUES (-->
-<!--            #{zzimId},-->
-<!--            #{productId},-->
-<!--            #{userId},-->
-<!--            NOW()-->
-<!--        )-->
-<!--    </insert>-->
 
-    <update id="updateZzimCnt" parameterType="long">
-        UPDATE ZZIM
-        SET
-            ZZIM_ID = ZZIM_ID +1
-        WHERE
-            ZZIM_ID = #{zzimId}
-    </update>
-
-    <select id="getZzimIdCnt" parameterType="ZzimDTO" resultType="int">
+    <select id="getZzimId" parameterType="ZzimDTO" resultType="int">
         SELECT COUNT(*) AS ZZIM_ID_COUNT
         FROM ZZIM
         WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}
@@ -56,7 +29,7 @@
     </delete>
 
     <select id="getZzimCount" parameterType="long" resultType="int">
-        SELECT COUNT(*)
+        SELECT COUNT(*) AS ZZIM_COUNT
         FROM ZZIM
         WHERE PRODUCT_ID = #{productId}
     </select>

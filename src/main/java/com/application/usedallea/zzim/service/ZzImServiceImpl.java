@@ -30,7 +30,7 @@ public class ZzImServiceImpl implements ZzimService{
     public boolean checkZzim(ZzimDTO zzimDTO) {
         boolean isCheckZzim = false;
 
-        if(zzimDAO.getZzimIdCnt(zzimDTO) > 1){  // userId와productId의 zzimId가 한개라도 있으면 찜의 중복
+        if(zzimDAO.getZzimId(zzimDTO) > 1){  // userId와productId의 zzimId가 한개라도 있으면 찜의 중복
             isCheckZzim = true;
         }
         return isCheckZzim;

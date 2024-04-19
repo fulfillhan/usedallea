@@ -108,6 +108,8 @@ public class ProductController {
 								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber){
 
 
+
+
 		Map<String, String> searchCntMap = new HashMap<>();
 		searchCntMap.put("searchTitle",searchTitle);
 		searchCntMap.put("sellerId",sellerId);
@@ -140,13 +142,18 @@ public class ProductController {
 		searchMap.put("onePageProductCnt", onePageProductCnt);
 		searchMap.put("sellerId", sellerId);
 		List<ProductDTO> productListBySeller = productService.getProductListBySeller(searchMap);
+
 		for(ProductDTO products : productListBySeller){
-			List<String> productImgUUIDs = productService.getImgUUIDList(products.getProductId());
-		if(!productImgUUIDs.isEmpty()){
-			String firstImgUUID = productImgUUIDs.get(0);
-			products.setFirstImgUUID(firstImgUUID);
+			long productId = products.getProductId();
+			int zzimCount = zzimService.getZzimCount(productId);
+			products.setZzimCount(zzimCount);
+			List<String> productImgUUIDs = productService.getImgUUIDList(productId);
+			if(!productImgUUIDs.isEmpty()){
+				String firstImgUUID = productImgUUIDs.get(0);
+				products.setFirstImgUUID(firstImgUUID);
+			}
 		}
-	}
+
 		model.addAttribute("productListBySeller",productListBySeller);
 		model.addAttribute("allProductCntBySeller",allProductCntBySeller);
 		model.addAttribute("allPageCnt",allPageCnt);

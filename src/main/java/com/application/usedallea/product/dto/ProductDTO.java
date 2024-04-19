@@ -26,6 +26,7 @@ public class ProductDTO {
 	private long daysAgo;
 	private long hoursAgo;
 	private String firstImgUUID;
+	private int zzimCount;
 
 	
 	
