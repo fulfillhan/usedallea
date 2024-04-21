@@ -1,15 +1,73 @@
+:root {
+    --color-primary: rgba(255, 100, 0, 1);
+    --color-secondary: rgba(255, 100, 0, 0.8);
+    --color-secondary-soft: rgba(255, 100, 0, 0.1);
+    --color-layout-line: rgba(238, 238, 238, 1);
+    --color-form-line: rgba(180, 180, 180, 1);
+    --color-dark: rgba(33, 33, 33, 1);
+    --color-light: rgba(255, 255, 255 ,1);
+    --color-font-light: rgba(170, 170, 170, 1);
+}
+
 a {
-    color: rgb(33, 33, 33);
+    color: var(--color-dark);
     text-decoration: none;
     cursor: pointer;
 }
 
+input {
+    outline: 0;
+}
+
+input:focus {
+    border-color: var(--color-secondary) !important;
+    box-shadow: 0 0 2px 2px var(--color-secondary-soft);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:not(input[type='radio'], input[type='checkbox']),
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--color-form-line);
+    padding: 12px;
+}
+
+input[type='checkbox'] {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+}
+
+input[type='submit'],
+input[type='reset'],
 button {
     border: 0;
     outline: none;
     background-color: transparent;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
 }
+
+input[type="submit"].ok,
+input[type="reset"].ok,
+button.ok {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+input[type='button'] {
+    background-color: #fff;
+    border: 1px solid var(--color-form-line);
+    cursor: pointer;
+}
+
+input[type='button']:hover,
+button:hover {
+    border-color: var(--color-secondary);
+}
+
 
 body {
     margin: 0;
