@@ -254,5 +254,16 @@
         </choose>
     </select>
 
+    <update id="updateProductStatus" parameterType="ProductDTO">
+        UPDATE PRODUCT
+        SET STATUS = #{status}
+        WHERE PRODUCT_ID = #{productId}
+    </update>
+    
+    <select id="getProductStatus" parameterType="long" resultType="ProductStatus">
+        SELECT STATUS
+        FROM PRODUCT
+        WHERE PRODUCT_ID = #{productId}
+    </select>
 
 </mapper>

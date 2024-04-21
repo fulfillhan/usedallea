@@ -24,8 +24,8 @@
     </select>
 
     <delete id="deleteZzim" parameterType="ZzimDTO">
-        DELETE FROM ZZIM
-        WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}
+       DELETE FROM ZZIM
+       WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}
     </delete>
 
     <select id="getZzimCount" parameterType="long" resultType="int">
@@ -33,5 +33,12 @@
         FROM ZZIM
         WHERE PRODUCT_ID = #{productId}
     </select>
+
+    <delete id="remove" parameterType="long">
+        DELETE FROM ZZIM
+        WHERE PRODUCT_ID = #{productId}
+    </delete>
+
+
 
 </mapper>

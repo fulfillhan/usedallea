@@ -1,15 +1,19 @@
 package com.application.usedallea.product.service;
 
+import com.application.usedallea.img.dao.ProductImgDAO;
 import com.application.usedallea.img.dto.ProductImgDTO;
 import com.application.usedallea.img.service.ProductImgService;
 import com.application.usedallea.product.dao.ProductDAO;
 import com.application.usedallea.product.dto.ProductDTO;
+import com.application.usedallea.zzim.dao.ZzimDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.Transient;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private ProductDAO productDAO;
+
+	@Autowired
+	private ZzimDAO zzimDAO;
 
 	@Autowired
 	private ProductImgService productImgService;
@@ -76,8 +83,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteProduct(long productId) {
+		zzimDAO.remove(productId);
 		productDAO.deleteProduct(productId);
+
 	}
 
 	@Override
@@ -99,6 +109,17 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap) {
 		return productDAO.getProductListBySeller(searchMap);
+	}
+
+	@Override
+	public ProductStatus updateProductStatus(long productId, ProductStatus status) {
+
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setProductId(productId);
+		productDTO.setStatus(String.valueOf(status));
+
+		productDAO.updateProductStatus(productDTO);
+		return productDAO.getProductStatus(productId);
 	}
 
 

@@ -6,9 +6,10 @@
 </head>
 <body>
 <div align="center" style="padding-top: 100px" layout:fragment="contents">
-<!--seller의 정보를 전달해야됨-->
+    <!--seller의 정보를 전달해야됨-->
+    <input type="hidden" id="sellerId" name="sellerId" th:value="${session.userId}">
     <h2><a th:href="@{/usedallea/main}">내 상점 관리</a></h2>
-    <table border="1" >
+    <table border="1">
         <colgroup>
             <col width="10%">
             <col width="40%">
@@ -17,21 +18,21 @@
             <col width="50%">
         </colgroup>
         <tr>
-            <div align="center" >
-            <input type="text" id="searchTitle" name="searchTitle" placeholder="상품명을 입력하세요" maxlength="40">
-            <input type="button" value="검색" onclick="getMyProductList()">
+            <div align="center">
+                <input type="text" id="searchTitle" name="searchTitle" placeholder="상품명을 입력하세요" maxlength="40">
+                <input type="button" value="검색" onclick="getMyProductList()">
             </div>
             <div align="left">
                 <span th:text="|총 ${allProductCntBySeller} 개|"></span>
             </div>
-            <div align="right" >
-                <select id="onePageProductCnt" onchange="getMyProductList()" >
+            <div align="right">
+                <select id="onePageProductCnt" onchange="getMyProductList()">
                     <option value="5">5개씩</option>
                     <option value="7">7개씩</option>
                     <option value="10">10개씩</option>
                 </select>
             </div>
-        <br>
+            <br>
         </tr>
         <thead>
         <tr align="center">
@@ -45,22 +46,31 @@
             <th>기능</th>
         </tr>
         </thead>
-        <tbody id="productList">
-        <tr align="center" th:each="productDTO : ${productListBySeller}">
+        <tbody id="productList" th:each="productDTO : ${productListBySeller}">
+        <tr align="center">
             <td>
                 <a th:href="@{/product/detail(productId=${productDTO.productId})}">
-                    <input type="hidden" id="sellerId" name="sellerId" th:value="${productDTO.sellerId}">
-                    <input type="hidden" id="productId" name="productId" th:value="${productDTO.productId}">
-                    <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지"/>
+                    <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지" width="100%"
+                         height="100%"/>
                 </a>
             </td>
-            <td th:text="${productDTO.status}"></td>
-            <td th:text="${productDTO.title}"><a href=""></a></td>
+            <td>
+                <select th:id="'status-'+${productDTOStat.index}"
+                        th:productId="${productDTO.productId}"
+                        th:onchange="updateProductStatus(this.getAttribute('id'), this.getAttribute('productId'))">
+                    <option th:selected="${productDTO.status} == '판매중'" th:value="판매중">판매중</option>
+                    <option th:selected="${productDTO.status} == '판매완료'" th:value="판매완료">판매완료</option>
+                    <option th:selected="${productDTO.status} == '삭제'" th:value="삭제">삭제</option>
+                </select>
+            </td>
+            <td th:text="${productDTO.title}"></a></td>
             <td th:text="|${productDTO.price} 원|"></td>
-            <td th:text="|${productDTO.readCount} 회|"></td>
-            <td th:text="|${productDTO.zzimCount} 개|"></td>
+            <td th:text="${productDTO.readCount}"></td>
+            <td th:text="${productDTO.zzimCount}"></td>
             <td th:text="${#temporals.format(productDTO.updatedAt,'yyyy-MM-dd HH:mm')}"></td>
-            <td><button><a th:href="@{/product/update(productId=${productDTO.productId})}">수정</a></button></td>
+            <td>
+                <button><a th:href="@{/product/update(productId=${productDTO.productId})}">수정</a></button>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -70,7 +80,8 @@
                 <a th:href="|javascript:getMyProductList(${startPage - 10})|">◀&nbsp;</a>
             </li>
             <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                <a th:if="${page != currentPageNumber}" th:href="|javascript:getMyProductList(${page})|" th:text="${page }"></a>&nbsp;
+                <a th:if="${page != currentPageNumber}" th:href="|javascript:getMyProductList(${page})|"
+                   th:text="${page }"></a>&nbsp;
                 <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
             </th:block>
             <li th:if="${endPage >= 10 && endPage != allPageCnt}">
@@ -79,25 +90,53 @@
         </ul>
     </div>
     <script>
-        $().ready(function(){
+        $().ready(function () {
+
             $("#onePageProductCnt").val("[[${onePageProductCnt}]]");
+
         });
-        function getMyProductList(currentPageNumber){
+
+        // ajax 페이징하기
+        function getMyProductList(currentPageNumber) {
             let url = "/product/productManager"
-            // url += "?productId="+$("#productId").val();
-            url += "?sellerId="+$("#sellerId").val();
-            url += "&onePageProductCnt="+$("#onePageProductCnt").val();
-            if(currentPageNumber != null){
-                url += "&currentPageNumber="+currentPageNumber;
+            url += "?sellerId=" + $("#sellerId").val();
+            url += "&onePageProductCnt=" + $("#onePageProductCnt").val();
+            if (currentPageNumber != null) {
+                url += "&currentPageNumber=" + currentPageNumber;
             }
-            if($("#searchTitle").val() != ''){
-                url += "&searchTitle="+$("#searchTitle").val();
+            if ($("#searchTitle").val() != '') {
+                url += "&searchTitle=" + $("#searchTitle").val();
             }
-            location.href=url;
+            location.href = url;
         }
 
-        $("#searchTitle").keypress(function (event){
-            if(event.keyCode == 13){
+        function updateProductStatus(id, productId) {
+            const productStatus = $("#" + id).val();// 변경된 판매 상태 가져오기
+
+            $.ajax({
+                type: "post",
+                url: "/product/updateProductStatus",
+                data: {
+                    productId,
+                    productStatus,
+                },
+                success: function (response) {
+                    if(response.deleted){
+                        //삭제된 경우 해당 요소 삭제
+                        if(confirm("정말 해당 상품을 삭제하시겠습니까?")){
+                            $("#"+ id).closest("tr").remove();
+
+                        } alert(response.script);
+                    }
+                    //select 요소의 값 변경
+                    alert(response.script);
+                    $("#"+ id+"option:selected").text(response.status);
+                }
+            });
+        }
+
+        $("#searchTitle").keypress(function (event) {
+            if (event.keyCode == 13) {
                 getMyProductList();
             }
         });

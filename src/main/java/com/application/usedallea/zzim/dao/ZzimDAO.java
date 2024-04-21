@@ -13,4 +13,6 @@ public interface ZzimDAO {
     int getZzimId(ZzimDTO zzimDTO);
 
     void deleteZzim(ZzimDTO zzimDTO);
+
+    void remove(long productId);
 }

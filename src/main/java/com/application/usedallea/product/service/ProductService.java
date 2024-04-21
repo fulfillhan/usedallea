@@ -31,5 +31,6 @@ public interface ProductService {
 
 	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
 
+	ProductStatus updateProductStatus(long productId, ProductStatus status);
 }
 
