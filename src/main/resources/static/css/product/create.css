@@ -5,14 +5,6 @@
     width: 100%;
 }
 
-.product-create__form input:not(input[type='radio']),
-.product-create__form select,
-.product-create__form textarea {
-    width: 100%;
-    border: 1px solid rgb(180, 180, 180);
-    padding: 12px;
-}
-
 .product-create__form-action {
     width: 100%;
     display: flex;
@@ -22,14 +14,10 @@
 
 .product-create__form input[type='submit'] {
     width: 35% !important;
-    background-color: rgba(255, 100, 0);
-    color: #fff;
-    cursor: pointer;
 }
 
 .product-create__form input[type='reset'] {
     width: 35% !important;
-    cursor: pointer;
 }
 
 .product-create__form--title {
@@ -69,7 +57,7 @@
     position: relative;
     right: 20px;
     top: 3px;
-    color: rgb(150, 150, 150);
+    color: var(--color-font-light);
 }
 
 .product-create__form-status--radio-group > input {

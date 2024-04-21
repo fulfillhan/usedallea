@@ -38,16 +38,9 @@
 
 <body>
     <div class="base-layout">
-
-        <section th:replace="~{common/header::toolBar}" ></section>
-
-        <section th:replace="~{common/header::searchBar}"></section>
-
         <section class="body">
             <div layout:fragment="contents"></div>
         </section>
-
-        <section th:replace="~{common/footer::contents}"></section>
     </div>
 </body>
 

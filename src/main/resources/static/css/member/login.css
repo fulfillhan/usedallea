@@ -1,0 +1,24 @@
+.login-container {
+    margin: auto;
+    width: 500px;
+    height: 500px;
+}
+
+.login-container form {
+    position: relative;
+    top: 45%;
+}
+
+.login__form--title {
+    width: 100%;
+    color: var(--color-font-dark);
+    border-bottom: 1px solid var(--color-form-line);
+}
+
+.login-container form > div {
+    margin-bottom: 20px;
+}
+
+.login-container form input[type='button'] {
+    margin-top: 20px;
+}
