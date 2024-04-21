@@ -14,5 +14,4 @@ public interface ZzimDAO {
 
     void deleteZzim(ZzimDTO zzimDTO);
 
-    void remove(long productId);
 }

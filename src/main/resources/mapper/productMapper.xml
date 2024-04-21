@@ -64,6 +64,7 @@
                 CATEGORY,
                 READ_COUNT,
                 STATUS,
+                VALIDATED_YN,
                 TITLE,
                 CREATED_AT
         FROM
@@ -105,12 +106,14 @@
                 PRODUCT_ID = #{productId}
     </update>
 
-    <delete id="deleteProduct" parameterType="long">
-        DELETE FROM
-                    PRODUCT
-        WHERE
-                PRODUCT_ID = #{productId}
-    </delete>
+    <update id="updateValidateProduct" parameterType="long">
+      UPDATE
+            PRODUCT
+      SET
+            VALIDATED_YN = 'n'
+      WHERE
+            PRODUCT_ID = #{productId}
+    </update>
 
     <select id="getAllProductCnt" parameterType="hashmap" resultType="int">
         SELECT
@@ -255,15 +258,24 @@
     </select>
 
     <update id="updateProductStatus" parameterType="ProductDTO">
-        UPDATE PRODUCT
-        SET STATUS = #{status}
-        WHERE PRODUCT_ID = #{productId}
+        UPDATE
+                PRODUCT
+        SET
+                STATUS = #{status}
+        WHERE
+                PRODUCT_ID = #{productId}
     </update>
     
     <select id="getProductStatus" parameterType="long" resultType="ProductStatus">
-        SELECT STATUS
-        FROM PRODUCT
-        WHERE PRODUCT_ID = #{productId}
+        SELECT
+                STATUS
+        FROM
+                PRODUCT
+        WHERE
+                PRODUCT_ID = #{productId}
     </select>
+
+
+
 
 </mapper>

@@ -125,12 +125,14 @@
                         //삭제된 경우 해당 요소 삭제
                         if(confirm("정말 해당 상품을 삭제하시겠습니까?")){
                             $("#"+ id).closest("tr").remove();
+                            alert(response.script);
+                        }
 
-                        } alert(response.script);
+                    }else{
+                        //select 요소의 값 변경
+                        alert(response.script);
+                        $("#"+ id+"option:selected").text(response.status);
                     }
-                    //select 요소의 값 변경
-                    alert(response.script);
-                    $("#"+ id+"option:selected").text(response.status);
                 }
             });
         }

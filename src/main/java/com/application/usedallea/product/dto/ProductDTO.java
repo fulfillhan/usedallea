@@ -20,6 +20,7 @@ public class ProductDTO {
 	private String qualityCondition;
 	private String category;
 	private String status;
+	private String validatedYn;
 	private int readCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

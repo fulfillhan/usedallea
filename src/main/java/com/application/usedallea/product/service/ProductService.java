@@ -21,7 +21,7 @@ public interface ProductService {
 
 	void updateProduct(ProductDTO productDTO);
 
-	void deleteProduct(long productId);
+	void updateValidateProduct(long productId);
 
 	int getAllProductCnt(Map<String, String> searchCntMap);
 
