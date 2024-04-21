@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout.html}">
+      layout:decorate="~{common/Defaultlayout.html}">
 <head>
-    <title>register</title>
-    <script th:src="@{http://dmaps.daum.net/map_js_init/postcode.v2.js}"></script>
-    <script src="/js/jquery-3.6.1.min.js"></script>
-
     <link rel="stylesheet" href="/css/member/register.css" type="text/css">
 </head>
 
@@ -72,26 +68,22 @@
 
                 <div class="member-register__form-address">
                     <div>
-                        <label for="zipCode">우편번호</label>
                         <div class="member-register__form-address--search">
-                            <input type="text" placeholder="우편번호 입력" id="zipCode" name="zipCode" required class="input">
+                            <input type="text" placeholder="우편번호" id="zipCode" name="zipCode" required class="input">
                             <input type="button" th:onclick="|javascript:execDaumPostcode()|" value="검색" class="search"/>
                         </div>
                     </div>
 
                     <div>
-                        <label for="roadAddress">도로명 주소</label>
-                        <input type="text" name="roadAddress" id="roadAddress">
+                        <input type="text" name="roadAddress" id="roadAddress" placeholder="도로명 주소">
                     </div>
 
                     <div>
-                        <label for="jibunAddress">지번 주소</label>
-                        <input type="text" name="jibunAddress" id="jibunAddress">
+                        <input type="text" name="jibunAddress" id="jibunAddress" placeholder="지번 주소">
                     </div>
 
                     <div>
-                        <label for="namujiAddress">나머지 주소</label>
-                        <input type="text" name="namujiAddress" id="namujiAddress">
+                        <input type="text" name="namujiAddress" id="namujiAddress" placeholder="나머지 주소">
                     </div>
                 </div>
             </div>
@@ -104,7 +96,9 @@
                 <textarea rows="5" cols="50" disabled>개인정보보호법에 따라  '중고올래'  회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.</textarea>
             </div>
 
-            <input type="submit" value="회원가입하기" class="ok">
+            <div class="member-register__form-submit-wrap">
+                <input type="submit" value="회원가입하기" class="ok">
+            </div>
         </div>
     </form>
     <script>

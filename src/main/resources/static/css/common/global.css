@@ -7,6 +7,7 @@
     --color-dark: rgba(33, 33, 33, 1);
     --color-light: rgba(255, 255, 255 ,1);
     --color-font-light: rgba(170, 170, 170, 1);
+    --color-font-dark: rgba(50, 50, 50, 0.9);
 }
 
 a {
@@ -41,6 +42,7 @@ input[type='checkbox'] {
 
 input[type='submit'],
 input[type='reset'],
+input[type='button'],
 button {
     border: 0;
     outline: none;
@@ -52,6 +54,7 @@ button {
 
 input[type="submit"].ok,
 input[type="reset"].ok,
+input[type='button'].ok,
 button.ok {
     background-color: var(--color-primary);
     color: #fff;
