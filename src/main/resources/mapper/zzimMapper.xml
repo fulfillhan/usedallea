@@ -18,27 +18,29 @@
     </insert>
 
     <select id="getZzimId" parameterType="ZzimDTO" resultType="int">
-        SELECT COUNT(*) AS ZZIM_ID_COUNT
-        FROM ZZIM
-        WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}
+        SELECT
+                COUNT(*) AS ZZIM_ID_COUNT
+        FROM
+                ZZIM
+        WHERE
+                PRODUCT_ID = #{productId} AND USER_ID = #{userId}
     </select>
 
     <delete id="deleteZzim" parameterType="ZzimDTO">
-       DELETE FROM ZZIM
-       WHERE PRODUCT_ID = #{productId} AND USER_ID = #{userId}
+       DELETE FROM
+                 ZZIM
+       WHERE
+                PRODUCT_ID = #{productId} AND USER_ID = #{userId}
     </delete>
 
     <select id="getZzimCount" parameterType="long" resultType="int">
-        SELECT COUNT(*) AS ZZIM_COUNT
-        FROM ZZIM
-        WHERE PRODUCT_ID = #{productId}
+        SELECT
+                COUNT(*) AS ZZIM_COUNT
+        FROM
+                ZZIM
+        WHERE
+                PRODUCT_ID = #{productId}
     </select>
-
-    <delete id="remove" parameterType="long">
-        DELETE FROM ZZIM
-        WHERE PRODUCT_ID = #{productId}
-    </delete>
-
 
 
 </mapper>

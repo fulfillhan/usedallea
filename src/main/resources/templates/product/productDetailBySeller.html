@@ -54,7 +54,7 @@
                             <img src="/img/time.png" />
                             <span th:if="${productDTO.hoursAgo < 24}">[[${productDTO.hoursAgo+'시간 전'}]]</span>
                              <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}">[[${productDTO.daysAgo+'일 전'}]]</span>
-                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}">[[${productDTO.daysAgo+'주일 이상'}"]]</span>
+                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}">[[${productDTO.daysAgo+'주일 이상'}]]</span>
                         </span>
                     </div>
                     <div>

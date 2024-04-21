@@ -83,11 +83,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional
-	public void deleteProduct(long productId) {
-		zzimDAO.remove(productId);
-		productDAO.deleteProduct(productId);
-
+	public void updateValidateProduct(long productId) {
+		productDAO.updateValidateProduct(productId);
 	}
 
 	@Override

@@ -86,21 +86,6 @@ public class ProductController {
 		return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
 	}
 
-	@PostMapping("/delete")   // 상품 관리 페이지에서 삭제 버튼을 누르면 해당 컨트롤러 실행하여 삭제해주기!
-	@ResponseBody
-	public String delete(@RequestParam("productId") long productId) {
-		productService.deleteProduct(productId);
-
-		String script = """
-				<script>
-				alert("게시글이 삭제되었습니다!");
-				location.href='product/productManager'; 
-				</script>
-				""";
-		// 나중에 상품 관리 페이지로 넘어가게한다.
-		return script;
-	}
-
 	@GetMapping("/productManager")
 	public String productManager(Model model,
 								 @RequestParam("sellerId") String sellerId,
@@ -173,12 +158,6 @@ public class ProductController {
 		ProductStatus status = ProductStatus.valueOf(productStatus); //status값을 enum으로 변경하기
 		String script = "";
 
-		if(status == ProductStatus.삭제){
-			productService.deleteProduct(productId);
-			script  = "해당 상품이 삭제되었습니다.";
-			response.put("deleted",true);
-		}
-		else{
 			switch (status){
 				case 판매중 -> {
 					status = productService.updateProductStatus(productId,status);
@@ -188,12 +167,16 @@ public class ProductController {
 					status = productService.updateProductStatus(productId,status);
 					script = "상품 상태가 '판매완료'로 변경되었습니다.";
 				}
+				case 삭제 -> {
+					productService.updateValidateProduct(productId);
+					script  = "해당 상품이 삭제되었습니다.";
+					response.put("deleted",true);
+				}
 				default ->
 					//에러 처리
 						System.out.println("오류 발생");
 			}
 			response.put("status",String.valueOf(status));
-		}
 		response.put("script",script);
 		return response;
 	}
