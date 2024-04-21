@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="/css/product/detail.css" type="text/css">
 </head>
 <div class="product-detail-container" layout:fragment="contents">
-    <input type="hidden" name="productId" th:value="${productDTO.productId}"/>
+    <input type="hidden" id = "productId" name="productId" th:value="${productDTO.productId}"/>
+    <input type="hidden" id = "userId" name="userId" th:value="${userId}"/>
     <div class="product-detail__category"></div>
 
 
@@ -31,28 +32,39 @@
                 <div class="product-detail__view">
                     <div class="product-detail__statistics">
                         <span>
-                            <img src="/img/zzim.png" />
-                            0
+                            <img src="/img/zzim.png">
+                            <div id="zzimCount" >
+                                <span id="zzimCountValue" th:text="${zzimCount}"></span>
+                            </div>
                         </span>
                         <span>
-                            <img src="/img/views.png"/><span th:text="${productDTO.readCount}"></span>
+                            <img src="/img/views.png"/>
+                            <span th:text="${productDTO.readCount}"></span>
                         </span>
                         <span>
                             <img src="/img/time.png" />
-                            1주 전
+                            <span th:if="${productDTO.hoursAgo < 24}">[[${productDTO.hoursAgo+'시간 전'}]]</span>
+                             <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}">[[${productDTO.daysAgo+'일 전'}]]</span>
+                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}">[[${productDTO.daysAgo+'주일 이상'}"]]</span>
                         </span>
                     </div>
+                    <div class="product-detail__report">
+                        <a th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}">
+                            <img src="/img/report.png" />
+                            <span>신고하기</span>
+                        </a>
+                    </div>
                 </div>
-
+            </div>
                 <div class="product-detail__status-row">
-                    <div class="product-detail__condition--name" >
+                    <div class="product-detail__status--name">
                         상품상태
                     </div>&emsp;
-                    <div class="product-detail__condition--value">
+                    <div class="product-detail__status--value">
 	                    <span th:text="${productDTO.qualityCondition}"></span>
                     </div>
                 </div>
-                <br>
+
 	            <div>
 		            <div class="product-detail__sell_status--name">
 			            판매상태
@@ -61,11 +73,11 @@
 			            <span th:text="${productDTO.status}"></span>
 		            </div>
 	            </div>
-            </div>
+
             <div class="product-detail__action-wrap">
                 <!--userId 로그인 한 아이디가 없거나, 로그인을 해도 userId 와 sellerId가 같지 않아야 한다.-->
-                <button class="product-detail__button--zzim"
-                    th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}" >
+                <button  id="zzimBtn" class="product-detail__button--zzim"
+                    th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}">
                     찜
                 </button>
                 <button class="product-detail__button--chat"
@@ -80,7 +92,6 @@
                 </button>
                 <!-- th:onclick="|location.href='@{/product/productManager(sellerId=${productDTO.sellerId})}'|">-->
             </div>
-
         </div>
     </div>
 
@@ -101,19 +112,49 @@
     <div class="product-detail__etc">
         <div>
             <div class="product-detail__etc--category">카테고리</div>
-            <div><a th:Text="${productDTO.category}"></a></div>
+            <div><a th:text="${productDTO.category}"></a></div>
         </div>
         <div>
-	        <!--이거는 빼는걸루..-->
-            <div class="product-detail__etc--name">상품태그</div>
-            <div>#N3BP #리바이스 #데님진 #현행</div>
+
+            <div class="product-detail__etc--name">지역</div>
+            <div>지역 데이터 추가</div>
         </div>
     </div>
+    <script>
+
+    $().ready(function() {
+        $("#zzimBtn").click(function (){
+          var productId =  $("#productId").val();
+          var userId = $("#userId").val();
+
+          if(!userId){
+              alert("로그인 후 이용 가능합니다!")
+             location.href="/member/login";
+          }
+
+            $.ajax({
+                type : "post",
+                url : "/zzim/check",
+                data : {"productId": productId},
+                success : function (response){
+                    if(response.status == "y"){
+                        alert("♥찜이 추가되었습니다!");
+                        // 찜 개수도 변경
+                        $("#zzimCountValue").text(response.zzimCount);
+                        //-> 버튼 색 바꾸기
+                    }else{
+                        alert("♥찜이 삭제되었습니다!");
+                        $("#zzimCountValue").text(response.zzimCount);
+                    }
+
+                }
+            });
+        });
+      /*  function addZzim(productId){
+        }*/
+    });
+    </script>
 </div>
 
-<div class="product-detail__info-wrap">
-    <div class="product-detail__img-wrap" id="imgList">
-        <!-- 이미지가 여기에 추가됩니다 -->
-    </div>
-</div>
+
 </html>

@@ -1,6 +1,7 @@
 package com.application.usedallea.product.dao;
 
 import com.application.usedallea.product.dto.ProductDTO;
+import com.application.usedallea.product.service.ProductStatus;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -32,4 +33,8 @@ public interface ProductDAO {
 	int getAllProductCntBySeller(Map<String, String> searchCntMap);
 
 	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
+
+	void updateProductStatus(ProductDTO productId);
+
+	ProductStatus getProductStatus(long productId);
 }
