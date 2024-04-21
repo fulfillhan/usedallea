@@ -3,6 +3,7 @@
     --color-secondary: rgba(255, 100, 0, 0.8);
     --color-secondary-soft: rgba(255, 100, 0, 0.1);
     --color-layout-line: rgba(238, 238, 238, 1);
+    --color-layout-line-bold: rgba(200, 200, 200, 1);
     --color-form-line: rgba(180, 180, 180, 1);
     --color-dark: rgba(33, 33, 33, 1);
     --color-light: rgba(255, 255, 255 ,1);
@@ -16,11 +17,21 @@ a {
     cursor: pointer;
 }
 
-input {
+label {
+    user-select: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    user-select: none;
+}
+
+input,
+textarea {
     outline: 0;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
     border-color: var(--color-secondary) !important;
     box-shadow: 0 0 2px 2px var(--color-secondary-soft);
     transition: border-color 0.2s, box-shadow 0.2s;

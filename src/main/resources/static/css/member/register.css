@@ -23,10 +23,6 @@
     border-bottom: 1px solid var(--color-form-line);
 }
 
-.member-register__form--title h1 {
-    font-weight: 400 !important;
-}
-
 .member-register__form--input {
     width: 100%;
 }
@@ -94,4 +90,12 @@
     position: relative;
     bottom: 3px;
     font-size: 16px;
+}
+.member-register__form-personal-agree p {
+    border: 1px solid var(--color-form-line);
+    padding: 15px;
+    font-size: 14px;
+    word-spacing: 1px;
+    line-height: 20px;
+    user-select: none;
 }
