@@ -15,8 +15,8 @@
             <img src="https://picsum.photos/200/300?grayscale"/>
         </div>
         <div class="slide-button-wrap">
-            <div class="pre"> 〈 </div>
-            <div class="next"> 〉 </div>
+            <div class="pre"> 〈</div>
+            <div class="next"> 〉</div>
         </div>
         <div class="slide-pagination-wrap">
             <div class="active"></div>
@@ -45,9 +45,12 @@
                             <span th:text="${productDTO.price+'원'}"/>
                         </div>
                         <div class="item__footer--date">
-                          <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}" th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
-                          <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}" th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
-                          <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}" th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
+                            <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}"
+                                  th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
+                            <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}"
+                                  th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
+                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}"
+                                  th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
                         </div>
                     </div>
                 </a>
@@ -56,19 +59,28 @@
     </section>
     <!--화면 페이징 처리-->
     <!--   <div style="display: table; margin-left: auto; margin-right: auto">-->
-    <ul th:align="center">
-        <li th:if="${startPage > 10}">
-            <a th:href="|javascript:getProductList(${startPage - 10})|">◀&nbsp;</a>
-        </li>
-        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-            <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|"
-               th:text="${page}"></a>&nbsp;
-            <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
-        </th:block>
-        <li th:if="${endPage >= 10 && endPage != allPageCnt}">
-            <a th:href="|javascript:getProductList(${startPage + 10})|">&nbsp;▶</a>
-        </li>
-    </ul>
+    <div class="pagination-container">
+        <div>
+            <!--            <span th:if="${startPage > 10}">-->
+            <span class="pagination__button--prev">
+                <a th:href="|javascript:getProductList(${startPage - 10})|">◀</a>
+            </span>
+            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <span class="pagination__button">
+                    <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|" th:text="${page}"></a>
+                </span>
+
+                <span class="pagination__button active">
+                    <a th:if="${page == currentPageNumber}" th:text="${page}"></a>
+                </span>
+            </th:block>
+            <!--            <span th:if="${endPage >= 10 && endPage != allPageCnt}">-->
+            <span class="pagination__button--next">
+                <a th:href="|javascript:getProductList(${startPage + 10})|">▶</a>
+            </span>
+        </div>
+    </div>
+
     <script>
 
 

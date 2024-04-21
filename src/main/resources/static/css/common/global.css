@@ -9,6 +9,7 @@
     --color-light: rgba(255, 255, 255 ,1);
     --color-font-light: rgba(170, 170, 170, 1);
     --color-font-dark: rgba(50, 50, 50, 0.9);
+    --color-font-deep-dark: rgba(0, 0, 0, 1);
 }
 
 a {
