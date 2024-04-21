@@ -7,32 +7,50 @@
 </head>
 
 <div class="product-list-container" layout:fragment="contents">
-    <section style="background-color: grey; width: 100%; height: 300px;">
-        Slide
-    </section>
+    <div class="slide-container">
+        <div class="slide-wrap">
+            <img src="https://picsum.photos/200/300.jpg"/>
+            <img src="https://picsum.photos/id/237/200/300"/>
+            <img src="https://picsum.photos/seed/picsum/200/300"/>
+            <img src="https://picsum.photos/200/300?grayscale"/>
+        </div>
+        <div class="slide-button-wrap">
+            <div class="pre"> 〈</div>
+            <div class="next"> 〉</div>
+        </div>
+        <div class="slide-pagination-wrap">
+            <div class="active"></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 
     <section class="today-recommended">
         <h3>오늘의 상품 추천</h3>
-      전체 : <span th:text="|${allProductCnt} 개|"></span>
+        전체 : <span th:text="|${allProductCnt} 개|"></span>
         <br><br>
         <div class="item-list">
             <!-- 상품 단건 이미지 보여주기-->
-            <div class="item" id="productList" th:each="productDTO : ${productList}" >
+            <div class="item" id="productList" th:each="productDTO : ${productList}">
                 <a th:href="@{/product/detail(productId=${productDTO.productId})}">
-                    <div class="item__body" >
+                    <div class="item__body">
                         <img th:src="@{/img/setThumbnail(imgName=${productDTO.firstImgUUID})}" alt="이미지"/>
                     </div>
                     <div class="item__footer">
                         <div class="item__footer--title">
-	                        <span th:text="${productDTO.title}"/>
+                            <span th:text="${productDTO.title}"/>
                         </div>
                         <div class="item__footer--price">
-	                        <span th:text="${productDTO.price+'원'}"/>
+                            <span th:text="${productDTO.price+'원'}"/>
                         </div>
                         <div class="item__footer--date">
-                          <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}" th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
-                          <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}" th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
-                          <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}" th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
+                            <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}"
+                                  th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
+                            <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}"
+                                  th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
+                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}"
+                                  th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
                         </div>
                     </div>
                 </a>
@@ -40,34 +58,45 @@
         </div>
     </section>
     <!--화면 페이징 처리-->
-<!--   <div style="display: table; margin-left: auto; margin-right: auto">-->
-        <ul th:align="center">
-            <li th:if="${startPage > 10}">
-                <a th:href="|javascript:getProductList(${startPage - 10})|">◀&nbsp;</a>
-            </li>
+    <!--   <div style="display: table; margin-left: auto; margin-right: auto">-->
+    <div class="pagination-container">
+        <div>
+            <!--            <span th:if="${startPage > 10}">-->
+            <span class="pagination__button--prev">
+                <a th:href="|javascript:getProductList(${startPage - 10})|">◀</a>
+            </span>
             <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|" th:text="${page}"></a>&nbsp;
-                <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
+                <span class="pagination__button">
+                    <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|" th:text="${page}"></a>
+                </span>
+
+                <span class="pagination__button active">
+                    <a th:if="${page == currentPageNumber}" th:text="${page}"></a>
+                </span>
             </th:block>
-            <li th:if="${endPage >= 10 && endPage != allPageCnt}">
-                <a th:href="|javascript:getProductList(${startPage + 10})|">&nbsp;▶</a>
-            </li>
-        </ul>
+            <!--            <span th:if="${endPage >= 10 && endPage != allPageCnt}">-->
+            <span class="pagination__button--next">
+                <a th:href="|javascript:getProductList(${startPage + 10})|">▶</a>
+            </span>
+        </div>
+    </div>
+
     <script>
 
 
-        $("#searchWord").keypress(function (event){
-            if(event.keyCode == 13){
+        $("#searchWord").keypress(function (event) {
+            if (event.keyCode == 13) {
                 getProductList();
             }
         });
-        function getProductList(currentPageNumber){
+
+        function getProductList(currentPageNumber) {
             let url = "/usedallea/main"
-            url += "?searchWord="+$("#searchWord").val();
-            if(currentPageNumber != null){
-                url += "&currentPageNumber="+currentPageNumber;
+            url += "?searchWord=" + $("#searchWord").val();
+            if (currentPageNumber != null) {
+                url += "&currentPageNumber=" + currentPageNumber;
             }
-            location.href=url;
+            location.href = url;
         }
 
 

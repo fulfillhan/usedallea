@@ -18,13 +18,22 @@
         </div>
 
         <div class="product-detail__info">
-            <div class="product-detail__info--title">
-                <div class="title" th:text="${productDTO.title}">
-                   <span th:text="${productDTO.title}"></span>
+            <div class="product-detail__info-main">
+                <div>
+                    <div class="title" th:text="${productDTO.title}">
+                       <span th:text="${productDTO.title}"></span>
+                    </div>
+                    <div class="price">
+                        <span th:text="${productDTO.price}"></span>
+                        <span>원</span>
+                    </div>
                 </div>
-                <div class="price">
-                    <span th:text="${productDTO.price}"></span>
-                    <span>원</span>
+
+                <div class="product-detail__info--sell-status">
+                    <div class="product-detail__info--sell-status--value"
+                         th:classappend="${productDTO.status} == '판매중' ? '' : 'close'">
+                        <span th:text="${productDTO.status}"></span>
+                    </div>
                 </div>
             </div>
 
@@ -48,31 +57,23 @@
                             <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}">[[${productDTO.daysAgo+'주일 이상'}"]]</span>
                         </span>
                     </div>
-                    <div class="product-detail__report">
+                    <div>
                         <a th:if="${userId == null or userId != null and !userId.equals(productDTO.sellerId)}">
                             <img src="/img/report.png" />
                             <span>신고하기</span>
                         </a>
                     </div>
                 </div>
-            </div>
+
                 <div class="product-detail__status-row">
                     <div class="product-detail__status--name">
                         상품상태
                     </div>&emsp;
                     <div class="product-detail__status--value">
-	                    <span th:text="${productDTO.qualityCondition}"></span>
+                        <span th:text="${productDTO.qualityCondition}"></span>
                     </div>
                 </div>
-
-	            <div>
-		            <div class="product-detail__sell_status--name">
-			            판매상태
-		            </div>
-		            <div class="product-detail__sell_status--value">
-			            <span th:text="${productDTO.status}"></span>
-		            </div>
-	            </div>
+            </div>
 
             <div class="product-detail__action-wrap">
                 <!--userId 로그인 한 아이디가 없거나, 로그인을 해도 userId 와 sellerId가 같지 않아야 한다.-->
