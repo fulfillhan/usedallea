@@ -1,16 +1,22 @@
 package com.application.usedallea.product.service;
 
+import com.application.usedallea.img.dao.ProductImgDAO;
 import com.application.usedallea.img.dto.ProductImgDTO;
 import com.application.usedallea.img.service.ProductImgService;
 import com.application.usedallea.product.dao.ProductDAO;
 import com.application.usedallea.product.dto.ProductDTO;
+import com.application.usedallea.zzim.dao.ZzimDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.Transient;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -22,15 +28,13 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDAO productDAO;
 
 	@Autowired
+	private ZzimDAO zzimDAO;
+
+	@Autowired
 	private ProductImgService productImgService;
 
 	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-//	@Override
-//	public List<ProductDTO> getAllProudctList(ProductDTO productDTO) {
-//
-//		return null;
-//	}
 
 	@Override
 	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
@@ -50,12 +54,21 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
-		//title, 가격, readCount, 상품 상태, 상품 설명, 카테고리
+
 		// 로그인을 하고, 해당 유저가 판매자가 아닌경우에만 조회수 증가
 		if(isCheckReadCnt){
 			productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
 		}
-		return productDAO.getProductDetail(productId);
+
+		ProductDTO productDTO = productDAO.getProductDetail(productId);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime createdAt = productDTO.getCreatedAt();
+		long daysAgo = Duration.between(createdAt, now).toDays();
+		long hoursAgo = Duration.between(createdAt, now).toHours();
+		productDTO.setDaysAgo(daysAgo);
+		productDTO.setHoursAgo(hoursAgo);
+
+		return productDTO;
 	}
 
 	@Override
@@ -70,8 +83,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteProduct(long productId) {
+		zzimDAO.remove(productId);
 		productDAO.deleteProduct(productId);
+
 	}
 
 	@Override
@@ -93,6 +109,17 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap) {
 		return productDAO.getProductListBySeller(searchMap);
+	}
+
+	@Override
+	public ProductStatus updateProductStatus(long productId, ProductStatus status) {
+
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setProductId(productId);
+		productDTO.setStatus(String.valueOf(status));
+
+		productDAO.updateProductStatus(productDTO);
+		return productDAO.getProductStatus(productId);
 	}
 
 

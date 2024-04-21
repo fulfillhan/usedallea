@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.application.usedallea.img.dto.ProductImgDTO;
+import com.application.usedallea.product.service.ProductStatus;
+import com.application.usedallea.zzim.service.ZzimService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +29,21 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private ZzimService zzimService;
+
+	private String getUserId(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return (String) session.getAttribute("userId");
+	}
 
 	// 중고 상품 등록
 	@GetMapping("/create")
 	public String create(Model model, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		model.addAttribute("sellerId", session.getAttribute("userId"));
-//		if (로그인이 안되어있으면){
-//			/**
-//			 * 만약 로그인으로 가졌다.
-//			 * 그럼 로그인이 된 후 다시 판매하기 메뉴로 이동시켜줘야 하는데, 어떻게 구현할 수 있을까?
-//			 */
-//			return "member/login";
-//		}
+
+		String sellerId = getUserId(request);
+		model.addAttribute("sellerId", sellerId);
+
 		return "product/createProduct";
 	}
 
@@ -48,7 +52,7 @@ public class ProductController {
 
 		long productId = productService.createProduct(uploadFile, productDTO, productImgDTO);
 
-		return "redirect:/product/detailBySeller?productId=" + productId;
+		return "redirect:/product/detail?productId=" + productId;
 
 	}
 
@@ -58,12 +62,11 @@ public class ProductController {
 	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
 
 		// 세션에서 현재 로그인 한 아이디 가져오기
-		HttpSession session = request.getSession();
-		String userId = (String) session.getAttribute("userId");
-		//session.setAttribute("userId", userId);
-		//굳이 model로? session으로 저장해서 보내는건
+		String userId = getUserId(request);
+
 		model.addAttribute("userId", userId);
-		model.addAttribute("productDTO", productService.getProductDetail(productId,true));
+		model.addAttribute("productDTO", productService.getProductDetail(productId, true));
+		model.addAttribute("zzimCount", zzimService.getZzimCount(productId));
 		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
 
 
@@ -72,15 +75,15 @@ public class ProductController {
 
 	//상품 수정 productId를 보내준다.
 	@GetMapping("/update")
-	public String update(Model model,@RequestParam("productId") long productId) {
-		model.addAttribute("productDTO", productService.getProductDetail(productId,false));
+	public String update(Model model, @RequestParam("productId") long productId) {
+		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
 		return "product/updateProduct";
 	}
 
 	@PostMapping("/update")
 	public String update(@ModelAttribute ProductDTO productDTO) {
 		productService.updateProduct(productDTO);
-		return "redirect:/product/productManager?sellerId="+productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
+		return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
 	}
 
 	@PostMapping("/delete")   // 상품 관리 페이지에서 삭제 버튼을 누르면 해당 컨트롤러 실행하여 삭제해주기!
@@ -103,22 +106,22 @@ public class ProductController {
 								 @RequestParam("sellerId") String sellerId,
 								 @RequestParam(name = "searchTitle", defaultValue = "") String searchTitle,
 								 @RequestParam(name = "onePageProductCnt", defaultValue = "10") int onePageProductCnt,
-								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber){
+								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber) {
 
 
 		Map<String, String> searchCntMap = new HashMap<>();
-		searchCntMap.put("searchTitle",searchTitle);
-		searchCntMap.put("sellerId",sellerId);
+		searchCntMap.put("searchTitle", searchTitle);
+		searchCntMap.put("sellerId", sellerId);
 
 		int allProductCntBySeller = productService.getAllProductCntBySeller(searchCntMap);  // 특정 판매자의 판매목록의 총 개수
 
 		int allPageCnt = allProductCntBySeller / onePageProductCnt;
-		if(allProductCntBySeller % onePageProductCnt != 0){
+		if (allProductCntBySeller % onePageProductCnt != 0) {
 			allPageCnt++;
 		}
 
-		int startPage = (currentPageNumber-1)/ 10 * 10 +1;
-		if(startPage == 0){
+		int startPage = (currentPageNumber - 1) / 10 * 10 + 1;
+		if (startPage == 0) {
 			startPage = 1;
 		}
 
@@ -126,36 +129,74 @@ public class ProductController {
 		if (endPage > allPageCnt) {
 			endPage = allPageCnt;
 		}
-		if(endPage == 0){
+		if (endPage == 0) {
 			endPage = 1;
 		}
 
-		int startProductIdx = (currentPageNumber-1) * onePageProductCnt;
+		int startProductIdx = (currentPageNumber - 1) * onePageProductCnt;
 
-		Map<String, Object> searchMap =  new HashMap<>();
-		searchMap.put("searchTitle",searchTitle);
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("searchTitle", searchTitle);
 		searchMap.put("startProductIdx", startProductIdx);
 		searchMap.put("onePageProductCnt", onePageProductCnt);
 		searchMap.put("sellerId", sellerId);
 		List<ProductDTO> productListBySeller = productService.getProductListBySeller(searchMap);
-		for(ProductDTO products : productListBySeller){
-			List<String> productImgUUIDs = productService.getImgUUIDList(products.getProductId());
-		if(!productImgUUIDs.isEmpty()){
-			String firstImgUUID = productImgUUIDs.get(0);
-			products.setFirstImgUUID(firstImgUUID);
+
+		for (ProductDTO products : productListBySeller) {
+			long productId = products.getProductId();
+			int zzimCount = zzimService.getZzimCount(productId);
+			products.setZzimCount(zzimCount);
+			List<String> productImgUUIDs = productService.getImgUUIDList(productId);
+			if (!productImgUUIDs.isEmpty()) {
+				String firstImgUUID = productImgUUIDs.get(0);
+				products.setFirstImgUUID(firstImgUUID);
+			}
 		}
-	}
-		model.addAttribute("productListBySeller",productListBySeller);
-		model.addAttribute("allProductCntBySeller",allProductCntBySeller);
-		model.addAttribute("allPageCnt",allPageCnt);
-		model.addAttribute("startPage",startPage);
-		model.addAttribute("endPage",endPage);
-		model.addAttribute("onePageProductCnt",onePageProductCnt);
-		model.addAttribute("currentPageNumber",currentPageNumber);
+
+		model.addAttribute("productListBySeller", productListBySeller);
+		model.addAttribute("allProductCntBySeller", allProductCntBySeller);
+		model.addAttribute("allPageCnt", allPageCnt);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		//model.addAttribute("startProductIdx",startProductIdx);
+		model.addAttribute("onePageProductCnt", onePageProductCnt);
+		model.addAttribute("currentPageNumber", currentPageNumber);
+
 		return "product/productManagerSample";
 	}
 
 
+	@PostMapping("/updateProductStatus")
+	@ResponseBody
+	public Map<String,Object> updateProductStatus(@RequestParam("productId")long productId, @RequestParam("productStatus") String productStatus ){
+		Map<String,Object> response = new HashMap<>();
+		ProductStatus status = ProductStatus.valueOf(productStatus); //status값을 enum으로 변경하기
+		String script = "";
+
+		if(status == ProductStatus.삭제){
+			productService.deleteProduct(productId);
+			script  = "해당 상품이 삭제되었습니다.";
+			response.put("deleted",true);
+		}
+		else{
+			switch (status){
+				case 판매중 -> {
+					status = productService.updateProductStatus(productId,status);
+					script = "상품 상태가 '판매중'으로 변경되었습니다.";
+				}
+				case 판매완료 -> {
+					status = productService.updateProductStatus(productId,status);
+					script = "상품 상태가 '판매완료'로 변경되었습니다.";
+				}
+				default ->
+					//에러 처리
+						System.out.println("오류 발생");
+			}
+			response.put("status",String.valueOf(status));
+		}
+		response.put("script",script);
+		return response;
+	}
 
 
 }
