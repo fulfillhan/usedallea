@@ -30,59 +30,35 @@ public class MemberController {
 		return (String) session.getAttribute("userId");
 	}
 
-//	@GetMapping("/register")
-//	public String registerMember() {
-//		return "member/registerOrUpdate";
-//	}
-
-//	@PostMapping("/register")
-//	@ResponseBody
-//	public String registerMember(@ModelAttribute MemberDTO memberDTO) {
-//		memberService.registerMember(memberDTO);
-//
-//		String script = """
-//				<script>
-//				alert('중고올래의 회원이 되신것을 축하드립니다!');
-//				location.href='/usedallea/main';
-//				</script>
-//				""";
-//		return script;
-//	}
 
 	@GetMapping("/registerOrUpdate")
 	public String registerOrUpdate(HttpServletRequest request, Model model) {
 
-		 String userId = getUserId(request);
+		String userId = getUserId(request);
 
-		//userId가 있으면 수정 페이지로
-		if ( userId != null) {
+		if (userId != null) {
 			MemberDTO memberDetail = memberService.getMemberDetail(userId);
 			if (memberDetail == null) {
 				memberDetail = new MemberDTO();
 			}
-
-			model.addAttribute("memberDTO",memberDetail);
-
-		} else{
+			model.addAttribute("memberDTO", memberDetail);
+		} else {
 			model.addAttribute("memberDTO", new MemberDTO());
-
 		}
 		return "/member/registerOrUpdate";
 	}
 
 
 	@PostMapping("/registerOrUpdate")
-	public String registerOrUpdate(@ModelAttribute MemberDTO memberDTO, HttpServletRequest request){
+	public String registerOrUpdate(@ModelAttribute MemberDTO memberDTO, HttpServletRequest request) {
 		String userId = getUserId(request);
 
-		if(userId == null){
+		if (userId == null) {
 			// 회원가입으로 로직 처리
 			memberService.registerMember(memberDTO);
-		}
-		else{
+		} else {
 			//회원 수정으로 로직 처리
 			memberService.updateMember(memberDTO);
-
 		}
 		return "redirect:/usedallea/main";
 	}
@@ -120,26 +96,6 @@ public class MemberController {
 		return "redirect:/usedallea/main";
 	}
 
-//	@GetMapping("/update")
-//	public String update(HttpServletRequest request, Model model) {
-//		HttpSession session = request.getSession();
-//		String userId = (String) session.getAttribute("userId");
-//		MemberDTO memberDetail = memberService.getMemberDetail(userId);
-//
-//		//null이면 객체로 반환하여 빈값으로 생성하기.
-//		if (memberDetail == null) {
-//			memberDetail = new MemberDTO();
-//		}
-//		model.addAttribute("memberDTO", memberDetail);
-//		return "member/registerOrUpdate";
-//	}
-
-//	@PostMapping("/update")
-//	public String update(@ModelAttribute MemberDTO memberDTO) {
-//		memberService.updateMember(memberDTO);
-//
-//		return "redirect:/usedallea/main";
-//	}
 
 	@GetMapping("/delete")
 	public String delete() {
