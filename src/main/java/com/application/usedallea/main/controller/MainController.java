@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,10 +83,15 @@ public class MainController {
         LocalDateTime now = LocalDateTime.now(); // 현재시간
         for (ProductDTO products : productList) {
             LocalDateTime createdAt = products.getCreatedAt();  //생성시간
-            long daysAgo = Duration.between(createdAt, now).toDays();
+            long minutesAgo = Duration.between(createdAt,now).toMinutes();
             long hoursAgo = Duration.between(createdAt, now).toHours();
+            long daysAgo = ChronoUnit.DAYS.between(createdAt, now);
+            long weeksAgo = ChronoUnit.WEEKS.between(createdAt,now);
+            products.setMinutesAgo(minutesAgo);
             products.setDaysAgo(daysAgo);
             products.setHoursAgo(hoursAgo);
+            products.setWeeksAgo(weeksAgo);
+
 
             //하나의 상품에 여러가지 이미지인경우
             List<String> productImgUUIDs = productService.getImgUUIDList(products.getProductId());

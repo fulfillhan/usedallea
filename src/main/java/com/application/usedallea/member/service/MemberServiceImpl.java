@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 		if(memberDTO.getPersonalInfoYn() == null) memberDTO.setPersonalInfoYn("n");
 		
 		memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-		
+		System.out.println(memberDTO);
 		memberDAO.registerMember(memberDTO);
 	}
 

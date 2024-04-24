@@ -15,7 +15,7 @@ public class ProductDTO {
 	private String sellerId;
 	private long imgId;
 	private String title;
-	private int price;
+	private String price;
 	private String description;
 	private String qualityCondition;
 	private String category;
@@ -24,8 +24,10 @@ public class ProductDTO {
 	private int readCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	private long minutesAgo;
 	private long daysAgo;
 	private long hoursAgo;
+	private long weeksAgo;
 	private String firstImgUUID;
 	private int zzimCount;
 

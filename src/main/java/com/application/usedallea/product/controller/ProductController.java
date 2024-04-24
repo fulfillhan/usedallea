@@ -37,7 +37,6 @@ public class ProductController {
 		return (String) session.getAttribute("userId");
 	}
 
-	// 중고 상품 등록
 	@GetMapping("/create")
 	public String create(Model model, HttpServletRequest request) {
 
@@ -48,7 +47,8 @@ public class ProductController {
 	}
 
 	@PostMapping("/create")
-	public String create(@RequestParam("uploadImg") List<MultipartFile> uploadFile, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
+	public String create(@RequestParam("uploadImg") List<MultipartFile> uploadFile,
+						 ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
 
 		long productId = productService.createProduct(uploadFile, productDTO, productImgDTO);
 
@@ -57,7 +57,6 @@ public class ProductController {
 	}
 
 
-	// 판매자에게 보이는 상품 상세
 	@GetMapping("/detail")
 	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
 
@@ -73,7 +72,6 @@ public class ProductController {
 		return "product/productDetailBySeller";
 	}
 
-	//상품 수정 productId를 보내준다.
 	@GetMapping("/update")
 	public String update(Model model, @RequestParam("productId") long productId) {
 		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
@@ -139,11 +137,10 @@ public class ProductController {
 		}
 
 		model.addAttribute("productListBySeller", productListBySeller);
-		model.addAttribute("allProductCntBySeller", allProductCntBySeller);
+		//model.addAttribute("allProductCntBySeller", allProductCntBySeller);
 		model.addAttribute("allPageCnt", allPageCnt);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
-		//model.addAttribute("startProductIdx",startProductIdx);
 		model.addAttribute("onePageProductCnt", onePageProductCnt);
 		model.addAttribute("currentPageNumber", currentPageNumber);
 
