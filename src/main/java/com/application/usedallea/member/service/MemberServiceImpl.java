@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String dupleCheckId(String userId) {
 		String validateId = "y";
-		if(memberDAO.dupleCheckId(userId) != null) {
+		if(memberDAO.dupleCheckId(userId) != null) {  //id가 있다.
 			validateId = "n";
 		}
 		return validateId;
