@@ -56,7 +56,17 @@
 
 	<select id="getMemberDetail" parameterType="String" resultType="MemberDTO">
 		SELECT
-		    	*
+		    	USER_ID,
+		    	NICKNAME,
+		    	NAME,
+				PHONE_NUMBER,
+				SMSSTS_YN,
+				EMAIL,
+				EMAILSTS_YN,
+				ZIP_CODE,
+				ROAD_ADDRESS,
+				JIBUN_ADDRESS,
+				NAMUJI_ADDRESS
 		FROM
 		    	USER
 		WHERE

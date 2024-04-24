@@ -64,7 +64,6 @@
                 CATEGORY,
                 READ_COUNT,
                 STATUS,
-                VALIDATED_YN,
                 TITLE,
                 CREATED_AT
         FROM
@@ -125,13 +124,17 @@
                 CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
                 TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
                 DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
+                AND VALIDATED_YN = 'y'
+            </if>
+            <if test="searchWord == ''">
+                 VALIDATED_YN = 'y'
             </if>
         </where>
     </select>
 
     <select id="getProductList" parameterType="hashmap" resultType="ProductDTO">
         <choose>
-            <when test="searchWord.equals('')">
+            <when test="searchWord == ''">
                 SELECT
                     PRODUCT_ID,
                     SELLER_ID,
@@ -146,11 +149,12 @@
                     IMG_ID
                 FROM
                     PRODUCT
+                WHERE
+                    VALIDATED_YN = 'y'
                 ORDER BY
                     CREATED_AT DESC
                 LIMIT
                     #{startProductIdx}, #{onePageProductCnt}
-
             </when>
             <otherwise>
                 SELECT
@@ -172,7 +176,9 @@
                        CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
                        TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
                        DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
+                       AND VALIDATED_YN = 'y'
                    </if>
+                   AND VALIDATED_YN = 'y'
                </where>
                 ORDER BY
                         CREATED_AT DESC
@@ -191,6 +197,7 @@
                    PRODUCT
                WHERE
                    SELLER_ID = #{sellerId}
+               AND VALIDATED_YN = 'y'
            </when>
            <otherwise>
                SELECT
@@ -199,6 +206,7 @@
                    PRODUCT
                WHERE
                     SELLER_ID = #{sellerId}
+               AND VALIDATED_YN = 'y'
                AND(
                CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
                TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR
@@ -224,6 +232,7 @@
                     PRODUCT
                 WHERE
                     SELLER_ID = #{sellerId}
+                AND VALIDATED_YN = 'y'
                 ORDER BY
                     CREATED_AT DESC
                 LIMIT
@@ -243,6 +252,7 @@
                     PRODUCT
                 <where>
                     SELLER_ID = #{sellerId}
+                    AND VALIDATED_YN = 'y'
                     AND (
                     CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
                     TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR

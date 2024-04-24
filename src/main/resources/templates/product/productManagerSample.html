@@ -22,9 +22,6 @@
                 <input type="text" id="searchTitle" name="searchTitle" placeholder="상품명을 입력하세요" maxlength="40">
                 <input type="button" value="검색" onclick="getMyProductList()">
             </div>
-            <div align="left">
-                <span th:text="|총 ${allProductCntBySeller} 개|"></span>
-            </div>
             <div align="right">
                 <select id="onePageProductCnt" onchange="getMyProductList()">
                     <option value="5">5개씩</option>
@@ -76,21 +73,15 @@
     </table>
     <div style="display: table; margin-left: auto; margin-right: auto">
         <ul th:align="center">
-            <li th:if="${startPage > 10}">
-                <a th:href="|javascript:getMyProductList(${startPage - 10})|">◀&nbsp;</a>
-            </li>
-            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
                 <a th:if="${page != currentPageNumber}" th:href="|javascript:getMyProductList(${page})|"
                    th:text="${page }"></a>&nbsp;
                 <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
-            </th:block>
-            <li th:if="${endPage >= 10 && endPage != allPageCnt}">
-                <a th:href="|javascript:getMyProductList(${startPage + 10})|">&nbsp;▶</a>
-            </li>
+            </span>
         </ul>
     </div>
     <script>
-        $().ready(function () {
+        $(function () {
 
             $("#onePageProductCnt").val("[[${onePageProductCnt}]]");
 

@@ -45,12 +45,16 @@
                             <span th:text="${productDTO.price+'원'}"/>
                         </div>
                         <div class="item__footer--date">
-                            <span name="hoursAgo" th:if="${productDTO.hoursAgo < 24}"
+                            <span th:if="${productDTO.minutesAgo < 60}"
+                                  th:text="${productDTO.minutesAgo+'분 전'}"></span>
+                            <span th:if="${productDTO.minutesAgo >= 60 && productDTO.hoursAgo < 24}"
                                   th:text="${productDTO.hoursAgo+'시간 전'}"></span>   <!-- 시간 전-->
                             <span th:if="${productDTO.hoursAgo >= 24 && productDTO.daysAgo < 7}"
                                   th:text="${productDTO.daysAgo+'일 전'}"></span>   <!-- 일 전-->
-                            <span name="daysAgo" th:if="${productDTO.daysAgo >= 7}"
-                                  th:text="${productDTO.daysAgo+'주일 이상'}"></span>   <!-- 일주일 이상-->
+                            <span th:if="${productDTO.weeksAgo < 1 && productDTO.daysAgo >= 7}"
+                                  th:text="${productDTO.daysAgo+'주 전'}"></span>   <!-- 일주일 이상-->
+                            <span th:if="${productDTO.weeksAgo >= 4}"
+                                  th:text="${productDTO.daysAgo+'주 이상'}"></span>
                         </div>
                     </div>
                 </a>
@@ -63,37 +67,48 @@
         <div>
             <!--            <span th:if="${startPage > 10}">-->
             <span class="pagination__button--prev">
-                <a th:href="|javascript:getProductList(${startPage - 10})|">◀</a>
+                <a th:if="${currentPageNumber > 1}" th:href="|javascript:getProductList(${currentPageNumber-1})|">◀</a>
+                <span th:unless="${currentPageNumber > 1}"><a>◀</a></span>
             </span>
-            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
                 <span class="pagination__button">
-                    <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|" th:text="${page}"></a>
+                    <a th:if="${page != currentPageNumber}" th:href="|javascript:getProductList(${page})|"
+                       th:text="${page}"></a>
                 </span>
-
                 <span class="pagination__button active">
                     <a th:if="${page == currentPageNumber}" th:text="${page}"></a>
                 </span>
-            </th:block>
-            <!--            <span th:if="${endPage >= 10 && endPage != allPageCnt}">-->
+            </span>
             <span class="pagination__button--next">
-                <a th:href="|javascript:getProductList(${startPage + 10})|">▶</a>
+                <a th:if="${currentPageNumber < allPageCnt}" th:href="|javascript:getProductList(${currentPageNumber+1})|">▶</a>
+                <span th:unless="${currentPageNumber < allPageCnt}"><a>▶</a></span>
             </span>
         </div>
     </div>
 
     <script>
 
+        $(function (){
+            $("#searchWord").keypress(function (event) {
+                if (event.keyCode == 13) {
+                    getProductList();
+                }
+            });
 
-        $("#searchWord").keypress(function (event) {
-            if (event.keyCode == 13) {
-                getProductList();
-            }
+            $(".header-search-bar__menu").click(function (event) {
+                var userId = $("#userId").val();
+                if (!userId) {
+                    event.preventDefault(); //기존 이벤트 동작 막기
+                    alert("로그인 후 이용가능합니다!");
+                    location.href = "/member/login";
+                }
+            });
+
         });
-
-        function getProductList(currentPageNumber) {
-            let url = "/usedallea/main"
-            url += "?searchWord=" + $("#searchWord").val();
-            if (currentPageNumber != null) {
+    function getProductList(currentPageNumber) {
+    let url = "/usedallea/main"
+    url += "?searchWord=" + $("#searchWord").val();
+    if (currentPageNumber != null) {
                 url += "&currentPageNumber=" + currentPageNumber;
             }
             location.href = url;

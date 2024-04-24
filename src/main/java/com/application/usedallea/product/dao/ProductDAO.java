@@ -16,7 +16,7 @@ public interface ProductDAO {
 
 	long getProductId(long imgId);
 
-	ProductDTO getProductDetail(long productId);
+	ProductDTO 	getProductDetail(long productId);
 
 	void updateReadCnt(long productId);
 
