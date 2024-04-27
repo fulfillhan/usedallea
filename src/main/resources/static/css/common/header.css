@@ -7,11 +7,11 @@
     border-bottom: 1px solid var(--color-layout-line);
 }
 .header-tool-bar__wrap {
+    position: relative;
     display: flex;
+    width: 1045px;
     justify-content: flex-end;
     align-items: center;
-    width: 1045px;
-    gap: 5px;
 }
 
 .header-search-bar {
