@@ -18,9 +18,26 @@
 
                 <!-- tab1 contents -->
                 <div class="sv-tabs-panel active" id="tab1">
-                    <div class="list-search-bar__search">
-                        <input type="text" id="searchWord" name="searchWord" placeholder="상품명 입력" maxlength="40"/>
-                        <img src="/img/search.png" onclick="getMyProductList()"/>
+                    <div class="list-search-bar-wrap">
+                        <div class="list-search-bar__search">
+                            <input type="text" id="searchWord" name="searchWord" placeholder="상품명 입력" maxlength="40"/>
+                            <img src="/img/search.png" onclick="getMyProductList()"/>
+                        </div>
+
+                        <div class="list-search-bar--count">
+                            <select>
+                                <option value="">abc</option>
+                            </select>
+                        </div>
+
+                        <div class="list-search-bar--category-wrap">
+                            <span class="active">전체</span>
+                            <span>판매중</span>
+                            <span>예약중</span>
+                            <span>판매완료</span>
+                            <span>|</span>
+                            <span>숨김</span>
+                        </div>
                     </div>
 
                     <div>
