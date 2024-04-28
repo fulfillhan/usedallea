@@ -27,4 +27,9 @@ public class PageController {
         return "design/myStoreManage";
     }
 
+    @RequestMapping("/list")
+    public String list() {
+        return "design/list";
+    }
+
 }
