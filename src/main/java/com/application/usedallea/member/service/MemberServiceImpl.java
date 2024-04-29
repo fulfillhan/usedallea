@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.application.usedallea.member.dao.MemberDAO;
 import com.application.usedallea.member.dto.MemberDTO;
 
+import java.util.List;
+
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -72,6 +74,22 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void updateDelete(String userId) {
 		memberDAO.updateDeleteMember(userId);
+	}
+
+	@Override
+	public int getAllUserCnt() {
+		return memberDAO.getAllUserCnt();
+	}
+
+	@Override
+	public List<MemberDTO> memberList() {
+		return memberDAO.getMemberList();
+	}
+
+	@Override
+	public void removeUser(String userId) {
+
+		memberDAO.removeUser(userId);
 	}
 
 }

@@ -38,4 +38,7 @@ public interface ProductDAO {
 
 	ProductStatus getProductStatus(long productId);
 
+    int getProductCntByUser(String sellerId);
+
+//	List<Integer> getProducCntByUser(String sellerId);
 }

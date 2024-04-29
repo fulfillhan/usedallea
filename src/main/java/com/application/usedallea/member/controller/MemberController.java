@@ -97,11 +97,6 @@ public class MemberController {
 	}
 
 
-	@GetMapping("/delete")
-	public String delete() {
-		return "member/delete";
-	}
-
 	@PostMapping("/delete")
 	public String delete(HttpServletRequest request) {
 		HttpSession session = request.getSession();

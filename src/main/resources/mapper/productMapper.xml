@@ -190,7 +190,7 @@
 
     <select id="getAllProductCntBySeller" parameterType="hashmap" resultType="int">
        <choose>
-           <when test="searchTitle == ''">
+           <when test="searchWord == ''">
                SELECT
                     COUNT(*)
                FROM
@@ -208,9 +208,9 @@
                     SELLER_ID = #{sellerId}
                AND VALIDATED_YN = 'y'
                AND(
-               CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
-               TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR
-               DESCRIPTION LIKE CONCAT('%', #{searchTitle}, '%')
+               CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
+               TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
+               DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
                )
            </otherwise>
        </choose>
@@ -218,7 +218,7 @@
 
     <select id="getProductListBySeller" parameterType="hashmap" resultType="ProductDTO">
         <choose>
-            <when test="searchTitle == ''">
+            <when test="searchWord == ''">
                 SELECT
                     PRODUCT_ID,
                     SELLER_ID,
@@ -254,9 +254,9 @@
                     SELLER_ID = #{sellerId}
                     AND VALIDATED_YN = 'y'
                     AND (
-                    CATEGORY LIKE CONCAT('%', #{searchTitle}, '%') OR
-                    TITLE LIKE CONCAT('%', #{searchTitle}, '%') OR
-                    DESCRIPTION LIKE CONCAT('%', #{searchTitle}, '%')
+                    CATEGORY LIKE CONCAT('%', #{searchWord}, '%') OR
+                    TITLE LIKE CONCAT('%', #{searchWord}, '%') OR
+                    DESCRIPTION LIKE CONCAT('%', #{searchWord}, '%')
                     )
                 </where>
                 ORDER BY
@@ -285,6 +285,14 @@
                 PRODUCT_ID = #{productId}
     </select>
 
+    <select id="getProductCntByUser" parameterType="String" resultType="int">
+        SELECT
+                COUNT(*)
+        FROM
+                PRODUCT
+        WHERE
+                SELLER_ID = #{sellerId}
+    </select>
 
 
 

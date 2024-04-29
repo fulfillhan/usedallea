@@ -87,13 +87,14 @@ public class ProductController {
 	@GetMapping("/productManager")
 	public String productManager(Model model,
 								 @RequestParam("sellerId") String sellerId,
-								 @RequestParam(name = "searchTitle", defaultValue = "") String searchTitle,
+								 @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
 								 @RequestParam(name = "onePageProductCnt", defaultValue = "10") int onePageProductCnt,
 								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber) {
 
 
 		Map<String, String> searchCntMap = new HashMap<>();
-		searchCntMap.put("searchTitle", searchTitle);
+//		searchCntMap.put("searchWord", searchWord);
+		searchCntMap.put("searchWord", searchWord);
 		searchCntMap.put("sellerId", sellerId);
 
 		int allProductCntBySeller = productService.getAllProductCntBySeller(searchCntMap);  // 특정 판매자의 판매목록의 총 개수
@@ -119,7 +120,7 @@ public class ProductController {
 		int startProductIdx = (currentPageNumber - 1) * onePageProductCnt;
 
 		Map<String, Object> searchMap = new HashMap<>();
-		searchMap.put("searchTitle", searchTitle);
+		searchMap.put("searchWord", searchWord);
 		searchMap.put("startProductIdx", startProductIdx);
 		searchMap.put("onePageProductCnt", onePageProductCnt);
 		searchMap.put("sellerId", sellerId);
@@ -137,14 +138,13 @@ public class ProductController {
 		}
 
 		model.addAttribute("productListBySeller", productListBySeller);
-		//model.addAttribute("allProductCntBySeller", allProductCntBySeller);
 		model.addAttribute("allPageCnt", allPageCnt);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("onePageProductCnt", onePageProductCnt);
 		model.addAttribute("currentPageNumber", currentPageNumber);
 
-		return "product/productManagerSample";
+		return "product/productManager";
 	}
 
 

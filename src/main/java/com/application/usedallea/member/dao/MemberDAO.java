@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.application.usedallea.member.dto.MemberDTO;
 
+import java.util.List;
+
 @Mapper
 public interface MemberDAO {
 
@@ -18,4 +20,10 @@ public interface MemberDAO {
 	void updateMember(MemberDTO memberDTO);
 
 	void updateDeleteMember(String userId);
+
+	int getAllUserCnt();
+
+    List<MemberDTO> getMemberList();
+
+	void removeUser(String userId);
 }
