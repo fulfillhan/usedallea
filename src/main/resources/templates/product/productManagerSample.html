@@ -19,7 +19,7 @@
         </colgroup>
         <tr>
             <div align="center">
-                <input type="text" id="searchTitle" name="searchTitle" placeholder="상품명을 입력하세요" maxlength="40">
+                <input type="text" id="searchWord" name="searchWord" placeholder="상품명을 입력하세요" maxlength="40">
                 <input type="button" value="검색" onclick="getMyProductList()">
             </div>
             <div align="right">
@@ -95,8 +95,8 @@
             if (currentPageNumber != null) {
                 url += "&currentPageNumber=" + currentPageNumber;
             }
-            if ($("#searchTitle").val() != '') {
-                url += "&searchTitle=" + $("#searchTitle").val();
+            if ($("#searchWord").val() != '') {
+                url += "&searchWord=" + $("#searchWord").val();
             }
             location.href = url;
         }
@@ -128,7 +128,7 @@
             });
         }
 
-        $("#searchTitle").keypress(function (event) {
+        $("#searchWord").keypress(function (event) {
             if (event.keyCode == 13) {
                 getMyProductList();
             }

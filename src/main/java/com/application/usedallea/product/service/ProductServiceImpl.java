@@ -1,6 +1,5 @@
 package com.application.usedallea.product.service;
 
-import com.application.usedallea.img.dao.ProductImgDAO;
 import com.application.usedallea.img.dto.ProductImgDTO;
 import com.application.usedallea.img.service.ProductImgService;
 import com.application.usedallea.product.dao.ProductDAO;
@@ -10,12 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.beans.Transient;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -118,6 +114,16 @@ public class ProductServiceImpl implements ProductService {
 
 		productDAO.updateProductStatus(productDTO);
 		return productDAO.getProductStatus(productId);
+	}
+
+//	@Override
+//	public List<Integer> getProducCntByUser(String sellerId) {
+//		return productDAO.getProducCntByUser(sellerId);
+//	}
+
+	@Override
+	public int getProducCntByUser(String sellerId) {
+		return productDAO.getProductCntByUser(sellerId);
 	}
 
 

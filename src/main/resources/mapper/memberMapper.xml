@@ -98,5 +98,37 @@
 		    	USER_ID = #{userId}
 	</update>
 
+	<select id="getAllUserCnt" resultType="int">
+		SELECT
+		    	COUNT(*)
+		FROM
+		    	USER
+	</select>
+
+	<select id="getMemberList" resultType="MemberDTO">
+		SELECT
+		    	USER_ID,
+		    	NAME,
+		    	NICKNAME,
+		    	EMAIL,
+				PHONE_NUMBER,
+				CREATED_AT,
+				UPDATED_AT,
+				ACTIVE_YN
+		FROM
+		    	USER
+		ORDER BY
+		     CREATED_AT ASC ;
+
+	</select>
+
+	<delete id="removeUser" parameterType="String">
+		DELETE FROM
+		           	USER
+		WHERE
+		    	USER_ID = #{userId}
+
+	</delete>
+
 
 </mapper>

@@ -1,81 +1,116 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout.html}">
-<head>
-    <meta charset="UTF-8">
-    <link href="/css/styles.css" rel="stylesheet" />
-</head>
-<div layout:fragment="contents">
-        <main>
+    <div layout:fragment="contents">
+
             <div class="container-fluid px-4">
-                <h1 class="mt-4">회원 리스트</h1>
-                <br>
+                <h1 class="mt-4">회원 관리</h1>
+                <div class="card mb-4">
+                </div>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        userManagement Table
+                        전체 회원 수 :
+                        <span th:text="|${allUserCnt} 명|"></span>
                     </div>
                     <div class="card-body">
-                        <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns"></div>
-                    <!--    <table border="1">
+                        <table >
                             <colgroup>
-                                <col width="20%">
-                                <col width="20%">
-                                <col width="20%">
-                                <col width="20%">
-                                <col width="20%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
+                                <col width="5%">
                             </colgroup>
-                            <tr>-->
-                                <div align="right">
-<!--                                    <input type="text" id="searchbar" placeholder="입력하세요" maxlength="20">-->
-<!--                                    <input type="button" value="검색">&lt;!&ndash;이름, 아이디, 상품명 검색&ndash;&gt;-->
-                                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                                        <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="입력하세요" aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                                            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div align="left">
-                                    <select id="onePageViewCnt">
-                                        <option value="5">5</option>
-                                        <option value="7">7</option>
-                                        <option value="10" selected>10</option>
-                                    </select>
-                                </div>
-<!--                            </tr>-->
-                            <table border="1">
-                                <colgroup>
-                                    <col width="20%">
-                                    <col width="20%">
-                                    <col width="20%">
-                                    <col width="20%">
-                                    <col width="20%">
-                                </colgroup>
                             <thead>
-                            <tr>
-                                <th>아이디</th>
-                                <th>이름</th>
-                                <th>전화 번호</th>
-                                <th>판매상품</th>
-                                <th>주소</th>
-                                <th>가입날짜</th>
+                            <tr align="center">
+                                <th>번호</th>
+                                <th>회원 ID</th>
+                                <th>닉네임</th>
+                                <th>이메일</th>
+                                <th>핸드폰 번호</th>
+                                <th>등록상품<br>(전체개수)</th>
+                                <th>가입일</th>
+                                <th>탈퇴일</th>
+                                <th>계정상태</th>
+                                <th>삭제</th>
                             </tr>
                             </thead>
-                            <tbody id="memberList" >
-                            <tr>
-                                <td>userId</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                                <td>$320,800</td>
+                            <tbody id="memberList" th:each="memberDTO : ${memberList}" >
+                            <tr align="center">
+                                <td th:text="${startViewIdx + memberDTOStat.count}"></td>
+                                <td th:text="${memberDTO.userId}"></td>
+                                <td th:text="${memberDTO.nickname}"></td>
+                                <td th:text="${memberDTO.email}"></td>
+                                <td th:text="${memberDTO.phoneNumber}"></td>
+                                <td th:text="|${memberDTO.productCnt} 개|"></td>
+                                <td th:text="${#temporals.format(memberDTO.createdAt,'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(memberDTO.updatedAt,'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${memberDTO.activeYn}"></td>
+                                <td>
+                                <button class="deleteBtn" th:attr="data-member=${memberDTO.userId}">계정 삭제</button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </main>
-</div>
+        <div style="display: table; margin-left: auto; margin-right: auto">
+            <ul th:align="center">
+                 <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                     <a th:if="${page != currentPageNumber}" th:href="|javascript:getMyPage(${page})|"
+                        th:text="${page }" ></a>
+                       <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
+                 </span>
+            </ul>
+        </div>
+
+        <script>
+            function  getMyPage(currentPageNumber){
+                let url = "/admin/userList"
+                url += "?onePageViewCnt="+$("#onePageViewCnt").val();
+                if(currentPageNumber != null){
+                    url += "&currentPageNumber="+currentPageNumber;
+                }
+                location.href = url;
+            }
+        </script>
+            <script th:inline="javascript">
+               /*<![CDATA[*/
+
+               $(function (){
+                   $(".deleteBtn").click(function(){
+                       //추가해야할 내용
+                       var userId = $(this).data("member");
+                       var row = $(this).closest('tr');
+                       if(confirm("해당 사용자의 계정을 삭제하시겠습니까?")){
+
+                           $.ajax({
+                               type : "POST",
+                               url : "/admin/removeUser",
+                               data : {
+                                  userId
+                               },
+                               success: function(response){
+
+                                   if(response == 'success'){
+                                       row.remove();
+                                       alert("사용자의 계정이 삭제되었습니다.");
+                                   }
+                               }
+                           });
+                       }
+                   });
+
+               });
+
+               /*]]>*/
+
+            </script>
+    </div>
 </html>

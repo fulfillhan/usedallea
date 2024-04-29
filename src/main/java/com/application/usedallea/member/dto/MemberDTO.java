@@ -1,5 +1,6 @@
 package com.application.usedallea.member.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,5 +24,7 @@ public class MemberDTO {
 	private String namujiAddress;
 	private String zipCode;
 	private String personalInfoYn;
-
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	private int productCnt;
 }

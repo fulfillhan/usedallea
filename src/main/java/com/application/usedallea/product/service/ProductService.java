@@ -32,5 +32,9 @@ public interface ProductService {
 	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
 
 	ProductStatus updateProductStatus(long productId, ProductStatus status);
+
+//	List<Integer> getProducCntByUser(String sellerId);
+
+	int getProducCntByUser(String sellerId);
 }
 

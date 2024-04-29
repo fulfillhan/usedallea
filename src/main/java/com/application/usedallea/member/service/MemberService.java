@@ -2,6 +2,8 @@ package com.application.usedallea.member.service;
 
 import com.application.usedallea.member.dto.MemberDTO;
 
+import java.util.List;
+
 public interface MemberService {
 
 	void registerMember(MemberDTO memberDTO);
@@ -15,4 +17,10 @@ public interface MemberService {
 	void updateMember(MemberDTO memberDTO);
 
 	void updateDelete(String userId);
+
+	int getAllUserCnt();
+
+    List<MemberDTO> memberList();
+
+	void removeUser(String userId);
 }
