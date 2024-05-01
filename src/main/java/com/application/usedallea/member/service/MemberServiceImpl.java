@@ -10,6 +10,7 @@ import com.application.usedallea.member.dao.MemberDAO;
 import com.application.usedallea.member.dto.MemberDTO;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -82,8 +83,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberDTO> memberList() {
-		return memberDAO.getMemberList();
+	public List<MemberDTO> memberList(Map<String, Integer> searchMap) {
+		return memberDAO.getMemberList(searchMap);
 	}
 
 	@Override

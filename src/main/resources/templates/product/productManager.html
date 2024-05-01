@@ -14,8 +14,8 @@
                 <a class="sv-tabs-tab active" href="#tab1">상품 관리</a>
                 <a class="sv-tabs-tab" href="#tab2">상품 등록</a>
             </nav>
-            <div class="sv-tabs-panel-list">
 
+            <div class="sv-tabs-panel-list">
                 <!-- tab1 contents -->
                 <div class="sv-tabs-panel active" id="tab1">
                     <div class="list-search-bar__search">
@@ -56,7 +56,7 @@
                                     <select th:id="'status-'+${productDTOStat.index}"
                                             th:productId="${productDTO.productId}"
                                             th:onchange="updateProductStatus(this.getAttribute('id'), this.getAttribute('productId'))">
-                                        <option th:selected="${productDTO.status} == '판매중'" value="판매중" selected>판매중</option>
+                                        <option th:selected="${productDTO.status} == '판매중'" value="판매중">판매중</option>
                                         <option th:selected="${productDTO.status} == '판매완료'" value="판매완료">판매완료</option>
                                         <option th:selected="${productDTO.status} == '삭제'" value="삭제">삭제</option>
                                     </select>
@@ -68,7 +68,9 @@
                                 <td th:text="${#temporals.format(productDTO.updatedAt,'yyyy-MM-dd HH:mm')}"></td>
                                 <td>
                                     <div class="list-table__features">
-                                    <button><a th:href="@{/product/update(productId=${productDTO.productId})}">수정</a>
+                                    <button>
+                                       <!-- <a th:href="@{/product/update(productId=${productDTO.productId})}">수정</a>-->
+                                        <a th:href="@{/product/create}">수정</a>
                                     </button>
                                     </div>
                                 </td>
@@ -81,26 +83,34 @@
                     <!--화면 페이징 처리-->
                     <div class="pagination-container">
                         <div>
-                            <ul th:align="center">
+                              <span class="pagination__button--prev">
+                                    <a th:if="${currentPageNumber > 1}" th:href="|javascript:getMyProductList(${currentPageNumber-1})|">◀</a>
+                                    <span th:unless="${currentPageNumber > 1}"><a>◀</a></span>
+                              </span>
                             <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                                <span class="pagination__button">
                                 <a th:if="${page != currentPageNumber}" th:href="|javascript:getMyProductList(${page})|"
-                                   th:text="${page }"></a>&nbsp;
-                                <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
+                                   th:text="${page}">
+                                </a>
+                                </span>
+                                    <span class="pagination__button active">
+                                    <strong th:if="${page == currentPageNumber}" th:text="${page}"></strong>
+                                </span>
                             </span>
-                            </ul>
+                            <span class="pagination__button--next">
+                                <a th:if="${currentPageNumber < allPageCnt}" th:href="|javascript:getMyProductList(${currentPageNumber+1})|">▶</a>
+                                <span th:unless="${currentPageNumber < allPageCnt}"><a>▶</a></span>
+                             </span>
                         </div>
                     </div>
                  </div>
                 <!-- tab1-contents end -->
 
-
                 <div class="sv-tabs-panel" id="tab2">
-
+                // 상품등록 내용 넣기
                 </div>
-
-<!--            </div>-->
+            </div>
         </div>
-    </div>
     </div>
     <script>
         const tabs = {
@@ -179,5 +189,5 @@
             }
         });
     </script>
-</div>>
+</div>
 </html>

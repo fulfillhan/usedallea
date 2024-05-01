@@ -36,9 +36,16 @@ public interface ProductDAO {
 
 	void updateProductStatus(ProductDTO productId);
 
+	List<ProductDTO> getProductIdBySeller(String sellerId);
+
 	ProductStatus getProductStatus(long productId);
 
     int getProductCntByUser(String sellerId);
 
-//	List<Integer> getProducCntByUser(String sellerId);
+	int getAllProductCntByAdmin(Map<String, String> searchCntMap);
+
+
+	List<ProductDTO> getProductListByAdmin(Map<String, Object> searchMap);
+
+	//void removeProduct(long productId);
 }

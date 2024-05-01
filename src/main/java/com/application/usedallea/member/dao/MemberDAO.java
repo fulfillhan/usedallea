@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.application.usedallea.member.dto.MemberDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MemberDAO {
@@ -23,7 +24,7 @@ public interface MemberDAO {
 
 	int getAllUserCnt();
 
-    List<MemberDTO> getMemberList();
+    List<MemberDTO> getMemberList(Map<String, Integer> searchMap);
 
 	void removeUser(String userId);
 }

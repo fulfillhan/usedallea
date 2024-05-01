@@ -275,7 +275,17 @@
         WHERE
                 PRODUCT_ID = #{productId}
     </update>
-    
+
+
+    <select id="getProductIdBySeller" parameterType="String" resultType="ProductDTO">
+        SELECT
+                PRODUCT_ID
+        FROM
+                PRODUCT
+        WHERE
+                SELLER_ID = #{sellerId}
+    </select>
+
     <select id="getProductStatus" parameterType="long" resultType="ProductStatus">
         SELECT
                 STATUS
@@ -293,6 +303,73 @@
         WHERE
                 SELLER_ID = #{sellerId}
     </select>
+
+    <select id="getAllProductCntByAdmin" parameterType="hashMap" resultType="int">
+        SELECT
+                COUNT(*)
+        FROM
+                PRODUCT
+        <where>
+            <if test="searchWord != ''">
+                SELLER_ID LIKE CONCAT('%', #{searchWord}, '%') OR
+                TITLE LIKE CONCAT('%', #{searchWord}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getProductListByAdmin" parameterType="hashMap" resultType="ProductDTO">
+        <choose>
+            <when test="searchWord.equals('')">
+                SELECT
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    CATEGORY,
+                    QUALITY_CONDITION,
+                    CREATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM
+                    PRODUCT
+                ORDER BY
+                    CREATED_AT DESC
+                LIMIT
+                    #{startProductIdx}, #{onePageViewCnt}
+            </when>
+            <otherwise>
+                SELECT
+                    PRODUCT_ID,
+                    SELLER_ID,
+                    PRICE,
+                    CATEGORY,
+                    QUALITY_CONDITION,
+                    CREATED_AT,
+                    READ_COUNT,
+                    STATUS,
+                    TITLE,
+                    IMG_ID
+                FROM
+                    PRODUCT
+                <where>
+                    SELLER_ID LIKE CONCAT('%', #{searchWord}, '%') OR
+                    TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                </where>
+                ORDER BY
+                    CREATED_AT DESC
+                LIMIT
+                    #{startProductIdx}, #{onePageViewCnt}
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="removeProduct" parameterType="long">
+        DELETE FROM
+                   PRODUCT
+        WHERE
+             PRODUCT_ID = #{productId}
+    </delete>
 
 
 
