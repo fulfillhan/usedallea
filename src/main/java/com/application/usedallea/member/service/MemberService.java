@@ -3,6 +3,7 @@ package com.application.usedallea.member.service;
 import com.application.usedallea.member.dto.MemberDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -20,7 +21,7 @@ public interface MemberService {
 
 	int getAllUserCnt();
 
-    List<MemberDTO> memberList();
+    List<MemberDTO> memberList(Map<String, Integer> searchMap);
 
 	void removeUser(String userId);
 }

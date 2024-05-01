@@ -42,8 +42,6 @@ public class MemberController {
 				memberDetail = new MemberDTO();
 			}
 			model.addAttribute("memberDTO", memberDetail);
-		} else {
-			model.addAttribute("memberDTO", new MemberDTO());
 		}
 		return "/member/registerOrUpdate";
 	}

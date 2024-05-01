@@ -41,21 +41,46 @@ public class ProductController {
 	public String create(Model model, HttpServletRequest request) {
 
 		String sellerId = getUserId(request);
-		model.addAttribute("sellerId", sellerId);
-
-		return "product/createProduct";
+		long productId = 0;
+		// 판매자가 가진 모든 상품 아이디를  가지고 온다.
+		List<ProductDTO> sellerProducts =  productService.getProductIdBySeller(sellerId);
+		for (ProductDTO productDTO : sellerProducts){
+			productId = productDTO.getProductId();
+			List<String> imgUUIDList = productService.getImgUUIDList(productId);
+			if(productId != 0) {  // id 가 있으면
+				ProductDTO productDetail = productService.getProductDetail(productId, false);
+				if (productDetail == null) {
+					productDetail = new ProductDTO();
+				}
+				model.addAttribute("productDTO", productDetail);
+				model.addAttribute("imgUUID",imgUUIDList);
+			}
+		}
+		return "product/createOrUpdate";
 	}
-
+//--> 여기서부터
 	@PostMapping("/create")
-	public String create(@RequestParam("uploadImg") List<MultipartFile> uploadFile,
+	public String create(@RequestParam(value="uploadImg",required = false) List<MultipartFile> uploadImg,
 						 ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
 
-		long productId = productService.createProduct(uploadFile, productDTO, productImgDTO);
+		long productId = productDTO.getProductId();
 
-		return "redirect:/product/detail?productId=" + productId;
+		/*if(uploadFile != null && !uploadFile.isEmpty()){
+
+		}*/
+		if(productId != 0){
+			//상품 수정
+			productService.updateProduct(productDTO);
+			return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();
+		}else if(uploadImg != null && !uploadImg.isEmpty()) {
+			//상품 등록
+			productId = productService.createProduct(uploadImg, productDTO, productImgDTO);
+			return "redirect:/product/detail?productId=" + productId;
+		}
+
+		return"redirect:/usedallea/main";
 
 	}
-
 
 	@GetMapping("/detail")
 	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
@@ -72,17 +97,19 @@ public class ProductController {
 		return "product/productDetailBySeller";
 	}
 
-	@GetMapping("/update")
+/*	@GetMapping("/update")
 	public String update(Model model, @RequestParam("productId") long productId) {
 		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
 		return "product/updateProduct";
-	}
+	}*/
 
+/*
 	@PostMapping("/update")
 	public String update(@ModelAttribute ProductDTO productDTO) {
 		productService.updateProduct(productDTO);
 		return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
 	}
+*/
 
 	@GetMapping("/productManager")
 	public String productManager(Model model,
@@ -93,7 +120,6 @@ public class ProductController {
 
 
 		Map<String, String> searchCntMap = new HashMap<>();
-//		searchCntMap.put("searchWord", searchWord);
 		searchCntMap.put("searchWord", searchWord);
 		searchCntMap.put("sellerId", sellerId);
 

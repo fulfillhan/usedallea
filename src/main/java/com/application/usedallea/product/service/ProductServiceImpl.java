@@ -20,7 +20,7 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-	
+
 	@Autowired
 	private ProductDAO productDAO;
 
@@ -36,10 +36,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
 
-		long imgId = productImgService.saveImg(uploadImg, productImgDTO); 	// img테이블에 이미지 저장하기 -> 이미지 id 생성
+		long imgId = productImgService.saveImg(uploadImg, productImgDTO);    // img테이블에 이미지 저장하기 -> 이미지 id 생성
 		productDTO.setImgId(imgId);
 		//단위 테스트
-	    //System.out.println(imgId);
+		//System.out.println(imgId);
 
 		productDTO.setStatus(ProductStatus.판매중.name());                   // 상품의 품질상태 저장하기
 
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
 
 		// 로그인을 하고, 해당 유저가 판매자가 아닌경우에만 조회수 증가
-		if(isCheckReadCnt){
+		if (isCheckReadCnt) {
 			productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
 		}
 
@@ -116,15 +116,28 @@ public class ProductServiceImpl implements ProductService {
 		return productDAO.getProductStatus(productId);
 	}
 
-//	@Override
-//	public List<Integer> getProducCntByUser(String sellerId) {
-//		return productDAO.getProducCntByUser(sellerId);
-//	}
 
 	@Override
 	public int getProducCntByUser(String sellerId) {
 		return productDAO.getProductCntByUser(sellerId);
 	}
+
+	@Override
+	public int getAllProductCntByAdmin(Map<String, String> searchCntMap) {
+		return productDAO.getAllProductCntByAdmin(searchCntMap);
+	}
+
+	@Override
+	public List<ProductDTO> getProductListByAdmin(Map<String, Object> searchMap) {
+		return productDAO.getProductListByAdmin(searchMap);
+	}
+
+	@Override
+	public List<ProductDTO> getProductIdBySeller(String sellerId) {
+		return productDAO.getProductIdBySeller(sellerId);
+	}
+
+
 
 
 }

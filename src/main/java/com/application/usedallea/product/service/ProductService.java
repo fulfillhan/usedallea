@@ -36,5 +36,14 @@ public interface ProductService {
 //	List<Integer> getProducCntByUser(String sellerId);
 
 	int getProducCntByUser(String sellerId);
+
+	int getAllProductCntByAdmin(Map<String, String> searchCntMap);
+
+	List<ProductDTO> getProductListByAdmin(Map<String, Object> searchMap);
+
+    List<ProductDTO> getProductIdBySeller(String sellerId);
+
+
+    //void removeProduct(long productId);
 }
 

@@ -105,7 +105,7 @@
 		    	USER
 	</select>
 
-	<select id="getMemberList" resultType="MemberDTO">
+	<select id="getMemberList" parameterType="hashMap" resultType="MemberDTO">
 		SELECT
 		    	USER_ID,
 		    	NAME,
@@ -118,7 +118,9 @@
 		FROM
 		    	USER
 		ORDER BY
-		     CREATED_AT ASC ;
+		     CREATED_AT ASC
+		LIMIT
+				#{startViewIdx},#{onePageViewCnt}
 
 	</select>
 
