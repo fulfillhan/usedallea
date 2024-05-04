@@ -37,7 +37,7 @@ public class ProductController {
 		return (String) session.getAttribute("userId");
 	}
 
-	@GetMapping("/create")
+/*	@GetMapping("/create")
 	public String create(Model model, HttpServletRequest request) {
 
 		String sellerId = getUserId(request);
@@ -57,29 +57,52 @@ public class ProductController {
 			}
 		}
 		return "product/createOrUpdate";
+	}*/
+
+	@GetMapping("/create")
+	public String create(Model model, HttpServletRequest request) {
+	/*	HttpSession session = request.getSession();
+		session.setAttribute("sellerId",session.getAttribute("userId"));*/
+
+		return "product/createOrUpdate";
 	}
-//--> 여기서부터
-	@PostMapping("/create")
-	public String create(@RequestParam(value="uploadImg",required = false) List<MultipartFile> uploadImg,
+
+
+	@GetMapping("/update")
+	public String update(Model model, HttpServletRequest request,
+						 @RequestParam("productId") long productId) {
+
+		HttpSession session = request.getSession();
+		session.setAttribute("sellerId",session.getAttribute("userId"));
+
+		List<String> imgUUIDList = productService.getImgUUIDList(productId);
+		ProductDTO productDetail = productService.getProductDetail(productId, false);
+		model.addAttribute("productDTO",productDetail) ;
+		model.addAttribute("imgUUID",imgUUIDList);
+		return "product/createOrUpdate";
+	}
+
+	//--> 여기서부터(이미지 여러장일때 업데이트 필요.)
+	@PostMapping("/creatOrUpdate")
+	public String create(HttpServletRequest request,
+					     @RequestParam(value="uploadImg") List<MultipartFile> uploadImg,
 						 ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
 
-		long productId = productDTO.getProductId();
+		//수정 필요
+		HttpSession session = request.getSession();
+		String sellerId =(String) session.getAttribute("userId");
+		long productId =productDTO.getProductId();
+		productDTO.setSellerId(sellerId);
 
-		/*if(uploadFile != null && !uploadFile.isEmpty()){
-
-		}*/
 		if(productId != 0){
 			//상품 수정
 			productService.updateProduct(productDTO);
-			return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();
-		}else if(uploadImg != null && !uploadImg.isEmpty()) {
+			return "redirect:/product/productManager?sellerId=" + sellerId;
+		}else {
 			//상품 등록
 			productId = productService.createProduct(uploadImg, productDTO, productImgDTO);
-			return "redirect:/product/detail?productId=" + productId;
+			return "redirect:/product/detail?productId=" + productId+"&sellerId="+sellerId;
 		}
-
-		return"redirect:/usedallea/main";
-
 	}
 
 	@GetMapping("/detail")

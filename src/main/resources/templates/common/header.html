@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<section class="header-tool-bar" th:fragment="toolBar">
+<section  th:if="${session.adminId == null}" class="header-tool-bar" th:fragment="toolBar">
     <div class="header-tool-bar__wrap">
         <!-- TODO 로그아웃 상태일 때 -->
         <div th:if="${session.userId == null}">
@@ -18,7 +18,7 @@
          </div>
     </div>
 </section>
-<section class="header-search-bar" th:fragment="searchBar">
+<section th:if="${session.adminId == null}" class="header-search-bar" th:fragment="searchBar">
     <input type="hidden" id="userId" th:value="${session.userId}">
     <div class="header-search-bar__wrap">
         <div class="header-search-bar__top">

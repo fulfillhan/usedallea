@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <div class="product-detail__action-wrap">
+            <div th:if="${session.adminId == null}" class="product-detail__action-wrap">
                 <div th:if="${productDTO.status == '판매중'}">
                 <!--userId 로그인 한 아이디가 없거나, 로그인을 해도 userId 와 sellerId가 같지 않아야 한다.-->
                 <button  id="zzimBtn" class="product-detail__button--zzim"

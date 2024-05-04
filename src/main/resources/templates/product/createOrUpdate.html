@@ -19,17 +19,18 @@
         <div class="sv-tabs-panel-list">
             <div class="sv-tabs-panel active" id="tab1">
                 <form
-                        th:action="@{/product/create}"
+                        th:action="@{/product/creatOrUpdate}"
                         method="post"
                         enctype="multipart/form-data"
                         class="product-create__form"
                 >
-                <!--    <input type="hidden" name="sellerId" th:value="${memberDTO.sellerId}"/>-->
+                    <input type="hidden" id="sellerId" name="sellerId" th:value="${session.sellerId}"/>
+                    <input th:if="${productDTO?.productId}" type="hidden" id="productId" name="productId" th:value="${productDTO.productId}"/>
 
-                    <div class="product-create__form--title" th:if="${productDTO.productId == null}">
+                    <div class="product-create__form--title" th:unless="${productDTO?.productId}">
                         <h1>상품 등록</h1>
                     </div>
-                    <div class="product-create__form--title" th:unless="${productDTO.productId == null}">
+                    <div class="product-create__form--title" th:if="${productDTO?.productId}">
                         <h1>상품 수정</h1>
                     </div>
 
@@ -37,20 +38,18 @@
                         <div>
                             <!-- 다중 파일 업로드-->
                             <label for="uploadImg">상품이미지<br/>(5장까지)</label><br>
-                            <input  th:if="${productDTO.productId == null}"
-                                    type="file"
-                                    multiple="multiple"
-                                    id="uploadImg"
-                                    name="uploadImg"
-                                    placeholder=""
-                                    required>
-                            <input th:unliess="${productDTO.productId == null}"
+                            <input
                                    type="file"
                                    multiple="multiple"
+                                   id="uploadImg"
                                    name="uploadImg"
                                    placeholder=""
+                                   th:value="${productDTO?.productId}"
+                                   th:readonly="${productDTO?.productId}"
                                    >
-                            <img th:src="@{/img/setThumbnail(imgName=${imgUUID})}" alt="이미지"/>
+                            <img th:if="${productDTO?.productId}"
+                                 th:src="@{/img/setThumbnail(imgName=${imgUUID})}" alt="이미지"/>
+
                         </div>
 
                         <div>
@@ -59,7 +58,7 @@
                                     type="text"
                                     id="title"
                                     name="title"
-                                    th:value="${productDTO.title}"
+                                    th:value="${productDTO?.title}"
                                     maxlength="40"
                                     placeholder="상품명을 입력해주세요(40자까지)"
                                     required>
@@ -67,28 +66,28 @@
 
                         <div>
                             <label for="category">카테고리</label>
-                            <select id="category" name="category"  th:value="${productDTO.category}" required>
-                                <option th:selected="${productDTO.category == 'cloth'}"  value="cloth" selected>의류</option>
-                                <option th:selected="${productDTO.category == 'bags'}"  value="bags">가방</option>
-                                <option th:selected="${productDTO.category == 'cosmetic'}" value="cosmetic">화장품</option>
-                                <option th:selected="${productDTO.category == 'furniture'}" value="furniture">가구/인테리어</option>
-                                <option th:selected="${productDTO.category == 'digital'}" value="digital">가전제품</option>
+                            <select id="category" name="category"  th:value="${productDTO?.category}" required>
+                                <option th:selected="${productDTO?.category == 'cloth'}"  value="cloth" selected>의류</option>
+                                <option th:selected="${productDTO?.category == 'bags'}"  value="bags">가방</option>
+                                <option th:selected="${productDTO?.category == 'cosmetic'}" value="cosmetic">화장품</option>
+                                <option th:selected="${productDTO?.category == 'furniture'}" value="furniture">가구/인테리어</option>
+                                <option th:selected="${productDTO?.category == 'digital'}" value="digital">가전제품</option>
                             </select>
                         </div>
 
                         <div>
                             <label>상품 상태</label>
-                            <div class="product-create__form-status--radio-group" th:value="${productDTO.qualityCondition}">
-                                <input type="radio" name="qualityCondition" th:checked="${productDTO.qualityCondition =='새상품(미사용)'}" value="새상품(미사용)">새상품(미사용)<br/>
-                                <input type="radio" name="qualityCondition" th:checked="${productDTO.qualityCondition =='사용감약간'}" value="사용감약간">사용감 약간 있음(사용은 했지만 흔적은 없음)<br/>
-                                <input type="radio" name="qualityCondition" th:checked="${productDTO.qualityCondition =='사용감많음'}" value="사용감많음">사용감 많음(눈에 띄는 흔적 있음)<br/>
-                                <input type="radio" name="qualityCondition" th:checked="${productDTO.qualityCondition =='수리/수선필요'}" value="수리/수선필요">고장/파손 상품(수리/수선 필요)<br/>
+                            <div class="product-create__form-status--radio-group" th:value="${productDTO?.qualityCondition}">
+                                <input type="radio" name="qualityCondition" th:checked="${productDTO?.qualityCondition =='새상품(미사용)'}" value="새상품(미사용)">새상품(미사용)<br/>
+                                <input type="radio" name="qualityCondition" th:checked="${productDTO?.qualityCondition =='사용감약간'}" value="사용감약간">사용감 약간 있음(사용은 했지만 흔적은 없음)<br/>
+                                <input type="radio" name="qualityCondition" th:checked="${productDTO?.qualityCondition =='사용감많음'}" value="사용감많음">사용감 많음(눈에 띄는 흔적 있음)<br/>
+                                <input type="radio" name="qualityCondition" th:checked="${productDTO?.qualityCondition =='수리/수선필요'}" value="수리/수선필요">고장/파손 상품(수리/수선 필요)<br/>
                             </div>
                         </div>
 
                         <div>
                             <label for="price">가격 설정</label>
-                            <input type="text" id="price" name="price" th:value="${productDTO.price}" placeholder="가격을 입력해주세요" required>
+                            <input type="text" id="price" name="price" th:value="${productDTO?.price}" placeholder="가격을 입력해주세요" required>
                             <span class="product-create__form-price--unit">원</span>
                         </div>
 
@@ -98,14 +97,15 @@
                                     rows="10"
                                     id="description"
                                     name="description"
-                                    th:value="${productDTO.description}"
+                                    th:text="${productDTO?.description}"
                                     maxlength="1000"
                                     placeholder="서로가 믿고 구매할 수 있도록 해당 제품에 대한 설명을 자세하게 적어주세요(제품의 상태, 구매시기, 브랜드명 등)"
-                                    ></textarea>
+                            ></textarea>
                         </div>
 
                         <div class="product-create__form-action">
-                            <input type="submit" value="등록하기" class="ok"/>
+                            <input type="submit" th:unless="${productDTO?.productId}" value="등록하기" class="ok"/>
+                            <input type="submit" th:if="${productDTO?.productId}" value="수정하기" class="ok"/>
                             <input type="reset" value="다시작성"/>
                         </div>
                     </div>

@@ -1,6 +1,5 @@
 package com.application.usedallea.member.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +42,7 @@ public class MemberController {
 			}
 			model.addAttribute("memberDTO", memberDetail);
 		}
-		return "/member/registerOrUpdate";
+		return "member/registerOrUpdate";
 	}
 
 

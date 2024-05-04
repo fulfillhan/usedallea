@@ -67,7 +67,7 @@
                                          height="100%"/>
                                 </a>
                             </td>
-                            <td> <a th:href="@{/product/detail(productId=${productDTO.productId})}">[[${productDTO.title}]]</a></td>
+                            <td> <a th:href="@{/product/detail(productId=${productDTO.productId},adminId=${session.adminId})}">[[${productDTO.title}]]</a></td>
                             <td>[[${productDTO.sellerId}]]</td>
                             <td>[[${productDTO.price}]]</td>
                             <td>[[${productDTO.category}]]</td>
@@ -75,7 +75,12 @@
                             <td>[[${productDTO.readCount}]]회</td>
                             <td th:text="${#temporals.format(productDTO.createdAt,'yyyy-MM-dd HH:mm')}"></td>
                             <td>
-                                <button class="deleteBtn" th:data-product="${productDTO.productId}">상품 수정</button>
+                                <div class="list-table__features">
+                                       <!-- <button class="deleteBtn" th:data-product="${productDTO.productId}">상품 수정</button>-->
+                                    <button>
+                                <a th:href="@{/product/update(productId=${productDTO.productId})}">수정하기</a>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -105,6 +110,13 @@
 
         <script>
 
+           /* $(function (){
+                $(".deleteBtn").click(function(){
+                    var productId = $("#productId").val();
+                    location.href="/product/update?productId="+productId;
+                });
+            });*/
+
             function  getMyPage(currentPageNumber){
                 let url = "/admin/productList"
                     url += "?searchWord="+ $("#searchWord").val();
@@ -119,8 +131,10 @@
                     getMyProductList();
                 }
             });
+
+
         </script>
-        <script th:inline="javascript">
+<!--        <script th:inline="javascript">
             /*<![CDATA[*/
             $(function (){
                 $(".deleteBtn").click(function(){
@@ -149,7 +163,7 @@
             });
             /*]]>*/
 
-        </script>
+        </script>-->
 
     </div>
 </html>
