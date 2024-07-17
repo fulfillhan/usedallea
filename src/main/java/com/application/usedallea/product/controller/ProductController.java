@@ -1,233 +1,126 @@
 package com.application.usedallea.product.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.application.usedallea.img.dto.ProductImgDTO;
-import com.application.usedallea.product.service.ProductStatus;
-import com.application.usedallea.zzim.service.ZzimService;
+import com.application.usedallea.img.Service.ImgService;
+import com.application.usedallea.img.dto.ImgRegisterDto;
+import com.application.usedallea.old.product.service.ProductStatus;
+import com.application.usedallea.product.dto.ProductModifyDto;
+import com.application.usedallea.product.dto.ProductRegisterDto;
+import com.application.usedallea.product.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.usedallea.product.dto.ProductDTO;
-import com.application.usedallea.product.service.ProductService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
-//	@Value("${file.repo.path")
-//	private String imgRepositoryPath;
+    private final ProductService productService;
+    private final ImgService imgService;
 
-	@Autowired
-	private ProductService productService;
+    @GetMapping("/register-page")
+    public String toRegisterPage() {
+        return "product/createOrUpdate";
+    }
 
-	@Autowired
-	private ZzimService zzimService;
+    //상품등록하기(이미지등록 어려움)
+    @PostMapping
+    public String create(HttpSession session,
+                         @RequestParam List<MultipartFile> uploadImg,
+                         @ModelAttribute ProductRegisterDto productDto,
+                         @ModelAttribute ImgRegisterDto imgDto) throws Exception {
+        String sellerId = (String) session.getAttribute("userId");
+        if (sellerId == null) {
+            return "redirect:/login";
+        }
+       // productDto.setSellerId(sellerId);
+        ProductRegisterDto.builder().sellerId(sellerId).build();
+        long productId = productService.saveProduct(uploadImg, productDto, imgDto);
+        return "redirect:/products/" + productId;  // 상세 페이지로 이동
+    }
 
-	private String getUserId(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		return (String) session.getAttribute("userId");
-	}
+    //상세 페이지 -> 확인 필요
+    @GetMapping("/{productId}")
+    public String Detail(@PathVariable long productId, HttpSession session, Model model) {
+        // 세션에서 로그인한 정보 가져오기
+        String userId = (String) session.getAttribute("userId");
 
-/*	@GetMapping("/create")
-	public String create(Model model, HttpServletRequest request) {
+        ProductRegisterDto productDto = productService.findByProductId(productId, true);
+        List<String> imgUUIDList = productService.findImgUUIDs(productId);
 
-		String sellerId = getUserId(request);
-		long productId = 0;
-		// 판매자가 가진 모든 상품 아이디를  가지고 온다.
-		List<ProductDTO> sellerProducts =  productService.getProductIdBySeller(sellerId);
-		for (ProductDTO productDTO : sellerProducts){
-			productId = productDTO.getProductId();
-			List<String> imgUUIDList = productService.getImgUUIDList(productId);
-			if(productId != 0) {  // id 가 있으면
-				ProductDTO productDetail = productService.getProductDetail(productId, false);
-				if (productDetail == null) {
-					productDetail = new ProductDTO();
-				}
-				model.addAttribute("productDTO", productDetail);
-				model.addAttribute("imgUUID",imgUUIDList);
-			}
-		}
-		return "product/createOrUpdate";
-	}*/
+        // 뷰로 전달
+        model.addAttribute("userId", userId);
+        model.addAttribute("productDTO", productDto);
+        model.addAttribute("imgUUIDList", imgUUIDList);
 
-	@GetMapping("/create")
-	public String create(Model model, HttpServletRequest request) {
-	/*	HttpSession session = request.getSession();
-		session.setAttribute("sellerId",session.getAttribute("userId"));*/
+        return "product/productDetailBySeller";
+    }
 
-		return "product/createOrUpdate";
-	}
+    // 상품의 상태 변경하기 2.
 
+    //특정상품 수정하기(확인 필요)
+    @PutMapping("/{productId}")
+    public String update(@PathVariable long productId, @RequestBody ProductModifyDto productDto) {
+        productDto.setProductId(productId);
+        productService.updateProduct(productDto);
+        // sellerId도 필요...
+        return "product/productDetailBySeller";  // 수정한 후 상세페이지로 이동...
+    }
 
-	@GetMapping("/update")
-	public String update(Model model, HttpServletRequest request,
-						 @RequestParam("productId") long productId) {
+    // 상품 전체 목록 가져오기 - 기존 메인에 있던것(페이징)
+    @GetMapping
+    public ResponseEntity<Void> products() {
+        return ResponseEntity.ok().build();
+    }
 
-		HttpSession session = request.getSession();
-		session.setAttribute("sellerId",session.getAttribute("userId"));
+    // 특정 판매자가 등록한 상품 전체 목록  -> 페이징이 들어감...
+    @GetMapping
+    public ResponseEntity<Void> findAll(HttpServletRequest request, @RequestBody ProductRegisterDto productDto) {
+        HttpSession session = request.getSession();
 
-		List<String> imgUUIDList = productService.getImgUUIDList(productId);
-		ProductDTO productDetail = productService.getProductDetail(productId, false);
-		model.addAttribute("productDTO",productDetail) ;
-		model.addAttribute("imgUUID",imgUUIDList);
-		return "product/createOrUpdate";
-	}
+        return ResponseEntity.ok().build();
+    }
 
-	//--> 여기서부터(이미지 여러장일때 업데이트 필요.)
-	@PostMapping("/creatOrUpdate")
-	public String create(HttpServletRequest request,
-					     @RequestParam(value="uploadImg") List<MultipartFile> uploadImg,
-						 ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception {
+    @PutMapping("/{productId}/{productStatus}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateStatus(@PathVariable long productId, @PathVariable String productStatus) {
+        Map<String, Object> response = new HashMap<>();
+        ProductStatus status = ProductStatus.valueOf(productStatus); //status값을 enum으로 변경하기
+        String script = "";
 
-		//수정 필요
-		HttpSession session = request.getSession();
-		String sellerId =(String) session.getAttribute("userId");
-		long productId =productDTO.getProductId();
-		productDTO.setSellerId(sellerId);
+        status = productService.updateProductStatus(productId, status);
 
-		if(productId != 0){
-			//상품 수정
-			productService.updateProduct(productDTO);
-			return "redirect:/product/productManager?sellerId=" + sellerId;
-		}else {
-			//상품 등록
-			productId = productService.createProduct(uploadImg, productDTO, productImgDTO);
-			return "redirect:/product/detail?productId=" + productId+"&sellerId="+sellerId;
-		}
-	}
-
-	@GetMapping("/detail")
-	public String detailBySeller(Model model, HttpServletRequest request, @RequestParam("productId") long productId) {
-
-		// 세션에서 현재 로그인 한 아이디 가져오기
-		String userId = getUserId(request);
-
-		model.addAttribute("userId", userId);
-		model.addAttribute("productDTO", productService.getProductDetail(productId, true));
-		model.addAttribute("zzimCount", zzimService.getZzimCount(productId));
-		model.addAttribute("imgUUIDList", productService.getImgUUIDList(productId));
-
-
-		return "product/productDetailBySeller";
-	}
-
-/*	@GetMapping("/update")
-	public String update(Model model, @RequestParam("productId") long productId) {
-		model.addAttribute("productDTO", productService.getProductDetail(productId, false));
-		return "product/updateProduct";
-	}*/
-
-/*
-	@PostMapping("/update")
-	public String update(@ModelAttribute ProductDTO productDTO) {
-		productService.updateProduct(productDTO);
-		return "redirect:/product/productManager?sellerId=" + productDTO.getSellerId();  //상품 관리 페이지로 변경해주기
-	}
-*/
-
-	@GetMapping("/productManager")
-	public String productManager(Model model,
-								 @RequestParam("sellerId") String sellerId,
-								 @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
-								 @RequestParam(name = "onePageProductCnt", defaultValue = "10") int onePageProductCnt,
-								 @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber) {
-
-
-		Map<String, String> searchCntMap = new HashMap<>();
-		searchCntMap.put("searchWord", searchWord);
-		searchCntMap.put("sellerId", sellerId);
-
-		int allProductCntBySeller = productService.getAllProductCntBySeller(searchCntMap);  // 특정 판매자의 판매목록의 총 개수
-
-		int allPageCnt = allProductCntBySeller / onePageProductCnt;
-		if (allProductCntBySeller % onePageProductCnt != 0) {
-			allPageCnt++;
-		}
-
-		int startPage = (currentPageNumber - 1) / 10 * 10 + 1;
-		if (startPage == 0) {
-			startPage = 1;
-		}
-
-		int endPage = startPage + 9;
-		if (endPage > allPageCnt) {
-			endPage = allPageCnt;
-		}
-		if (endPage == 0) {
-			endPage = 1;
-		}
-
-		int startProductIdx = (currentPageNumber - 1) * onePageProductCnt;
-
-		Map<String, Object> searchMap = new HashMap<>();
-		searchMap.put("searchWord", searchWord);
-		searchMap.put("startProductIdx", startProductIdx);
-		searchMap.put("onePageProductCnt", onePageProductCnt);
-		searchMap.put("sellerId", sellerId);
-		List<ProductDTO> productListBySeller = productService.getProductListBySeller(searchMap);
-
-		for (ProductDTO products : productListBySeller) {
-			long productId = products.getProductId();
-			int zzimCount = zzimService.getZzimCount(productId);
-			products.setZzimCount(zzimCount);
-			List<String> productImgUUIDs = productService.getImgUUIDList(productId);
-			if (!productImgUUIDs.isEmpty()) {
-				String firstImgUUID = productImgUUIDs.get(0);
-				products.setFirstImgUUID(firstImgUUID);
-			}
-		}
-
-		model.addAttribute("productListBySeller", productListBySeller);
-		model.addAttribute("allPageCnt", allPageCnt);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("onePageProductCnt", onePageProductCnt);
-		model.addAttribute("currentPageNumber", currentPageNumber);
-
-		return "product/productManager";
-	}
-
-
-	@PostMapping("/updateProductStatus")
-	@ResponseBody
-	public Map<String,Object> updateProductStatus(@RequestParam("productId")long productId, @RequestParam("productStatus") String productStatus ){
-		Map<String,Object> response = new HashMap<>();
-		ProductStatus status = ProductStatus.valueOf(productStatus); //status값을 enum으로 변경하기
-		String script = "";
-
-			switch (status){
-				case 판매중 -> {
-					status = productService.updateProductStatus(productId,status);
-					script = "상품 상태가 '판매중'으로 변경되었습니다.";
-				}
-				case 판매완료 -> {
-					status = productService.updateProductStatus(productId,status);
-					script = "상품 상태가 '판매완료'로 변경되었습니다.";
-				}
-				case 삭제 -> {
-					productService.updateValidateProduct(productId);
-					script  = "해당 상품이 삭제되었습니다.";
-					response.put("deleted",true);
-				}
-				default ->
-					//에러 처리
-						System.out.println("오류 발생");
-			}
-			response.put("status",String.valueOf(status));
-		response.put("script",script);
-		return response;
-	}
-
+        // 하단의 로직은 비즈니스 로직쪽으로 이동?
+        switch (status) {
+            case 판매중 -> {
+                // status = productService.updateProductStatus(productId,status);
+                script = "상품 상태가 '판매중'으로 변경되었습니다.";
+            }
+            case 판매완료 -> {
+                // status = productService.updateProductStatus(productId,status);
+                script = "상품 상태가 '판매완료'로 변경되었습니다.";
+            }
+            case 삭제 -> {
+                // productService.updateValidateProduct(productId);
+                script = "해당 상품이 삭제되었습니다.";
+                response.put("deleted", true);
+            }
+            default ->
+                //에러 처리
+                    System.out.println("오류 발생");
+        }
+        response.put("status", String.valueOf(status));
+        response.put("script", script);
+        return ResponseEntity.ok().build();
+    }
 
 }
-
-

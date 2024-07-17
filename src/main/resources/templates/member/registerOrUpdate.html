@@ -19,12 +19,16 @@
         </div>
     </div>
 
-    <form
+    <!--<form
             th:action="@{/member/registerOrUpdate}"
+            method="get"
+            th:onsubmit="return checkFirmValidation(${session.userId})"
+    >-->
+    <form
+            th:action="@{/users}"
             method="post"
             th:onsubmit="return checkFirmValidation(${session.userId})"
     >
-
         <div class="member-register__form--input">
             <div>
                 <label for="userId" >아이디*</label>
@@ -177,23 +181,17 @@
                 // AJAX전송(단일데이터)
                 $.ajax({
                     type: "post",
-                    url: "/member/dupleCheckId",
+                    url: "/users/check-duplicate-id",
                     data: {"userId": userId},
-                    success: function (validateLogin) {
+                    success: function (isDuplicate) {
 
-                            if (validateLogin == "y") {
+                            if (isDuplicate) {
                                 $("#isvalidMsg").html("<span style='color:green;'>사용 가능한 아이디입니다.</span>");
                                 formCheckUserId = true;
                             } else {
                                 $("#isvalidMsg").html("<span style='color:red;'>이미 사용중인 아이디입니다.</span>");
                                 formCheckUserId = false;
                             }
-                           /* //userId가 있으면
-                            if(userId){
-
-                                $("#userId").prop("readonly",true);
-                                $("#isvalidMsg").hide();
-                            }*/
 
                     }
                 });

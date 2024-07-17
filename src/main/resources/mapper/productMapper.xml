@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.application.usedallea.product.dao.ProductDAO">
-    <insert id="createProduct" parameterType="ProductDTO">
+<mapper namespace=" com.application.usedallea.product.domain.repository">
+    <insert id="create" parameterType="Product">
         INSERT INTO PRODUCT(
             SELLER_ID,
             IMG_ID,
@@ -53,7 +53,7 @@
                 IMG_ID = #{imgId}
     </select>
 
-    <select id="getProductDetail"  parameterType="long" resultType="ProductDTO">
+    <select id="findByProductId"  parameterType="long" resultType="Product">
         SELECT
                 PRODUCT_ID,
                 SELLER_ID,
@@ -65,20 +65,21 @@
                 READ_COUNT,
                 STATUS,
                 TITLE,
-                CREATED_AT
+                CREATED_AT,
+                VALIDATED_YN
         FROM
                 PRODUCT
         WHERE
                 PRODUCT_ID = #{productId}
     </select>
-    <update id="updateReadCnt" parameterType="long">
+<!--    <update id="updateReadCnt" parameterType="long">
         UPDATE
                 PRODUCT
         SET
                 READ_COUNT = READ_COUNT + 1
         WHERE
                 PRODUCT_ID = #{productId}
-    </update>
+    </update>-->
 
     <select id="getImgUUIDList" parameterType="long" resultType="String">
         SELECT

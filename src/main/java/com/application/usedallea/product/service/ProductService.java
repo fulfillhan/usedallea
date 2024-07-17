@@ -1,49 +1,22 @@
 package com.application.usedallea.product.service;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import com.application.usedallea.img.dto.ProductImgDTO;
+import com.application.usedallea.img.dto.ImgRegisterDto;
+import com.application.usedallea.old.product.service.ProductStatus;
+import com.application.usedallea.product.dto.ProductModifyDto;
+import com.application.usedallea.product.dto.ProductRegisterDto;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.application.usedallea.product.dto.ProductDTO;
+import java.util.List;
 
 public interface ProductService {
-	//List<ProductDTO> getAllProudctList(ProductDTO productDTO);
 
+   long saveProduct(List<MultipartFile> uploadImg, ProductRegisterDto productDto, ImgRegisterDto imgDto) throws Exception;
 
-	long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException;
+   void updateProduct(ProductModifyDto productDto);
 
-	 ProductDTO getProductDetail(long productId, boolean isCheckReadCnt);
+   ProductStatus updateProductStatus(long productId, ProductStatus status);
 
-	List<String> getImgUUIDList(long productId);
+   ProductRegisterDto findByProductId(long productId, boolean isCheckReadCnt);
 
-	void updateProduct(ProductDTO productDTO);
-
-	void updateValidateProduct(long productId);
-
-	int getAllProductCnt(Map<String, String> searchCntMap);
-
-	List<ProductDTO> getProductList(Map<String, Object> searchMap);
-
-	int getAllProductCntBySeller(Map<String, String> searchCntMap);
-
-	List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap);
-
-	ProductStatus updateProductStatus(long productId, ProductStatus status);
-
-//	List<Integer> getProducCntByUser(String sellerId);
-
-	int getProducCntByUser(String sellerId);
-
-	int getAllProductCntByAdmin(Map<String, String> searchCntMap);
-
-	List<ProductDTO> getProductListByAdmin(Map<String, Object> searchMap);
-
-    List<ProductDTO> getProductIdBySeller(String sellerId);
-
-
-    //void removeProduct(long productId);
+    List<String> findImgUUIDs(long productId);
 }
-

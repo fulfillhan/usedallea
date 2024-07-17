@@ -1,13 +1,14 @@
 package com.application.usedallea.product.service;
 
-import com.application.usedallea.img.dto.ProductImgDTO;
-import com.application.usedallea.img.service.ProductImgService;
-import com.application.usedallea.product.dao.ProductDAO;
-import com.application.usedallea.product.dto.ProductDTO;
-import com.application.usedallea.zzim.dao.ZzimDAO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.application.usedallea.img.Service.ImgService;
+import com.application.usedallea.img.domain.entity.Img;
+import com.application.usedallea.img.dto.ImgRegisterDto;
+import com.application.usedallea.old.product.service.ProductStatus;
+import com.application.usedallea.product.domain.entity.Product;
+import com.application.usedallea.product.domain.repository.ProductRepository;
+import com.application.usedallea.product.dto.ProductModifyDto;
+import com.application.usedallea.product.dto.ProductRegisterDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,129 +16,88 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+@RequiredArgsConstructor
+public class ProductServiceImpl implements  ProductService {
 
+    private final ProductRepository productRepository;
+    private final ImgService imgService;
 
-	@Autowired
-	private ProductDAO productDAO;
+    @Override
+    public long saveProduct(List<MultipartFile> uploadImg, ProductRegisterDto productDto, ImgRegisterDto imgDto) throws IOException {
+        long imgId = imgService.saveImg(uploadImg, imgDto);
+        Product newProduct = Product.builder()
+                .imgId(imgId)
+                .sellerId(productDto.getSellerId())
+                .title(productDto.getTitle())
+                .status(ProductStatus.판매중.name())
+                .price(productDto.getPrice())
+                .description(productDto.getDescription())
+                .qualityCondition(productDto.getQualityCondition())
+                .category(productDto.getCategory())
+                .build();
+        return productRepository.create(newProduct);
+    }
 
-	@Autowired
-	private ZzimDAO zzimDAO;
+    @Override
+    public ProductRegisterDto findByProductId(long productId, boolean isCheckReadCnt) {
+        Product product = productRepository.findByProductId(productId);
 
-	@Autowired
-	private ProductImgService productImgService;
+        if (isCheckReadCnt) {
+            product.increaseReadCount();
+        }
 
-	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+        // createdAt 기준으로 날짜 계산
+        LocalDateTime createdAt = product.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
 
+        long daysAgo = Duration.between(createdAt, now).toDays();
+        long hoursAgo = Duration.between(createdAt, now).toHours();
 
-	@Override
-	public long createProduct(List<MultipartFile> uploadImg, ProductDTO productDTO, ProductImgDTO productImgDTO) throws Exception, IOException {
+        return ProductRegisterDto.toDto(product, daysAgo, hoursAgo);
+    }
 
-		long imgId = productImgService.saveImg(uploadImg, productImgDTO);    // img테이블에 이미지 저장하기 -> 이미지 id 생성
-		productDTO.setImgId(imgId);
-		//단위 테스트
-		//System.out.println(imgId);
+    @Override
+    public List<String> findImgUUIDs(long productId) {
+        Product product = productRepository.findByProductId(productId);
+        long imgId= product.getImgId();
+        Img img = imgService.findById(imgId);
+        return null;
+    }
 
-		productDTO.setStatus(ProductStatus.판매중.name());                   // 상품의 품질상태 저장하기
+    @Override
+    public void updateProduct(ProductModifyDto productDto) {
 
-		productDAO.createProduct(productDTO);                               //상품 테이블에 이미지 id 저장하여 등록된 상품테이블 모두 저장하기
+            Product product = productRepository.findByProductId(productDto.getProductId());
 
-		return productDAO.getProductId(imgId);
+            Product newProduct = product.toBuilder()
+                    .productId(productDto.getProductId())
+                    .title(productDto.getTitle())
+                    .category(productDto.getCategory())
+                    .qualityCondition(productDto.getQualityCondition())
+                    .price(productDto.getPrice())
+                    .description(productDto.getDescription())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            productRepository.update(newProduct);
+    }
 
-	}
-
-	@Override
-	public ProductDTO getProductDetail(long productId, boolean isCheckReadCnt) {
-
-		// 로그인을 하고, 해당 유저가 판매자가 아닌경우에만 조회수 증가
-		if (isCheckReadCnt) {
-			productDAO.updateReadCnt(productId);                                 // 조회수 증가 readCount
-		}
-
-		ProductDTO productDTO = productDAO.getProductDetail(productId);
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime createdAt = productDTO.getCreatedAt();
-		long daysAgo = Duration.between(createdAt, now).toDays();
-		long hoursAgo = Duration.between(createdAt, now).toHours();
-		productDTO.setDaysAgo(daysAgo);
-		productDTO.setHoursAgo(hoursAgo);
-
-		return productDTO;
-	}
-
-	@Override
-	public List<String> getImgUUIDList(long productId) {
-
-		return productDAO.getImgUUIDList(productId);
-	}
-
-	@Override
-	public void updateProduct(ProductDTO productDTO) {
-		productDAO.updateProduct(productDTO);
-	}
-
-	@Override
-	public void updateValidateProduct(long productId) {
-		productDAO.updateValidateProduct(productId);
-	}
-
-	@Override
-	public int getAllProductCnt(Map<String, String> searchCntMap) {
-
-		return productDAO.getAllProductCnt(searchCntMap);
-	}
-
-	@Override
-	public List<ProductDTO> getProductList(Map<String, Object> searchMap) {
-		return productDAO.getProductList(searchMap);
-	}
-
-	@Override
-	public int getAllProductCntBySeller(Map<String, String> searchCntMap) {
-		return productDAO.getAllProductCntBySeller(searchCntMap);
-	}
-
-	@Override
-	public List<ProductDTO> getProductListBySeller(Map<String, Object> searchMap) {
-		return productDAO.getProductListBySeller(searchMap);
-	}
-
-	@Override
-	public ProductStatus updateProductStatus(long productId, ProductStatus status) {
-
-		ProductDTO productDTO = new ProductDTO();
-		productDTO.setProductId(productId);
-		productDTO.setStatus(String.valueOf(status));
-
-		productDAO.updateProductStatus(productDTO);
-		return productDAO.getProductStatus(productId);
-	}
-
-
-	@Override
-	public int getProducCntByUser(String sellerId) {
-		return productDAO.getProductCntByUser(sellerId);
-	}
-
-	@Override
-	public int getAllProductCntByAdmin(Map<String, String> searchCntMap) {
-		return productDAO.getAllProductCntByAdmin(searchCntMap);
-	}
-
-	@Override
-	public List<ProductDTO> getProductListByAdmin(Map<String, Object> searchMap) {
-		return productDAO.getProductListByAdmin(searchMap);
-	}
-
-	@Override
-	public List<ProductDTO> getProductIdBySeller(String sellerId) {
-		return productDAO.getProductIdBySeller(sellerId);
-	}
-
-
-
+    @Override
+    public ProductStatus updateProductStatus(long productId, ProductStatus status) {
+        switch (status){
+            case 판매중 -> {
+                // 판매중으로 변경
+            }
+            case 판매완료 -> {
+                // 판매 완료로 변경
+            }
+            case 삭제 -> {
+                // 삭제 처리
+            }
+        }
+        return ProductStatus.삭제;
+    }
 
 }
+
