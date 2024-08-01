@@ -1,6 +1,5 @@
 package com.application.usedallea.user.service;
 
-import com.application.usedallea.old.member.service.MemberServiceImpl;
 import com.application.usedallea.user.domain.entity.User;
 import com.application.usedallea.user.domain.repository.UserRepository;
 import com.application.usedallea.user.dto.UserModifyDto;
@@ -10,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 @Slf4j
 @Service

@@ -27,7 +27,7 @@ public class ImgServiceImpl implements ImgService{
         if(uploadImg.isEmpty()){
             throw new RuntimeException("file is empty");
         }
-        // todo findMaxImgId() 확인 필요
+
         Img img = imgRepository.findMaxImgId();
         long imgSeq = 1;
         for(MultipartFile imgList : uploadImg){

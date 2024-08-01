@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 public class ProductModifyDto {
 
     private long productId;
     private String title;
     private String category;
     private String qualityCondition;
-    private String price;
+    private Integer price;
     private String description;
 
 }

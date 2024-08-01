@@ -20,7 +20,7 @@ public class AuthenticationController {
     public String login() {
         return "member/login";
     }
-    
+
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@RequestBody UserRegisterDto userDto, HttpSession session) {
         boolean validateLogin = userService.loginUser(userDto);

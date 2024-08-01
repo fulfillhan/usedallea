@@ -2,10 +2,13 @@ package com.application.usedallea.product.controller;
 
 import com.application.usedallea.img.Service.ImgService;
 import com.application.usedallea.img.dto.ImgRegisterDto;
-import com.application.usedallea.old.product.service.ProductStatus;
+//import com.application.usedallea.old.product.service.ProductStatus;
+import com.application.usedallea.product.domain.entity.Product;
 import com.application.usedallea.product.dto.ProductModifyDto;
 import com.application.usedallea.product.dto.ProductRegisterDto;
 import com.application.usedallea.product.service.ProductService;
+import com.application.usedallea.product.service.ProductStatus;
+import com.application.usedallea.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductController {
 
+    private final UserService userService;
     private final ProductService productService;
     private final ImgService imgService;
 
@@ -48,7 +52,23 @@ public class ProductController {
         return "redirect:/products/" + productId;  // 상세 페이지로 이동
     }
 
-    //상세 페이지 -> 확인 필요
+    // 상품 전체 목록 조회
+    @GetMapping()
+    public ResponseEntity<List<Product>> show(@RequestBody ProductRegisterDto productDto,
+                                              @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
+                                              @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber){
+
+        //todo 페이징 객체지향적으로
+        makePage(searchWord,currentPageNumber);
+        
+        return ResponseEntity.ok().build();
+
+    }
+    public void makePage(String searchWord, int currentPageNumber){
+
+    }
+
+    //상세 페이지
     @GetMapping("/{productId}")
     public String Detail(@PathVariable long productId, HttpSession session, Model model) {
         // 세션에서 로그인한 정보 가져오기
@@ -76,17 +96,13 @@ public class ProductController {
         return "product/productDetailBySeller";  // 수정한 후 상세페이지로 이동...
     }
 
-    // 상품 전체 목록 가져오기 - 기존 메인에 있던것(페이징)
-    @GetMapping
-    public ResponseEntity<Void> products() {
-        return ResponseEntity.ok().build();
-    }
-
     // 특정 판매자가 등록한 상품 전체 목록  -> 페이징이 들어감...
     @GetMapping
-    public ResponseEntity<Void> findAll(HttpServletRequest request, @RequestBody ProductRegisterDto productDto) {
-        HttpSession session = request.getSession();
-
+    public ResponseEntity<Void> findAll(HttpSession request, @RequestBody ProductRegisterDto productDto,
+                                        @RequestParam("sellerId") String sellerId,
+                                        @RequestParam(name = "searchWord", defaultValue = "") String searchWord,
+                                        @RequestParam(name = "onePageProductCnt", defaultValue = "10") int onePageProductCnt,
+                                        @RequestParam(name = "currentPageNumber", defaultValue = "1") int currentPageNumber) {
         return ResponseEntity.ok().build();
     }
 

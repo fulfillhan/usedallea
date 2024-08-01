@@ -48,7 +48,7 @@ public class AdminController {
         return validateLogin;
     }
 
-    @GetMapping("/userList")
+    @GetMapping("/memberList")
     public String userList (Model model,
                         @RequestParam(name = "onePageViewCnt", defaultValue = "20") int onePageViewCnt,
                         @RequestParam(name="currentPageNumber", defaultValue = "1") int currentPageNumber) {
@@ -119,7 +119,6 @@ public class AdminController {
             return "errors";
         }
     }
-
 
 
     @GetMapping("/productList")

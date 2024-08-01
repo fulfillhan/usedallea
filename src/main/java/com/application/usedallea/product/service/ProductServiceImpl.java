@@ -3,7 +3,6 @@ package com.application.usedallea.product.service;
 import com.application.usedallea.img.Service.ImgService;
 import com.application.usedallea.img.domain.entity.Img;
 import com.application.usedallea.img.dto.ImgRegisterDto;
-import com.application.usedallea.old.product.service.ProductStatus;
 import com.application.usedallea.product.domain.entity.Product;
 import com.application.usedallea.product.domain.repository.ProductRepository;
 import com.application.usedallea.product.dto.ProductModifyDto;
@@ -47,7 +46,6 @@ public class ProductServiceImpl implements  ProductService {
         if (isCheckReadCnt) {
             product.increaseReadCount();
         }
-
         // createdAt 기준으로 날짜 계산
         LocalDateTime createdAt = product.getCreatedAt();
         LocalDateTime now = LocalDateTime.now();

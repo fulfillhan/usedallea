@@ -18,12 +18,7 @@
 <!--        </div>-->
         <div class="sv-tabs-panel-list">
             <div class="sv-tabs-panel active" id="tab1">
-                <form
-                        th:action="@{/product/creatOrUpdate}"
-                        method="post"
-                        enctype="multipart/form-data"
-                        class="product-create__form"
-                >
+                <form id="inputForm" class="product-create__form">
                     <input type="hidden" id="sellerId" name="sellerId" th:value="${session.sellerId}"/>
                     <input th:if="${productDTO?.productId}" type="hidden" id="productId" name="productId" th:value="${productDTO.productId}"/>
 
@@ -104,8 +99,8 @@
                         </div>
 
                         <div class="product-create__form-action">
-                            <input type="submit" th:unless="${productDTO?.productId}" value="등록하기" class="ok"/>
-                            <input type="submit" th:if="${productDTO?.productId}" value="수정하기" class="ok"/>
+                            <input type="button" th:unless="${productDTO?.productId}" value="등록하기" class="ok" onclick="create()" />
+                            <input type="button" th:if="${productDTO?.productId}" value="수정하기" class="ok" onclick="update()" />
                             <input type="reset" value="다시작성"/>
                         </div>
                     </div>
@@ -161,6 +156,50 @@
         });
 */
 
+        function create() {
+            const jsonParam = formToObject('inputForm');
+
+            const formData = new FormData();
+
+            $.ajax({
+                url: '/products',
+                method: 'post',
+                contentType: 'multipart/form-data',
+                data: jsonParam,
+                success: function(data) {
+                    location.href = '';
+                },
+            });
+        }
+
+        function update() {
+            const jsonParam = formToObject('inputForm');
+            const productId = $('#productId').val();
+
+            $.ajax({
+                url: '/products/' + productId,
+                method: 'put',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: jsonParam,
+                success: function(data) {
+                    location.href = '';
+                },
+            });
+        }
+
+        function formToObject(formId){
+            const array = $('#' + formId).serializeArray();
+            const json = {};
+            jQuery.map(array, function(n) {
+                json[n.name] = n.value;
+            });
+            return json;
+        }
+
+        <!--                        th:action="@{/product/creatOrUpdate}"-->
+        <!--                        method="post"-->
+        <!--                        enctype="multipart/form-data"-->
 
     </script>
 </div>

@@ -12,7 +12,7 @@ public class ProductRegisterDto {
     private long productId;
     private long imgId;
     private String title;
-    private String price;
+    private Integer price;
     private String description;
     private String qualityCondition;
     private String category;
