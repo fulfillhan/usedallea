@@ -66,6 +66,7 @@
   
 ## 🌿기술 Specification
 
+- [Git Flow](https://techblog.woowahan.com/2553/)를 기반으로 브랜치 관리
 - 인증 과정, 아이디 확인 등 AJAX  구현
 - 레이어드 아키텍처(Presentaion Layer, Business Layer,Data Access Layer) 적용
 - 세션 기반으로 인증 및 인가  구현
